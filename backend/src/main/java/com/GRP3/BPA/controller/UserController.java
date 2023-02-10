@@ -18,7 +18,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/")
+
+    @PostMapping(value = "/api/users")
     public ResponseEntity<User> saveUser(@RequestBody User user){
         return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
     }
