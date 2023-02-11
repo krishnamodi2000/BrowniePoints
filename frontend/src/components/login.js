@@ -1,4 +1,3 @@
-import {View} from 'react-native';
 import React from 'react';
 import {
   useTheme,
@@ -6,11 +5,9 @@ import {
   Box,
   Stack,
   Heading,
-  HStack,
   Input,
   Button,
 } from 'native-base';
-import {Image} from 'react-native-svg';
 
 const login = () => {
   const {colors} = useTheme();
