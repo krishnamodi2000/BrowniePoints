@@ -1,0 +1,95 @@
+package com.GRP3.BPA.model;
+
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+@Entity
+@Table(name="User")
+@AllArgsConstructor
+@NoArgsConstructor
+public class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Getter @Setter
+    @Column
+    private String email;
+
+    @Getter @Setter
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Getter @Setter
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Getter @Setter
+    @Column(name = "contact_number")
+    private Integer contactNumber;
+
+    @Getter @Setter
+    @Column
+    private String password;
+
+    @Getter @Setter
+    @Column
+    private String role;
+
+    @Getter @Setter
+    @Column(name = "is_authenticated")
+    private Boolean isAuthenticated;
+
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority(this.role));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
+
+
+}
