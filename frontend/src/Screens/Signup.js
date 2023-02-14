@@ -5,6 +5,8 @@ import {InputType1} from '../components/Commons/Input';
 
 const inputFields = [
   {placeholder: 'Banner ID', type: 'text', name: 'bannerId'},
+  {placeholder: 'First Name', type: 'text', name: 'firstName'},
+  {placeholder: 'Last Name', type: 'text', name: 'lastName'},
   {placeholder: 'Email', type: 'email', name: 'emailId'},
   {
     placeholder: 'Password',
@@ -26,6 +28,8 @@ const Signup = () => {
     emailId: '',
     password: '',
     confirmPassword: '',
+    firstName: '',
+    lastName: '',
   });
 
   const handleTextChange = (name, value) => {
