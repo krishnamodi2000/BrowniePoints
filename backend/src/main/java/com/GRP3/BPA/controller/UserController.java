@@ -4,6 +4,7 @@ import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +20,15 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "/api/users")
+    @PostMapping(value = "/api/auth/register")
     public ResponseEntity<User> saveUser(@RequestBody User user){
         return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
+    }
+
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping(value = "/test")
+    public String test(){
+        return "pass";
     }
 }

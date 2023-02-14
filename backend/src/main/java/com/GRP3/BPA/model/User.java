@@ -2,114 +2,94 @@ package com.GRP3.BPA.model;
 
 
 import jakarta.persistence.*;
-import jakarta.websocket.ClientEndpoint;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 @Entity
 @Table(name="User")
-
-public class User {
+@AllArgsConstructor
+@NoArgsConstructor
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Getter @Setter
     @Column
-    private String email_id;
+    private String email;
 
-    @Column
-    private String first_name;
+    @Getter @Setter
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column
-    private String last_name;
+    @Getter @Setter
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column
-    private Integer contact_number;
+    @Getter @Setter
+    @Column(name = "contact_number")
+    private Integer contactNumber;
 
+    @Getter @Setter
     @Column
     private String password;
 
+    @Getter @Setter
     @Column
-    private Boolean is_admin;
+    private String role;
 
-    @Column
-    private Boolean is_authenticated;
+    @Getter @Setter
+    @Column(name = "is_authenticated")
+    private Boolean isAuthenticated;
 
-    public User(){
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority(this.role));
     }
 
-    public User(int id, String email_id, String net_id, String first_name, String last_name, int contact_number, String university_id, String password, Boolean is_admin, Boolean is_authenticated) {
-        this.email_id = email_id;
-        this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.contact_number = contact_number;
-        this.password = password;
-        this.is_admin = is_admin;
-        this.is_authenticated = is_authenticated;
-    }
-
-    public String getEmail_id() {
-        return email_id;
-    }
-
-    public void setEmail_id(String email_id) {
-        this.email_id = email_id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public int getContact_number() {
-        return contact_number;
-    }
-
-    public void setContact_number(int contact_number) {
-        this.contact_number = contact_number;
-    }
-
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
-    public Boolean getIs_admin() {
-        return is_admin;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setIs_admin(Boolean is_admin) {
-        this.is_admin = is_admin;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public Boolean getIs_authenticated() {
-        return is_authenticated;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setIs_authenticated(Boolean is_authenticated) {
-        this.is_authenticated = is_authenticated;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
+
+
+
+
 }
