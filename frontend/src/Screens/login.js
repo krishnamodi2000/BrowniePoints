@@ -13,7 +13,7 @@ const inputFields = [
     },
   ];
   
-  const login = () => {
+  const Login = () => {
     const [formData, setFormData] = useState({
       bannerId: '',
       password: '',
@@ -52,7 +52,7 @@ const inputFields = [
                 background="secondary.400"
                 onPress={() => console.log(formData)}
                 _pressed={{backgroundColor: 'secondary.500'}}>
-                login
+                Login
               </Button>
             </Stack>
           </Stack>
@@ -60,7 +60,7 @@ const inputFields = [
       </Wrapper>
     );
   };
-  export default login;
+  export default Login;
   
   
   

@@ -24,8 +24,8 @@ const Home = ({navigation}) => {
           size="lg"
           mt="2"
           mb="2"
-          backgroundColor="primary.200"
-          _pressed={{backgroundColor: 'primary.400'}}
+          backgroundColor="secondary.400"
+          _pressed={{backgroundColor: 'secondary.500'}}
           onPress={() => navigation.navigate('login')}>
           Login
         </Button>

@@ -4,14 +4,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import theme from './theme';
 import Signup from './Screens/Signup';
 import Home from './Screens/Home';
-import Login from './Screens/login';
+import Login from './Screens/Login';
 
 const Stack = createNativeStackNavigator();
 
 const components = [
   {name: 'Home', component: Home},
   {name: 'Signup', component: Signup},
-  {name: 'login', component: Login},
+  {name: 'Login', component: Login},
   
 ];
 
