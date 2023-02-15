@@ -20,7 +20,13 @@ const Home = ({navigation}) => {
         </Text>
       </Center>
       <VStack mt="auto" padding="30">
-        <Button size="lg" mt="2" mb="2" backgroundColor="secondary.400">
+        <Button   
+          size="lg"
+          mt="2"
+          mb="2"
+          backgroundColor="primary.200"
+          _pressed={{backgroundColor: 'primary.400'}}
+          onPress={() => navigation.navigate('login')}>
           Login
         </Button>
         <Button
