@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 const components = [
   {name: 'Home', component: Home},
   {name: 'Signup', component: Signup},
-  {name: 'login', component: Login},
+  {name: 'Login', component: Login},
 ];
 
 export default function App() {
