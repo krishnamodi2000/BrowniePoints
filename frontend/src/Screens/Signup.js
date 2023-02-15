@@ -8,6 +8,7 @@ import {
   Spinner,
   FormControl,
   WarningOutlineIcon,
+  ScrollView,
 } from 'native-base';
 import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
@@ -151,57 +152,60 @@ const Signup = () => {
 
   return (
     <Wrapper>
-      <Center height="100%">
-        <CustomAlert
-          message={alert}
-          open={Boolean(alert)}
-          onClose={() => setAlert('')}
-          status="error"
-        />
-        <Heading
-          size="lg"
-          fontSize="36"
-          color="secondary.300"
-          textAlign="center"
-          mt="5"
-          mb="5">
-          User Registration
-        </Heading>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+        <Center height="100%">
+          <CustomAlert
+            message={alert}
+            open={Boolean(alert)}
+            onClose={() => setAlert('')}
+            status="error"
+          />
+          <Heading
+            size="lg"
+            fontSize="36"
+            color="secondary.300"
+            textAlign="center"
+            mt="5"
+            mb="5">
+            User Registration
+          </Heading>
 
-        <Stack p="4" space={3} width="100%">
-          {inputFields.map((inputField, key) => (
-            <Stack space={2} key={key}>
-              <FormControl isInvalid={errors[inputField.name]}>
-                <InputType1
-                  {...inputField}
-                  isDisabled={loader}
-                  onChangeText={value =>
-                    handleTextChange(inputField.name, value)
-                  }
-                />
-                <FormControl.ErrorMessage
-                  leftIcon={<WarningOutlineIcon size="xs" />}>
-                  {errors[inputField.name]}
-                </FormControl.ErrorMessage>
-              </FormControl>
+          <Stack p="4" space={3} width="100%">
+            {inputFields.map((inputField, key) => (
+              <Stack space={2} key={key}>
+                <FormControl isInvalid={errors[inputField.name]}>
+                  <InputType1
+                    {...inputField}
+                    isDisabled={loader}
+                    onChangeText={value =>
+                      handleTextChange(inputField.name, value)
+                    }
+                  />
+                  <FormControl.ErrorMessage
+                    leftIcon={<WarningOutlineIcon size="xs" />}>
+                    {errors[inputField.name]}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+              </Stack>
+            ))}
+
+            <Stack space={2}>
+              {loader ? (
+                <Spinner color="secondary.500" size="lg" />
+              ) : (
+                <Button
+                  size="lg"
+                  background="secondary.400"
+                  onPress={handleSubmit}
+                  _pressed={{backgroundColor: 'secondary.500'}}>
+                  Reigister
+                </Button>
+              )}
             </Stack>
-          ))}
-
-          <Stack space={2}>
-            {loader ? (
-              <Spinner color="secondary.500" size="lg" />
-            ) : (
-              <Button
-                size="lg"
-                background="secondary.400"
-                onPress={handleSubmit}
-                _pressed={{backgroundColor: 'secondary.500'}}>
-                Reigister
-              </Button>
-            )}
           </Stack>
-        </Stack>
-      </Center>
+        </Center>
+      </ScrollView>
     </Wrapper>
   );
 };
