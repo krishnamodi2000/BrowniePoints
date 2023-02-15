@@ -1,10 +1,21 @@
 import React, {useState} from 'react';
-import {Stack, Heading, Input, Button, Center} from 'native-base';
 import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
+import {
+  Stack,
+  Heading,
+  Input,
+  Button,
+  Center,
+  Spinner,
+  FormControl,
+  WarningOutlineIcon,
+  ScrollView,
+} from 'native-base';
+import axios from 'axios';
 
 const inputFields = [
-  {placeholder: 'Banner ID', type: 'text', name: 'bannerId'},
+  {placeholder: 'Email ID', type: 'text', name: 'emailId'},
   {
     placeholder: 'Password',
     type: 'password',
@@ -15,14 +26,63 @@ const inputFields = [
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    bannerId: '',
+    emailId: '',
     password: '',
   });
+  const [loader, setLoader] = useState(false);
+  const [errors, setErrors] = useState({
 
+    emailId: '',
+    password: '',
+  
+  });
+  const [alert, setAlert] = useState('');
+
+  const isValidated = () => {
+    const errorObj = {
+      emailId: '',
+      password: '',
+    };
+    let isValid = true;
+
+    if (formData.emailId.length <= 0) {
+      isValid = false;
+      errorObj.emailId = 'Please enter valid email address';
+      //Enter email validation using regex
+    }
+
+    if (formData.password.length < 6) {
+      isValid = false;
+      errorObj.password = 'Please enter valid password';
+    }
+
+    setErrors(errorObj);
+    return isValid;
+  };
   const handleTextChange = (name, value) => {
     setFormData(current => ({...current, [name]: value}));
   };
-
+  const handleSubmit = () => {
+    if (isValidated()) {
+      setLoader(true);
+      axios
+        .post('http://api/auth/authenticate', {
+          email: formData.emailId,
+          password: formData.password,
+        })
+        .then(res => {
+          if (res.data) {
+          }
+        })
+        .catch(e => {
+          setAlert('Unable to Login the user.');
+          console.log(JSON.stringify(e));
+        })
+        .finally(() => {
+          setLoader(false);
+        });
+    }
+  };
   return (
     <Wrapper>
       <Center height="100%">
@@ -50,7 +110,7 @@ const Login = () => {
             <Button
               size="lg"
               background="secondary.400"
-              onPress={() => console.log(formData)}
+              onPress={() => handleSubmit()}
               _pressed={{backgroundColor: 'secondary.500'}}>
               login
             </Button>
