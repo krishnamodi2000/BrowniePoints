@@ -5,7 +5,7 @@ import {View} from 'native-base';
 const Wrapper = ({children}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View bg="primary.600" height="100%">
+      <View bg="primary.800" height="100%">
         {children}
       </View>
     </SafeAreaView>
