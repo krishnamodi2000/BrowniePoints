@@ -7,17 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="teacher")
+@Table(name="student")
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Teacher {
+public class Student {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private String teacher_id;
+    private String banner_id;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
-
 }
