@@ -4,13 +4,8 @@ import {InputType1} from '../components/Commons/Input';
 import {
   Stack,
   Heading,
-  Input,
   Button,
   Center,
-  Spinner,
-  FormControl,
-  WarningOutlineIcon,
-  ScrollView,
 } from 'native-base';
 import axios from 'axios';
 
@@ -21,7 +16,7 @@ const inputFields = [
     type: 'password',
     secureTextEntry: true,
     name: 'password',
-  },
+  },  
 ];
 
 const Login = () => {
@@ -31,10 +26,8 @@ const Login = () => {
   });
   const [loader, setLoader] = useState(false);
   const [errors, setErrors] = useState({
-
     emailId: '',
     password: '',
-  
   });
   const [alert, setAlert] = useState('');
 
@@ -66,12 +59,13 @@ const Login = () => {
     if (isValidated()) {
       setLoader(true);
       axios
-        .post('http://api/auth/authenticate', {
+        .post('http://10.0.2.2:8080/api/auth/authenticate', {
           email: formData.emailId,
           password: formData.password,
         })
         .then(res => {
           if (res.data) {
+            console.log(res.data);
           }
         })
         .catch(e => {

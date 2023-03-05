@@ -118,7 +118,7 @@ const Signup = ({navigation}) => {
     if (isValidated()) {
       setLoader(true);
       axios
-        .post('http://134.190.141.204:8080/api/auth/register', {
+        .post('http://10.0.2.2:8080/api/auth/register', {
           email: formData.emailId,
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -134,7 +134,7 @@ const Signup = ({navigation}) => {
         })
         .catch(e => {
           setAlert('Unable to register the user.');
-          console.log(JSON.stringify(e), e);
+ 
         })
         .finally(() => {
           setLoader(false);
@@ -152,11 +152,8 @@ const Signup = ({navigation}) => {
   };
 
   const resetState = () => {
-    console.log('Called');
     setErrors({...dataObj});
     setFormData({...dataObj});
-
-    console.log(dataObj);
   };
 
   return (
