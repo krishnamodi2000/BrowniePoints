@@ -1,12 +1,7 @@
 import React, {useState} from 'react';
 import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
-import {
-  Stack,
-  Heading,
-  Button,
-  Center,
-} from 'native-base';
+import {Stack, Heading, Button, Center, Spinner} from 'native-base';
 import axios from 'axios';
 
 const inputFields = [
@@ -16,10 +11,10 @@ const inputFields = [
     type: 'password',
     secureTextEntry: true,
     name: 'password',
-  },  
+  },
 ];
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [formData, setFormData] = useState({
     emailId: '',
     password: '',
@@ -65,7 +60,7 @@ const Login = () => {
         })
         .then(res => {
           if (res.data) {
-            console.log(res.data);
+            navigation.navigate('HomePage');
           }
         })
         .catch(e => {
@@ -101,13 +96,17 @@ const Login = () => {
           ))}
 
           <Stack space={2}>
-            <Button
-              size="lg"
-              background="secondary.400"
-              onPress={() => handleSubmit()}
-              _pressed={{backgroundColor: 'secondary.500'}}>
-              login
-            </Button>
+            {loader ? (
+              <Spinner color="secondary.500" size="lg" />
+            ) : (
+              <Button
+                size="lg"
+                background="secondary.400"
+                onPress={() => handleSubmit()}
+                _pressed={{backgroundColor: 'secondary.500'}}>
+                login
+              </Button>
+            )}
           </Stack>
         </Stack>
       </Center>
