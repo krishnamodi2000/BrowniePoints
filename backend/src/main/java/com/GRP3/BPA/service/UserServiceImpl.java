@@ -30,6 +30,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public User getUser(String username) throws UsernameNotFoundException{
+
+        User user = this.loadUserByUsername(username);
+        if(user == null) throw new UsernameNotFoundException("User not exist");
+        return user;
+    }
+
+    @Override
     public User login(String email, String password) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(email);
 
