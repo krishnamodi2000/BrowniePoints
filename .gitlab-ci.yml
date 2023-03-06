@@ -1,4 +1,4 @@
 build:
   image: maven:3.8.3-openjdk-17
   script:
-    - mvn -f /backend/pom.xml build 
+    - mvn -f backend/pom.xml install
