@@ -1,0 +1,13 @@
+stages:
+  - build
+  - test
+
+build:
+  image: maven:3.8.3-openjdk-17
+  script:
+    - mvn -f backend/pom.xml install
+
+test:
+  image: maven:3.8.3-openjdk-17
+  script:
+    - mvn -f backend/pom.xml test
