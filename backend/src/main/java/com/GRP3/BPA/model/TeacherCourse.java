@@ -15,8 +15,13 @@ public class TeacherCourse {
     @GeneratedValue
     @Getter @Setter
     private Long id;
+
+    @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="teacher_id")
     private Teacher teacher;
+    @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
 
