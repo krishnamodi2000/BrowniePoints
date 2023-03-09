@@ -5,6 +5,7 @@ import theme from './theme';
 import Signup from './Screens/Signup';
 import Home from './Screens/Home';
 import Login from './Screens/Login';
+import HomePage from './Screens/HomePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ const components = [
   {name: 'Home', component: Home},
   {name: 'Signup', component: Signup},
   {name: 'Login', component: Login},
+  {name:"HomePage",component:HomePage}
 ];
 
 export default function App() {
