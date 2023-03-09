@@ -12,6 +12,7 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import {validateEmail} from '../helpers/functions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const inputFields = [
   {placeholder: 'Email ID', type: 'text', name: 'emailId'},
@@ -62,18 +63,19 @@ const Login = ({navigation}) => {
     if (isValidated()) {
       setLoader(true);
       axios
-        .post('http://10.0.2.2:8080/api/auth/authenticate', {
+        .post('http://192.168.2.189:8080/api/auth/authenticate', {
           email: formData.emailId,
           password: formData.password,
         })
-        .then(res => {
+        .then(async res => {
           if (res.data) {
+            await AsyncStorage.setItem('token', res.data.token);
             navigation.navigate('HomePage');
           }
         })
         .catch(e => {
           setAlert('Unable to Login the user.');
-          console.log(JSON.stringify(e));
+          console.log(JSON.stringify(e), e);
         })
         .finally(() => {
           setLoader(false);
