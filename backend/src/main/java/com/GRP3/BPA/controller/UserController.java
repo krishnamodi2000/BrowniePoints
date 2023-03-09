@@ -5,6 +5,8 @@ import com.GRP3.BPA.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,12 @@ public class UserController {
         return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
     }
 
+
+    @PostMapping(value = "/api/user")
+    public ResponseEntity<User> getUserDetails(Authentication authentication){
+
+       return new ResponseEntity<User>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
+    }
 
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping(value = "/test")
