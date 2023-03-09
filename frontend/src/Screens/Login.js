@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
 import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
-import {Stack, Heading, Button, Center, Spinner} from 'native-base';
+import {
+  Stack,
+  Heading,
+  Button,
+  Center,
+  Spinner,
+  FormControl,
+  WarningOutlineIcon,
+} from 'native-base';
 import axios from 'axios';
+import {validateEmail} from '../helpers/functions';
 
 const inputFields = [
   {placeholder: 'Email ID', type: 'text', name: 'emailId'},
@@ -33,10 +42,9 @@ const Login = ({navigation}) => {
     };
     let isValid = true;
 
-    if (formData.emailId.length <= 0) {
+    if (!validateEmail(formData.emailId)) {
       isValid = false;
       errorObj.emailId = 'Please enter valid email address';
-      //Enter email validation using regex
     }
 
     if (formData.password.length < 6) {
@@ -88,10 +96,18 @@ const Login = ({navigation}) => {
         <Stack p="4" space={3} width="100%">
           {inputFields.map((inputField, key) => (
             <Stack space={2} key={key}>
-              <InputType1
-                {...inputField}
-                onChangeText={value => handleTextChange(inputField.name, value)}
-              />
+              <FormControl isInvalid={errors[inputField.name]}>
+                <InputType1
+                  {...inputField}
+                  onChangeText={value =>
+                    handleTextChange(inputField.name, value)
+                  }
+                />
+                <FormControl.ErrorMessage
+                  leftIcon={<WarningOutlineIcon size="xs" />}>
+                  {errors[inputField.name]}
+                </FormControl.ErrorMessage>
+              </FormControl>
             </Stack>
           ))}
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Stack,
   Heading,
@@ -14,6 +14,7 @@ import {InputType1} from '../components/Commons/Input';
 import axios from 'axios';
 import {CustomAlert} from '../components/Commons/CustomAlert';
 import CustomModal from '../components/Commons/CustomModal';
+import {validateEmail} from '../helpers/functions';
 
 const inputFields = [
   {
@@ -80,10 +81,9 @@ const Signup = ({navigation}) => {
       errorObj.bannerId = 'Please enter valid banner Id';
     }
 
-    if (formData.emailId.length <= 0) {
+    if (!validateEmail(formData.emailId)) {
       isValid = false;
       errorObj.emailId = 'Please enter valid email address';
-      //Enter email validation using regex
     }
 
     if (formData.password.length < 6) {
@@ -134,7 +134,6 @@ const Signup = ({navigation}) => {
         })
         .catch(e => {
           setAlert('Unable to register the user.');
- 
         })
         .finally(() => {
           setLoader(false);
