@@ -17,11 +17,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired
-//    public UserServiceImpl(UserRepository userRepository){
-//        super();
-//        this.userRepository = userRepository;
-//    }
 
     public User saveUser(User user) {
         String password = user.getPassword();
@@ -31,7 +26,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User getUser(String username) throws UsernameNotFoundException{
-
         User user = this.loadUserByUsername(username);
         if(user == null) throw new UsernameNotFoundException("User not exist");
         return user;
@@ -40,18 +34,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User login(String email, String password) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(email);
-
         if(user == null) throw new UsernameNotFoundException("User does not exist");
         if(user.getPassword().equals(password)) return user;
-
         return null;
     }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
-
         return user;
-
     }
 }

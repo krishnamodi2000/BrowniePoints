@@ -10,7 +10,4 @@ public interface UserService {
     User getUser(String username) throws UsernameNotFoundException;
 
     User login(String email, String password) throws UsernameNotFoundException;
-
-    //public UserDetails loadUserByUsername(String username);
-
 }
