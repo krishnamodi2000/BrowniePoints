@@ -1,6 +1,5 @@
 package com.GRP3.BPA.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -88,8 +86,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-
-
 }
