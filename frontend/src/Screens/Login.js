@@ -10,9 +10,9 @@ import {
   FormControl,
   WarningOutlineIcon,
 } from 'native-base';
-import axios from 'axios';
 import {validateEmail} from '../helpers/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Axios from '../config/Axios';
 
 const inputFields = [
   {placeholder: 'Email ID', type: 'text', name: 'emailId'},
@@ -62,11 +62,10 @@ const Login = ({navigation}) => {
   const handleSubmit = () => {
     if (isValidated()) {
       setLoader(true);
-      axios
-        .post('http://192.168.2.189:8080/api/auth/authenticate', {
-          email: formData.emailId,
-          password: formData.password,
-        })
+      Axios.post('/auth/authenticate', {
+        email: formData.emailId,
+        password: formData.password,
+      })
         .then(async res => {
           if (res.data) {
             await AsyncStorage.setItem('token', res.data.token);
