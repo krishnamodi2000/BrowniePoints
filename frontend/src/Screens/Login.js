@@ -13,6 +13,8 @@ import {
 import {validateEmail} from '../helpers/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../config/Axios';
+import {useDispatch} from 'react-redux';
+import {getUserInfoAction} from '../redux/user/actions';
 
 const inputFields = [
   {placeholder: 'Email ID', type: 'text', name: 'emailId'},
@@ -25,6 +27,8 @@ const inputFields = [
 ];
 
 const Login = ({navigation}) => {
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     emailId: '',
     password: '',
@@ -69,7 +73,8 @@ const Login = ({navigation}) => {
         .then(async res => {
           if (res.data) {
             await AsyncStorage.setItem('token', res.data.token);
-            navigation.navigate('HomePage');
+            dispatch(getUserInfoAction());
+            // navigation.navigate('HomePage');
           }
         })
         .catch(e => {

@@ -1,20 +1,14 @@
-import {Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import {Text} from 'native-base';
+import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUserInfoAction} from '../redux/user/actions';
+import Wrapper from '../wrapper/Wrapper';
 
 export default function HomePage({navigator}) {
   const {user} = useSelector(state => state.user);
-  const dispatch = useDispatch();
   console.log(user);
-
-  useEffect(() => {
-    dispatch(getUserInfoAction());
-  }, [dispatch]);
-
   return (
-    <View>
-      <Text>Welcome User</Text>
-    </View>
+    <Wrapper>
+      <Text color="white">Hi {user.firstName},</Text>
+    </Wrapper>
   );
 }

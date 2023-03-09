@@ -17,11 +17,13 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
+        loading: false,
       };
     case actionTypes.GET_USER_INFO_FAIL:
       return {
         ...state,
         data: action.error,
+        loading: false,
       };
 
     default:
