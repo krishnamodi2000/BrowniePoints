@@ -118,7 +118,7 @@ const Signup = ({navigation}) => {
     if (isValidated()) {
       setLoader(true);
       axios
-        .post('http://10.0.2.2:8080/api/auth/register', {
+        .post('http://192.168.2.189:8080/api/auth/register', {
           email: formData.emailId,
           firstName: formData.firstName,
           lastName: formData.lastName,
