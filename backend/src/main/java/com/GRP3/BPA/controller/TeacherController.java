@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.jsonwebtoken.Claims;
+/** import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.Date;
+ */
 import java.util.List;
 
-import java.util.List;
 
 /**
  * Internal filter ????????? How is it done and how do I extend it to my method!
@@ -21,16 +21,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/teachers/courses")
 public class TeacherController {
-    @Value("${jwt.secret}")
-    private String secretKey;
+//    @Value("${jwt.secret}")
+//    private String secretKey;
     @Autowired
     private TeacherCourseService teacherCourseService;
-
+//add @RequestHeader("Authorization") String token in the object below when doing JWT
     @PostMapping("/addCourse")
-    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId, @RequestHeader("Authorization") String token) {
-        if (!isValidToken(token)) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
 
         try {
             TeacherCourse teacherCourse = teacherCourseService.addCourseForTeacher(teacherId, courseId);
@@ -41,10 +41,10 @@ public class TeacherController {
     }
 
     @PostMapping("/addCourses")
-    public ResponseEntity<Object> addCourses(@RequestBody String teacherId, @RequestBody List<String> courseIds,  @RequestHeader("Authorization") String token) {
-        if (!isValidToken(token)) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<Object> addCourses(@RequestBody String teacherId, @RequestBody List<String> courseIds) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
 
         try {
             List<TeacherCourse> teacherCourses = teacherCourseService.addCoursesForTeacher(teacherId, courseIds);
@@ -55,10 +55,10 @@ public class TeacherController {
     }
 
     @DeleteMapping("/removeCourse")
-    public ResponseEntity<Object> removeCourse(@RequestBody String teacherId, @RequestBody String courseId, @RequestHeader("Authorization") String token) {
-        if (!isValidToken(token)) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<Object> removeCourse(@RequestBody String teacherId, @RequestBody String courseId) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
 
         try {
             teacherCourseService.removeCourseForTeacher(teacherId,courseId);
@@ -69,10 +69,10 @@ public class TeacherController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> removeCourses(@PathVariable String teacherId, @RequestBody List<String> courseIds,  @RequestHeader("Authorization") String token) {
-        if (!isValidToken(token)) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<Object> removeCourses(@PathVariable String teacherId, @RequestBody List<String> courseIds) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
 
         try {
             teacherCourseService.removeCoursesForTeacher(teacherId, courseIds);
@@ -83,10 +83,10 @@ public class TeacherController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getCourses(@RequestBody String teacherId, @RequestHeader("Authorization") String token) {
-        if (!isValidToken(token)) {
-            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<Object> getCourses(@RequestBody String teacherId) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
         try {
             List<TeacherCourse> teacherCourses = teacherCourseService.getCoursesForTeacher(teacherId);
             return new ResponseEntity<>(teacherCourses, HttpStatus.OK);
@@ -95,22 +95,22 @@ public class TeacherController {
         }
     }
 
-    private boolean isValidToken(String token) {
-        try {
-            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-            return claims.getExpiration().after(new Date());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private String generateToken() {
-        Date now = new Date();
-        Date expiration = new Date(now.getTime() + 3600000); // 1 hour
-        return Jwts.builder()
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-    }
+//    private boolean isValidToken(String token) {
+//        try {
+//            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+//            return claims.getExpiration().after(new Date());
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
+//
+//    private String generateToken() {
+//        Date now = new Date();
+//        Date expiration = new Date(now.getTime() + 3600000); // 1 hour
+//        return Jwts.builder()
+//                .setIssuedAt(now)
+//                .setExpiration(expiration)
+//                .signWith(SignatureAlgorithm.HS256, secretKey)
+//                .compact();
+//    }
 }
