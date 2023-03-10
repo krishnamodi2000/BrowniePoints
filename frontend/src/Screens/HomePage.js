@@ -1,6 +1,7 @@
 import {Text} from 'native-base';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import Header from '../components/Header/Header';
 import Wrapper from '../wrapper/Wrapper';
 
 export default function HomePage({navigator}) {
@@ -8,7 +9,7 @@ export default function HomePage({navigator}) {
   console.log(user);
   return (
     <Wrapper>
-      <Text color="white">Hi {user.firstName},</Text>
+      <Header title={user.firstName} />
     </Wrapper>
   );
 }

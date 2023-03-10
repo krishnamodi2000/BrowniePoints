@@ -74,7 +74,6 @@ const Login = ({navigation}) => {
           if (res.data) {
             await AsyncStorage.setItem('token', res.data.token);
             dispatch(getUserInfoAction());
-            // navigation.navigate('HomePage');
           }
         })
         .catch(e => {
