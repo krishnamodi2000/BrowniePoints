@@ -66,8 +66,10 @@ public class TeacherCourseService {
         return teacherCourses;
     }
 
-    public void removeCourseForTeacher(Long teacherCourseId) {
-        teacherCourseRepository.deleteById(teacherCourseId);
+    public void removeCourseForTeacher(String teacherId, String courseId) {
+
+        TeacherCourse teacherCourse= teacherCourseRepository.findByTeacherIdAndCourseIdIn(teacherId, courseId);
+        teacherCourseRepository.delete(teacherCourse);
     }
 
     public void removeCoursesForTeacher(String teacherId, List<String> courseIds) {

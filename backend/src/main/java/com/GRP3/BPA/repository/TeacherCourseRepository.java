@@ -11,5 +11,6 @@ public interface TeacherCourseRepository extends JpaRepository<TeacherCourse, Lo
     List<TeacherCourse> findByTeacherId(String teacherId);
 
     List<TeacherCourse> findByTeacherIdAndCourseIdIn(String teacherId, List<String> courseIds);
+    TeacherCourse findByTeacherIdAndCourseIdIn(String teacherId, String courseId);
 }
 
