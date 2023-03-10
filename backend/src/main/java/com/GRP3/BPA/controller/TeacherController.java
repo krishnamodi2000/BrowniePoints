@@ -15,6 +15,9 @@ import java.util.List;
 
 import java.util.List;
 
+/**
+ * Internal filter ????????? How is it done and how do I extend it to my method!
+ */
 @RestController
 @RequestMapping("/teachers/courses")
 public class TeacherController {
