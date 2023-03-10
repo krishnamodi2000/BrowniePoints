@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Stack,
   Heading,
-  Input,
   Button,
   Center,
   Spinner,
@@ -14,6 +13,8 @@ import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
 import axios from 'axios';
 import {CustomAlert} from '../components/Commons/CustomAlert';
+import CustomModal from '../components/Commons/CustomModal';
+import {validateEmail} from '../helpers/functions';
 
 const inputFields = [
   {
@@ -50,37 +51,28 @@ const inputFields = [
   },
 ];
 
-const Signup = () => {
-  const [formData, setFormData] = useState({
-    bannerId: '',
-    emailId: '',
-    password: '',
-    contactNumber: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-  });
+const dataObj = {
+  bannerId: '',
+  emailId: '',
+  password: '',
+  contactNumber: '',
+  confirmPassword: '',
+  firstName: '',
+  lastName: '',
+};
+
+const Signup = ({navigation}) => {
+  const [formData, setFormData] = useState({...dataObj});
   const [loader, setLoader] = useState(false);
   const [errors, setErrors] = useState({
-    bannerId: '',
-    emailId: '',
-    password: '',
-    contactNumber: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
+    ...dataObj,
   });
   const [alert, setAlert] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const isValidated = () => {
     const errorObj = {
-      bannerId: '',
-      emailId: '',
-      password: '',
-      contactNumber: '',
-      confirmPassword: '',
-      firstName: '',
-      lastName: '',
+      ...dataObj,
     };
     let isValid = true;
 
@@ -89,10 +81,9 @@ const Signup = () => {
       errorObj.bannerId = 'Please enter valid banner Id';
     }
 
-    if (formData.emailId.length <= 0) {
+    if (!validateEmail(formData.emailId)) {
       isValid = false;
       errorObj.emailId = 'Please enter valid email address';
-      //Enter email validation using regex
     }
 
     if (formData.password.length < 6) {
@@ -100,7 +91,7 @@ const Signup = () => {
       errorObj.password = 'Please enter valid password';
     }
 
-    if (formData.password === formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       isValid = false;
       errorObj.confirmPassword = 'Password do not match';
     }
@@ -127,7 +118,7 @@ const Signup = () => {
     if (isValidated()) {
       setLoader(true);
       axios
-        .post('http://10.0.2.2:8080/api/auth/register', {
+        .post('http://192.168.2.189:8080/api/auth/register', {
           email: formData.emailId,
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -138,11 +129,11 @@ const Signup = () => {
         })
         .then(res => {
           if (res.data) {
+            setShowSuccessModal(true);
           }
         })
         .catch(e => {
           setAlert('Unable to register the user.');
-          console.log(JSON.stringify(e));
         })
         .finally(() => {
           setLoader(false);
@@ -150,10 +141,37 @@ const Signup = () => {
     }
   };
 
+  const handleLoginPress = () => {
+    navigateToLogin();
+    resetState();
+  };
+
+  const navigateToLogin = () => {
+    navigation.navigate('Login');
+  };
+
+  const resetState = () => {
+    setErrors({...dataObj});
+    setFormData({...dataObj});
+  };
+
   return (
     <Wrapper>
       <ScrollView
         contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+        <CustomModal
+          showModal={showSuccessModal}
+          setShowModal={setShowSuccessModal}
+          heading="Registration Successfull"
+          body={
+            <Center>
+              Please Login to your account.
+              <Button mt="2" minWidth="100" onPress={handleLoginPress}>
+                Login
+              </Button>
+            </Center>
+          }
+        />
         <Center height="100%">
           <CustomAlert
             message={alert}
@@ -178,6 +196,7 @@ const Signup = () => {
                   <InputType1
                     {...inputField}
                     isDisabled={loader}
+                    isReadOnly={loader}
                     onChangeText={value =>
                       handleTextChange(inputField.name, value)
                     }
@@ -199,7 +218,7 @@ const Signup = () => {
                   background="secondary.400"
                   onPress={handleSubmit}
                   _pressed={{backgroundColor: 'secondary.500'}}>
-                  Reigister
+                  Register
                 </Button>
               )}
             </Stack>
