@@ -1,10 +1,12 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.TeacherCourse;
+import com.GRP3.BPA.service.JwtService;
 import com.GRP3.BPA.service.TeacherCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 /** import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/teachers/courses")
 public class TeacherController {
+    JwtService jwtService;
 //    @Value("${jwt.secret}")
 //    private String secretKey;
     @Autowired
@@ -28,7 +31,7 @@ public class TeacherController {
 //add @RequestHeader("Authorization") String token in the object below when doing JWT
     @PostMapping("/addCourse")
     public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
-//        if (!isValidToken(token)) {
+//        if (!jwtService.isTokenValid(token,userDetails)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }
 

@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeacherCourse {
     @Id
-    @GeneratedValue
-    @Getter @Setter
+//    @GeneratedValue
+//    @Getter @Setter
     private Long id;
 
     @Getter @Setter
