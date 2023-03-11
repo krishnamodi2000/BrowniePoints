@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Entity
-@Table(name="User")
+@Table(name="User", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
@@ -22,7 +22,7 @@ public class User implements UserDetails {
     private int id;
 
     @Getter @Setter
-    @Column
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Getter @Setter
@@ -84,6 +84,10 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        return true;
+    }
+
+    public boolean isPresent() {
         return true;
     }
 }

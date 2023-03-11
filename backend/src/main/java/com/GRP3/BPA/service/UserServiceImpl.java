@@ -18,9 +18,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User saveUser(User user) {
+    public User saveUser(User user) throws RuntimeException{
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
+
+        emailIsAlreadyExist(user);
+        return userRepository.save(user);
+    }
+
+
+    public User emailIsAlreadyExist(User user) throws RuntimeException{
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
         return userRepository.save(user);
     }
 
