@@ -53,9 +53,7 @@ public class TeacherCourseTest {
         Course course = new Course();
         course.setCourse_id("course123");
         when(courseRepository.findById("course123")).thenReturn(course);
-
         teacherCourseService.addCourseForTeacher("teacher123", "course123");
-
         verify(teacherCourseRepository, times(1)).save(any(TeacherCourse.class));
     }
 
