@@ -24,11 +24,9 @@ import java.util.List;
 @RequestMapping("/teachers/courses")
 public class TeacherController {
     JwtService jwtService;
-//    @Value("${jwt.secret}")
-//    private String secretKey;
     @Autowired
     private TeacherCourseService teacherCourseService;
-//add @RequestHeader("Authorization") String token in the object below when doing JWT
+    //add @RequestHeader("Authorization") String token, UserDetails userDetails in the object below when doing JWT
     @PostMapping("/addCourse")
     public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
 //        if (!jwtService.isTokenValid(token,userDetails)) {
@@ -98,22 +96,5 @@ public class TeacherController {
         }
     }
 
-//    private boolean isValidToken(String token) {
-//        try {
-//            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-//            return claims.getExpiration().after(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-//
-//    private String generateToken() {
-//        Date now = new Date();
-//        Date expiration = new Date(now.getTime() + 3600000); // 1 hour
-//        return Jwts.builder()
-//                .setIssuedAt(now)
-//                .setExpiration(expiration)
-//                .signWith(SignatureAlgorithm.HS256, secretKey)
-//                .compact();
-//    }
+
 }

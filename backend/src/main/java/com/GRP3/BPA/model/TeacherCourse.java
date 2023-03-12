@@ -12,8 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeacherCourse {
     @Id
-//    @GeneratedValue
-//    @Getter @Setter
+    @Getter @Setter
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 

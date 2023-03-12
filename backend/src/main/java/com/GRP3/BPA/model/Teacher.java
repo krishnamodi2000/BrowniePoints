@@ -13,9 +13,11 @@ import lombok.Setter;
 
 public class Teacher {
     @Id
+    @Getter @Setter
     //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private String teacher_id;
 
+    @Getter@Setter
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;

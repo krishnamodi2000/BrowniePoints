@@ -13,8 +13,8 @@ import lombok.Setter;
 public class Course {
 
     @Id
-    @Getter
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Getter @Setter
+   // @GeneratedValue(strategy= GenerationType.IDENTITY)
     private String course_id;
 
     @Getter @Setter

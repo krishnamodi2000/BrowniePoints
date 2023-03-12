@@ -8,6 +8,9 @@ import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 
+/**
+ * Code Reference: https://stackoverflow.com/questions/11880924/how-to-add-custom-method-to-spring-data-jpa
+ */
 public class CourseRepositoryImpl implements CourseCustomRepository {
     @PersistenceContext
     private EntityManager entityManager;
