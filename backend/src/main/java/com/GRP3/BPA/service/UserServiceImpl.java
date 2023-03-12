@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User saveUser(User user) throws RuntimeException{
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
-
         emailIsAlreadyExist(user);
         return userRepository.save(user);
     }
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     public User emailIsAlreadyExist(User user) throws RuntimeException{
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new RuntimeException("Email is already exists");
         }
         return userRepository.save(user);
     }
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User getUser(String username) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(username);
-        if(user == null) throw new UsernameNotFoundException("User not exist");
+        if(user == null) throw new UsernameNotFoundException("User does not exist");
         return user;
     }
 
