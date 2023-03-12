@@ -6,6 +6,7 @@ import com.GRP3.BPA.model.TeacherCourse;
 import com.GRP3.BPA.repository.CourseRepository;
 import com.GRP3.BPA.repository.TeacherCourseRepository;
 import com.GRP3.BPA.repository.TeacherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +17,12 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TeacherCourseService {
+    @Autowired
     private final TeacherCourseRepository teacherCourseRepository;
+    @Autowired
     private final TeacherRepository teacherRepository;
+
+    @Autowired
     private final CourseRepository courseRepository;
 
     public TeacherCourseService(TeacherCourseRepository teacherCourseRepository, TeacherRepository teacherRepository,
