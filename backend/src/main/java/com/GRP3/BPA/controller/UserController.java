@@ -1,6 +1,7 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.User;
+import com.GRP3.BPA.model.UserException;
 import com.GRP3.BPA.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +23,21 @@ public class UserController {
 
 
     @PostMapping(value = "/api/auth/register")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
-        return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        try {
+
+            return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
+//            return "success";
+        }
+        catch (RuntimeException e){
+            return new ResponseEntity<User>(new User(), HttpStatus.CREATED);
+//            return e.getMessage();
+        }
     }
 
 
     @PostMapping(value = "/api/user")
     public ResponseEntity<User> getUserDetails(Authentication authentication){
-
        return new ResponseEntity<User>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
     }
 
