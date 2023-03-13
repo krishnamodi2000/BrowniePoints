@@ -24,9 +24,14 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/api/auth/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
+    @PostMapping("/api/auth/login")
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request)
     {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        try {
+            return ResponseEntity.ok(authenticationService.authenticate(request));
+        }
+        catch(RuntimeException e){
+            return ResponseEntity.ok(e.getMessage());
+        }
     }
 }
