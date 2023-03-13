@@ -23,14 +23,16 @@ public class UserController {
 
 
     @PostMapping(value = "/api/auth/register")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
 
-            return new ResponseEntity<User>(userService.saveUser(user), HttpStatus.CREATED);
+            userService.saveUser(user);
+
+            return new ResponseEntity<>("success", HttpStatus.CREATED);
 //            return "success";
         }
         catch (RuntimeException e){
-            return new ResponseEntity<User>(new User(), HttpStatus.CREATED);
+            return new ResponseEntity<>(new UserException(e.getMessage()), HttpStatus.OK);
 //            return e.getMessage();
         }
     }
