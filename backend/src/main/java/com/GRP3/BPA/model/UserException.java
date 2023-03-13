@@ -1,10 +1,11 @@
 package com.GRP3.BPA.model;
 
-public class UserException extends User{
+public class UserException {
 
     String message;
 
     public UserException(String message) {
+//        super();
         this.message = message;
     }
 
