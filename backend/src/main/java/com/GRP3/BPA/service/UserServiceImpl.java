@@ -41,7 +41,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user == null) throw new UsernameNotFoundException("User does not exist");
         UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
         return userDTO;
-//        return user;
     }
 
     @Override
