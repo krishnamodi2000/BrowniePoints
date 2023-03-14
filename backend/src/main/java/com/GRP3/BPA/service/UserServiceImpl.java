@@ -1,5 +1,6 @@
 package com.GRP3.BPA.service;
 
+import com.GRP3.BPA.DTO.UserDTO;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     public User emailIsAlreadyExist(User user) throws RuntimeException{
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        User tempsUser = userRepository.findByEmail(user.getEmail());
+        if (tempsUser != null && tempsUser.isPresent()) {
             throw new RuntimeException("Email is already exists");
         }
         return userRepository.save(user);
     }
 
     @Override
-    public User getUser(String username) throws UsernameNotFoundException{
-        User user = this.loadUserByUsername(username);
+    public UserDTO getUser(String token) throws UsernameNotFoundException{
+        User user = this.loadUserByUsername(token);
         if(user == null) throw new UsernameNotFoundException("User does not exist");
-        return user;
+        UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+        return userDTO;
+//        return user;
     }
 
     @Override

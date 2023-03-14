@@ -90,4 +90,12 @@ public class User implements UserDetails {
     public boolean isPresent() {
         return true;
     }
+
+    public int getId() {
+        return 0;
+    }
+
+    public String getToken() {
+        return null;
+    }
 }
