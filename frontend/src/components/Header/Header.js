@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, HStack, Icon, Menu, Pressable, Text} from 'native-base';
+import {Box, HStack, Menu, Pressable, Text} from 'native-base';
+import Icon from 'react-native-vector-icons/Entypo';
 
 export default function Header({title}) {
   return (
@@ -16,7 +17,9 @@ export default function Header({title}) {
               return (
                 <Pressable
                   accessibilityLabel="More options menu"
-                  {...triggerProps}></Pressable>
+                  {...triggerProps}>
+                  <Icon name="dots-three-vertical" color="#0f172a" size={28} />
+                </Pressable>
               );
             }}>
             <Menu.Item>Arial</Menu.Item>
