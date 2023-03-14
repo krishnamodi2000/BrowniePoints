@@ -1,5 +1,6 @@
 package com.GRP3.BPA.controller;
 
+import com.GRP3.BPA.DTO.UserDTO;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.UserException;
 import com.GRP3.BPA.service.UserService;
@@ -38,9 +39,10 @@ public class UserController {
     }
 
 
+//    @PreAuthorize("hasRole('TE')")
     @PostMapping(value = "/api/user")
-    public ResponseEntity<User> getUserDetails(Authentication authentication){
-       return new ResponseEntity<User>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
+    public ResponseEntity<?> getUserDetails(Authentication authentication){
+       return new ResponseEntity<>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('TEACHER')")
