@@ -5,7 +5,6 @@ public class UserException {
     String message;
 
     public UserException(String message) {
-//        super();
         this.message = message;
     }
 
