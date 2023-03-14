@@ -13,8 +13,7 @@ import lombok.Setter;
 public class CourseStudent {
     @Id
     @GeneratedValue
-    @Getter
-    @Setter
+    @Getter @Setter
     private Long id;
 
     @JoinColumn(name="banner_id")

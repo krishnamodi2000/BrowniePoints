@@ -14,7 +14,7 @@ import lombok.Setter;
 
 public class Student {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private String banner_id;
 
     @OneToOne(cascade=CascadeType.ALL)

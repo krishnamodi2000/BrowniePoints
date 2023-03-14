@@ -26,9 +26,9 @@ public class TeacherController {
     JwtService jwtService;
     @Autowired
     private TeacherCourseService teacherCourseService;
-    //add @RequestHeader("Authorization") String token, UserDetails userDetails in the object below when doing JWT
     @PostMapping("/addCourse")
-    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
+    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId,@RequestHeader("Authorization") String token) {
+//        UserDetails userDetails = jwtService.extractUserDetails(token);
 //        if (!jwtService.isTokenValid(token,userDetails)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }

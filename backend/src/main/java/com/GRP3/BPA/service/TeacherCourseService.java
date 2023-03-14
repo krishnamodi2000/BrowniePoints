@@ -3,16 +3,15 @@ package com.GRP3.BPA.service;
 import com.GRP3.BPA.model.Course;
 import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.model.TeacherCourse;
-import com.GRP3.BPA.repository.CourseRepository;
-import com.GRP3.BPA.repository.TeacherCourseRepository;
-import com.GRP3.BPA.repository.TeacherRepository;
+import com.GRP3.BPA.repository.course.CourseRepository;
+import com.GRP3.BPA.repository.teacherCourse.TeacherCourseRepository;
+import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
