@@ -15,7 +15,7 @@ const Home = ({navigation}) => {
           source={Logo}
           padding="20"
         />
-        <Text color="white" fontSize="28">
+        <Text color="#fbfcf8" fontSize="28">
           Brownie Point
         </Text>
       </Center>

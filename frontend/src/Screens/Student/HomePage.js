@@ -1,3 +1,4 @@
+import {Box, Text, VStack} from 'native-base';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomCard from '../../components/Commons/CustomCard';
@@ -22,8 +23,18 @@ export default function HomePage({navigation}) {
           {name: 'Logout', onPress: () => logout()},
         ]}
       />
-      <CustomCard subjectName="CSCI5308 - Adv. Software Engineering" />
-      <CustomCard subjectName="CSCI5408 - Adv. Software Engineering" />
+      <CustomCard>
+        <VStack space="2">
+          <Box px="2">
+            <Text fontSize={20} fontWeight="bold" color="white">
+              CSCI 5308 - Adv. Topic in software Development
+            </Text>
+          </Box>
+          <Box px="2">
+            <Text color={'secondary.500'}> Points : 5</Text>
+          </Box>
+        </VStack>
+      </CustomCard>
     </Wrapper>
   );
 }
