@@ -20,7 +20,8 @@ const noAuthComponents = [
   {name: 'Login', component: Login},
 ];
 
-const authProtectedComponents = [{name: 'HomePage', component: HomePage}];
+const teacherComponents = [{name: 'HomePage', component: HomePage}];
+const studentComponents = [{name: 'HomePage', component: HomePage}];
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ export default function App() {
 
 const ComponentProvider = () => {
   const dispatch = useDispatch();
-  const {loading, user} = useSelector(state => state.user);
+  const {loading, user, role} = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(getUserInfoAction());
@@ -48,14 +49,23 @@ const ComponentProvider = () => {
     <NavigationContainer>
       <Stack.Navigator>
         {user
-          ? authProtectedComponents.map((component, key) => (
-              <Stack.Screen
-                key={key}
-                name={component.name}
-                component={component.component}
-                options={{headerShown: false}}
-              />
-            ))
+          ? role === 'ROLE_TEACHER'
+            ? teacherComponents.map((component, key) => (
+                <Stack.Screen
+                  key={key}
+                  name={component.name}
+                  component={component.component}
+                  options={{headerShown: false}}
+                />
+              ))
+            : studentComponents.map((component, key) => (
+                <Stack.Screen
+                  key={key}
+                  name={component.name}
+                  component={component.component}
+                  options={{headerShown: false}}
+                />
+              ))
           : noAuthComponents.map((component, key) => (
               <Stack.Screen
                 key={key}
