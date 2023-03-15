@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="Course")
+@Table(name="course")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course {
-
-    @Id
     @Getter @Setter
+    @Id
    // @GeneratedValue(strategy= GenerationType.IDENTITY)
     private String course_id;
 

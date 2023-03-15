@@ -11,9 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseStudent {
-    @Id
-    @GeneratedValue
     @Getter @Setter
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @Getter @Setter
     @ManyToOne

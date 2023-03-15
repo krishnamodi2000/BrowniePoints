@@ -14,9 +14,10 @@ import lombok.Setter;
 
 public class Student {
     @Id
+    @Getter @Setter
     //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private String banner_id;
-
+    @Getter @Setter
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
