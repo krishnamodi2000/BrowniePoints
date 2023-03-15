@@ -13,6 +13,7 @@ import Loading from './Screens/Loading';
 import store from './redux/index';
 import HomeScreen from './Screens/Teacher/HomeScreen';
 import Course from './Screens/Teacher/Course';
+import EditCourse from './Screens/Teacher/EditCourse';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const noAuthComponents = [
 const teacherComponents = [
   {name: 'HomePage', component: HomeScreen},
   {name: 'Course', component: Course},
+  {name: 'Edit Course', component: EditCourse},
 ];
 const studentComponents = [{name: 'HomePage', component: HomePage}];
 

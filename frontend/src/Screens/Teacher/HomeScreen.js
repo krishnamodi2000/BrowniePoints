@@ -14,8 +14,17 @@ export default function HomeScreen({navigation}) {
     dispatch(logoutAction());
   };
 
-  const navigateToCouse = () => {
+  const navigateToCourse = () => {
     navigation.navigate('Course');
+  };
+
+  const naviagteToEditCourse = () => {
+    navigation.navigate('Edit Course', {
+      courseDetails: {
+        courseCode: 'CSCI5308',
+        courseName: 'Adv. Topic in Software Development',
+      },
+    });
   };
 
   return (
@@ -24,7 +33,7 @@ export default function HomeScreen({navigation}) {
         title={user.firstName}
         menuItemsList={[
           {name: 'Profile', onPress: () => console.log('Profile Clicked')},
-          {name: 'Add Course', onPress: () => navigateToCouse()},
+          {name: 'Add Course', onPress: () => navigateToCourse()},
           {name: 'Logout', onPress: () => logout()},
         ]}
       />
@@ -33,6 +42,7 @@ export default function HomeScreen({navigation}) {
           <CardContent
             courseCode="5308"
             courseName="Adv. Topic in software development"
+            naviagteToEditCourse={naviagteToEditCourse}
           />
         </CustomCard>
       </ScrollView>
@@ -40,7 +50,7 @@ export default function HomeScreen({navigation}) {
   );
 }
 
-const CardContent = ({courseCode, courseName}) => {
+const CardContent = ({courseCode, courseName, naviagteToEditCourse}) => {
   return (
     <VStack>
       <Text fontSize={20} fontWeight="bold" color="white">
@@ -55,7 +65,8 @@ const CardContent = ({courseCode, courseName}) => {
       <Button
         mt={3}
         background="primary.200"
-        _pressed={{backgroundColor: 'primary.600'}}>
+        _pressed={{backgroundColor: 'primary.600'}}
+        onPress={() => naviagteToEditCourse()}>
         Edit Information
       </Button>
     </VStack>
