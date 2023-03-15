@@ -7,6 +7,7 @@ import com.GRP3.BPA.service.JwtService;
 import com.GRP3.BPA.service.TeacherCourseService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +36,7 @@ public class TeacherController {
     @Autowired
     private CourseStudentService courseStudentService;
     @PostMapping("/addCourse")
-    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
+    public ResponseEntity<Object> addCourse(@RequestParam String teacherId, @RequestParam String courseId) {
 //        UserDetails userDetails = jwtService.extractUserDetails(token);
 //        if (!jwtService.isTokenValid(token,userDetails)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
@@ -52,7 +53,7 @@ public class TeacherController {
 
 
     @PostMapping("/addCourses")
-    public ResponseEntity<Object> addCourses(@RequestBody String teacherId, @RequestBody List<String> courseIds) {
+    public ResponseEntity<Object> addCourses(@RequestParam String teacherId, @RequestParam List<String> courseIds) {
 //        if (!isValidToken(token)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }
@@ -66,7 +67,7 @@ public class TeacherController {
     }
 
     @DeleteMapping("/removeCourse")
-    public ResponseEntity<Object> removeCourse(@RequestBody String teacherId, @RequestBody String courseId) {
+    public ResponseEntity<Object> removeCourse(@RequestParam String teacherId, @RequestParam String courseId) {
 //        if (!isValidToken(token)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }
@@ -80,7 +81,7 @@ public class TeacherController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> removeCourses(@PathVariable String teacherId, @RequestBody List<String> courseIds) {
+    public ResponseEntity<Object> removeCourses(@RequestParam String teacherId, @RequestParam List<String> courseIds) {
 //        if (!isValidToken(token)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }
@@ -109,7 +110,7 @@ public class TeacherController {
 
 
     @PostMapping("/addStudent")
-    public ResponseEntity<Object>  addStudentToCourse(@RequestBody String courseId, @RequestBody String teacherId, @RequestBody String studentId) {
+    public ResponseEntity<Object>  addStudentToCourse(@RequestParam String courseId, @RequestParam String teacherId, @RequestParam String studentId) {
         try {
             CourseStudent courseStudent=courseStudentService.addStudent(courseId, teacherId, studentId);
             return new ResponseEntity<>(courseStudent, HttpStatus.CREATED);
@@ -119,7 +120,7 @@ public class TeacherController {
     }
     }
     @DeleteMapping("/removeStudent")
-    public ResponseEntity<Object> removeStudentFromCourse(@RequestBody String courseId, @RequestBody String teacherId, @RequestBody String studentId) {
+    public ResponseEntity<Object> removeStudentFromCourse(@RequestParam String courseId, @RequestParam String teacherId, @RequestParam String studentId) {
         try {
             courseStudentService.removeStudent(courseId, teacherId, studentId);
             return new ResponseEntity<>("Student removed Successfully",HttpStatus.NO_CONTENT);
@@ -130,7 +131,7 @@ public class TeacherController {
     }
 
     @PostMapping("/addStudents/csv")
-    public ResponseEntity<Object> addStudentsFromCsv(@RequestBody String courseId, @RequestBody String teacherId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Object> addStudentsFromCsv(@RequestParam String courseId, @RequestParam String teacherId, @RequestParam("file") MultipartFile file) {
         try (InputStream csv = file.getInputStream()) {
             courseStudentService.addStudentsFromCsv(courseId, teacherId, csv);
             return new ResponseEntity<>("Students Added Succesfully",HttpStatus.CREATED);
