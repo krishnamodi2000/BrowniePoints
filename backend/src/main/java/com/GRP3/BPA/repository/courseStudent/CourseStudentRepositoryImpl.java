@@ -28,7 +28,7 @@ public class CourseStudentRepositoryImpl implements CourseStudentCustomRepositor
      */
     @Override
     public List<CourseStudent> findByStudentIdAndCourseIdIn(String studentId, List<String> courseIds) {
-        String query = "SELECT cs FROM CourseStudent cs WHERE cs.student.banner_id = :studentId AND cs.teacherCourse.course.course_id IN :courseIds";
+        String query = "SELECT cs FROM CourseStudent cs WHERE cs.student.banner_id = :studentId AND cs.course.course_id IN :courseIds";
         return entityManager.createQuery(query, CourseStudent.class)
                 .setParameter("studentId", studentId)
                 .setParameter("courseIds", courseIds)
@@ -42,7 +42,7 @@ public class CourseStudentRepositoryImpl implements CourseStudentCustomRepositor
      */
     @Override
     public CourseStudent findByStudentIdAndCourseIdIn(String studentId, String courseId) {
-        String query = "SELECT cs FROM CourseStudent cs WHERE cs.student.banner_id = :studentId AND cs.teacherCourse.course.course_id = :courseId";
+        String query = "SELECT cs FROM CourseStudent cs WHERE cs.student.banner_id = :studentId AND cs.course.course_id = :courseId";
         return entityManager.createQuery(query, CourseStudent.class)
                 .setParameter("studentId", studentId)
                 .setParameter("courseId", courseId)

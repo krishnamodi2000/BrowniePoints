@@ -11,15 +11,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseStudent {
-    @Id
-    @GeneratedValue
     @Getter @Setter
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="banner_id")
     private Student student;
     @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="course_id")
-    private TeacherCourse teacherCourse;
+    private Course course;
 }
 

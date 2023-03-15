@@ -53,11 +53,13 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         Course course = courseRepository.findById(courseId);
         TeacherCourse teacherCourse = teacherCourseRepository.findByTeacherIdAndCourseIdIn(teacherId, courseId);
         Student student = studentRepository.findById(studentId);
-
-        CourseStudent courseStudent = new CourseStudent();
-        courseStudent.setStudent(student);
-        courseStudent.setTeacherCourse(teacherCourse);
-        return courseStudentRepository.save(courseStudent);
+        if(teacherCourse!=null){
+            CourseStudent courseStudent = new CourseStudent();
+            courseStudent.setStudent(student);
+            courseStudent.setCourse(course);
+            return courseStudentRepository.save(courseStudent);
+        }
+        return null;
     }
 
     /**
@@ -70,8 +72,10 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         Course course = courseRepository.findById(courseId);
         TeacherCourse teacherCourse = teacherCourseRepository.findByTeacherIdAndCourseIdIn(teacherId, courseId);
         Student student = studentRepository.findById(studentId);
-        CourseStudent courseStudent = courseStudentRepository.findByStudentIdAndCourseIdIn(studentId,courseId);
-        courseStudentRepository.delete(courseStudent);
+        if(teacherCourse!=null){
+            CourseStudent courseStudent = courseStudentRepository.findByStudentIdAndCourseIdIn(studentId,courseId);
+            courseStudentRepository.delete(courseStudent);
+        }
     }
 
     /**
@@ -83,17 +87,20 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     public void addStudentsFromCsv(String courseId, String teacherId, InputStream csv) {
         Course course = courseRepository.findById(courseId);
         TeacherCourse teacherCourse = teacherCourseRepository.findByTeacherIdAndCourseIdIn(teacherId, courseId);
+        if(teacherCourse!=null){
+            // parse the CSV and extract the student ids
+            List<String> studentIds = parseCsv(csv);
 
-        // parse the CSV and extract the student ids
-        List<String> studentIds = parseCsv(csv);
+            for (String studentId : studentIds) {
+                Student student = studentRepository.findById(studentId);
+                CourseStudent courseStudent = new CourseStudent();
+                courseStudent.setStudent(student);
+                courseStudent.setCourse(course);
+                courseStudentRepository.save(courseStudent);
+            }
+}
 
-        for (String studentId : studentIds) {
-            Student student = studentRepository.findById(studentId);
-            CourseStudent courseStudent = new CourseStudent();
-            courseStudent.setStudent(student);
-            courseStudent.setTeacherCourse(teacherCourse);
-            courseStudentRepository.save(courseStudent);
-        }
+
     }
 
     private List<String> parseCsv(InputStream csv) {
