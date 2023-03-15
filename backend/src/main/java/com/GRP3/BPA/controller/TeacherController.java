@@ -5,6 +5,7 @@ import com.GRP3.BPA.model.TeacherCourse;
 import com.GRP3.BPA.service.CourseStudentService;
 import com.GRP3.BPA.service.JwtService;
 import com.GRP3.BPA.service.TeacherCourseService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class TeacherController {
     @Autowired
     private CourseStudentService courseStudentService;
     @PostMapping("/addCourse")
-    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId,@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Object> addCourse(@RequestBody String teacherId, @RequestBody String courseId) {
 //        UserDetails userDetails = jwtService.extractUserDetails(token);
 //        if (!jwtService.isTokenValid(token,userDetails)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
@@ -47,6 +48,8 @@ public class TeacherController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
     @PostMapping("/addCourses")
     public ResponseEntity<Object> addCourses(@RequestBody String teacherId, @RequestBody List<String> courseIds) {
