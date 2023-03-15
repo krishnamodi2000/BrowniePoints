@@ -33,7 +33,6 @@ const studentComponents = [
   {name: 'HomePage', component: HomePage},
   {name: 'UserProfile', component: UserProfile},
 ];
-
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
@@ -43,7 +42,6 @@ export default function App() {
     </NativeBaseProvider>
   );
 }
-
 const ComponentProvider = () => {
   const dispatch = useDispatch();
   const {loading, user, role} = useSelector(state => state.user);
