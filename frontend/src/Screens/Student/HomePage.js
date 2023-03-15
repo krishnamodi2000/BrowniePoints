@@ -1,4 +1,4 @@
-import {Box, Text, VStack} from 'native-base';
+import {Button, Box, Text, VStack, Fab, Icon} from 'native-base';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomCard from '../../components/Commons/CustomCard';
@@ -8,6 +8,7 @@ import Wrapper from '../../wrapper/Wrapper';
 
 export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
+  console.log(user);
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutAction());
@@ -19,7 +20,7 @@ export default function HomePage({navigation}) {
   return (
     <Wrapper>
       <Header
-        title={user.firstName}
+        title={`Hello, ${user.firstName}`}
         menuItemsList={[
           {name: 'Profile', onPress: () => handleProfilePress()},
           {name: 'Logout', onPress: () => logout()},
@@ -86,6 +87,21 @@ export default function HomePage({navigation}) {
           </Box>
         </VStack>
       </CustomCard>
+
+      <Button
+        style={{
+          backgroundColor: '#fcd12a',
+          position: 'absolute',
+          bottom: 15,
+          right: 6,
+          height: 50,
+          width: 50,
+          borderRadius: 25,
+        }}
+        floating
+        onPress={() => console.log('Pressed')}>
+        <Text>QR</Text>
+      </Button>
     </Wrapper>
   );
 }
