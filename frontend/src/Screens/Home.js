@@ -1,8 +1,7 @@
-import {View} from 'react-native';
 import React from 'react';
 import Wrapper from '../wrapper/Wrapper';
 import Logo from '../assets/Logo.png';
-import {Center, Flex, Image, VStack, Text, Button} from 'native-base';
+import {Center, Image, VStack, Text, Button} from 'native-base';
 
 const Home = ({navigation}) => {
   return (
@@ -15,7 +14,7 @@ const Home = ({navigation}) => {
           source={Logo}
           padding="20"
         />
-        <Text color="white" fontSize="28">
+        <Text color="#fbfcf8" fontSize="28">
           Brownie Point
         </Text>
       </Center>
@@ -25,9 +24,11 @@ const Home = ({navigation}) => {
           mt="2"
           mb="2"
           backgroundColor="secondary.400"
-          _pressed={{backgroundColor: 'secondary.500'}}
+          _pressed={{backgroundColor: 'secondary.400'}}
           onPress={() => navigation.navigate('Login')}>
-          Login
+          <Text color="#fff9e3" fontSize="19" fontWeight={800}>
+            Login
+          </Text>
         </Button>
         <Button
           size="lg"
@@ -36,10 +37,11 @@ const Home = ({navigation}) => {
           backgroundColor="primary.200"
           _pressed={{backgroundColor: 'primary.400'}}
           onPress={() => navigation.navigate('Signup')}>
-          Register
+          <Text color="#fff9e3" fontSize="18" fontWeight={700}>
+            Register
+          </Text>
         </Button>
       </VStack>
-      <Text>home</Text>
     </Wrapper>
   );
 };

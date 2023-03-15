@@ -97,7 +97,7 @@ const Signup = ({navigation}) => {
       errorObj.confirmPassword = 'Password do not match';
     }
 
-    if (formData.firstName.length <= 3) {
+    if (formData.firstName.length <= 1) {
       isValid = false;
       errorObj.firstName = 'Please enter valid first name';
     }

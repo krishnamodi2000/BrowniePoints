@@ -7,7 +7,7 @@ const AxiosInstance = axios.create({
 });
 
 AxiosInstance.interceptors.request.use(async request => {
-  if (request.url.endsWith('authenticate')) return request;
+  if (request.url.endsWith('login')) return request;
 
   if (request.url.endsWith('register')) return request;
 
