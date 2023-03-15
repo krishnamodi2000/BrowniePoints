@@ -9,9 +9,11 @@ import Wrapper from '../../wrapper/Wrapper';
 export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
   const dispatch = useDispatch();
-
   const logout = () => {
     dispatch(logoutAction());
+  };
+  const handleProfilePress = () => {
+    navigation.navigate('UserProfile');
   };
 
   return (
@@ -19,19 +21,68 @@ export default function HomePage({navigation}) {
       <Header
         title={user.firstName}
         menuItemsList={[
-          {name: 'Profile', onPress: () => console.log('Profile Clicked')},
+          {name: 'Profile', onPress: () => handleProfilePress()},
           {name: 'Logout', onPress: () => logout()},
         ]}
       />
       <CustomCard>
         <VStack space="2">
-          <Box px="2">
-            <Text fontSize={20} fontWeight="bold" color="white">
-              CSCI 5308 - Adv. Topic in software Development
+          <Box
+            px="4"
+            py="5"
+            borderRadius={8}
+            bg="#373737"
+            borderWidth={1}
+            borderColor="gray.300"
+            shadow={2}
+            transition="all 0.2s"
+            _hover={{
+              transform: 'translateY(-8px)',
+              shadow: '2xl',
+            }}>
+            <Text fontSize={22} fontWeight="bold" color="white" mb="2">
+              CSCI 5308 - Advanced Topics in Software Development
             </Text>
+
+            <Box
+              borderRadius={5}
+              bg="secondary.100"
+              px="3"
+              py="1"
+              alignSelf="flex-start"
+              mb="2">
+              <Text fontSize={16} fontWeight="bold" color="black">
+                Points: 5
+              </Text>
+            </Box>
           </Box>
-          <Box px="2">
-            <Text color={'secondary.500'}> Points : 5</Text>
+          <Box
+            px="4"
+            py="5"
+            borderRadius={8}
+            bg="#373737"
+            borderWidth={1}
+            borderColor="gray.300"
+            shadow={2}
+            transition="all 0.2s"
+            _hover={{
+              transform: 'translateY(-8px)',
+              shadow: '2xl',
+            }}>
+            <Text fontSize={22} fontWeight="bold" color="white" mb="2">
+              CSCI 5309 - Data Management Warehousing Analysis
+            </Text>
+            <Box
+              borderRadius={5}
+              bg="secondary.100"
+              px="3"
+              py="1"
+              alignSelf="flex-start"
+              mb="2">
+              <Text fontSize={16} fontWeight="bold" color="black">
+                Points: 2
+              </Text>
+            </Box>
           </Box>
         </VStack>
       </CustomCard>

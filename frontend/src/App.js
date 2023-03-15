@@ -12,6 +12,7 @@ import {useEffect} from 'react';
 import Loading from './Screens/Loading';
 import store from './redux/index';
 import HomeScreen from './Screens/Teacher/HomeScreen';
+import UserProfile from './Screens/Student/UserProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,10 @@ const noAuthComponents = [
 ];
 
 const teacherComponents = [{name: 'HomePage', component: HomeScreen}];
-const studentComponents = [{name: 'HomePage', component: HomePage}];
+const studentComponents = [
+  {name: 'HomePage', component: HomePage},
+  {name: 'UserProfile', component: UserProfile},
+];
 
 export default function App() {
   return (

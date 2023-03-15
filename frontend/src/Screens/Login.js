@@ -91,7 +91,7 @@ const Login = ({navigation}) => {
         <Heading
           size="lg"
           fontSize="36"
-          color="primary.300"
+          color="secondary.300"
           textAlign="center"
           mt="5"
           mb="5">
