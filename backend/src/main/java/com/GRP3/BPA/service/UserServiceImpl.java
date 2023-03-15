@@ -4,13 +4,11 @@ import com.GRP3.BPA.DTO.UserDTO;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.service.utils.Utils;
-import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Set;
 

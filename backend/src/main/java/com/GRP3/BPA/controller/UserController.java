@@ -4,7 +4,6 @@ import com.GRP3.BPA.service.EmailValidator;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.UserException;
 import com.GRP3.BPA.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
