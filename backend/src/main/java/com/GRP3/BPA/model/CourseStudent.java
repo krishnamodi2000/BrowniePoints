@@ -16,10 +16,12 @@ public class CourseStudent {
     @Getter @Setter
     private Long id;
     @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="banner_id")
     private Student student;
     @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="course_id")
-    private TeacherCourse teacherCourse;
+    private Course course;
 }
 
