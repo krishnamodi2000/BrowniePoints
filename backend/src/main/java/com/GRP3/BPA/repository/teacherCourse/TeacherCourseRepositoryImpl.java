@@ -1,11 +1,8 @@
-package com.GRP3.BPA.repository;
+package com.GRP3.BPA.repository.teacherCourse;
 
 import com.GRP3.BPA.model.TeacherCourse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.GRP3.BPA.repository;
+package com.GRP3.BPA.repository.teacherCourse;
 
 import com.GRP3.BPA.model.TeacherCourse;
 
