@@ -15,6 +15,7 @@ import axios from 'axios';
 import {CustomAlert} from '../components/Commons/CustomAlert';
 import CustomModal from '../components/Commons/CustomModal';
 import {validateEmail} from '../helpers/functions';
+import Axios from '../config/Axios';
 
 const inputFields = [
   {
@@ -117,16 +118,15 @@ const Signup = ({navigation}) => {
   const handleSubmit = () => {
     if (isValidated()) {
       setLoader(true);
-      axios
-        .post('http://192.168.2.189:8080/api/auth/register', {
-          email: formData.emailId,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          contactNumber: Math.random(0) * 1020,
-          password: formData.password,
-          role: 'ROLE_STUDENT',
-          isAuthenticated: true,
-        })
+      Axios.post('/auth/register', {
+        email: formData.emailId,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        contactNumber: Math.random(0) * 1020,
+        password: formData.password,
+        role: 'ROLE_STUDENT',
+        isAuthenticated: true,
+      })
         .then(res => {
           if (res.data) {
             setShowSuccessModal(true);

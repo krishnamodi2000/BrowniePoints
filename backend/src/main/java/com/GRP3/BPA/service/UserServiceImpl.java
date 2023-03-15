@@ -3,6 +3,7 @@ package com.GRP3.BPA.service;
 import com.GRP3.BPA.DTO.UserDTO;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.repository.UserRepository;
+import com.GRP3.BPA.service.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +20,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User saveUser(User user) throws RuntimeException{
+    public User saveUser(User user) throws RuntimeException {
         String password = user.getPassword();
+        if(!Utils.isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
         user.setPassword(passwordEncoder.encode(password));
         emailIsAlreadyExist(user);
         return userRepository.save(user);
@@ -41,7 +43,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user == null) throw new UsernameNotFoundException("User does not exist");
         UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
         return userDTO;
-//        return user;
     }
 
     @Override
