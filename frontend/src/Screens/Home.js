@@ -1,8 +1,7 @@
-import {View} from 'react-native';
 import React from 'react';
 import Wrapper from '../wrapper/Wrapper';
 import Logo from '../assets/Logo.png';
-import {Center, Flex, Image, VStack, Text, Button} from 'native-base';
+import {Center, Image, VStack, Text, Button} from 'native-base';
 
 const Home = ({navigation}) => {
   return (
