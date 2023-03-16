@@ -38,9 +38,9 @@ package:
 
 deploy:
   stage: deploy
-  image: docker:latest
+  image: docker:19
   services: 
-    - docker:dind
+    - docker:19-dind
   before_script:
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker build -t ${CONTAINER_TEST_IMAGE}
