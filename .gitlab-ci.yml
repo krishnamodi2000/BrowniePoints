@@ -1,13 +1,39 @@
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+default:
+  image: maven:3.8.3-openjdk-17
+  services: docker:dind
+
 stages:
   - build
   - test
+  - package
+  - deploy
 
 build:
+  stage: build
   image: maven:3.8.3-openjdk-17
   script:
     - mvn -f backend/pom.xml install
 
 test:
+  stage: test
   image: maven:3.8.3-openjdk-17
   script:
     - mvn -f backend/pom.xml test
+
+package:
+  stage: package
+  script: 
+    - echo "Maven Packaging Started"
+    - mvn clean package
+  artifacts:
+    paths:
+      - target/*.jar
+    only:
+      - main
+
+deploy:
+  
+
