@@ -3,7 +3,8 @@ variables:
 
 default:
   image: maven:3.8.3-openjdk-17
-  services: docker:dind
+  services: 
+  - docker:dind
 
 stages:
   - build
@@ -31,9 +32,9 @@ package:
   artifacts:
     paths:
       - target/*.jar
-    only:
-      - main
+  only:
+    - main
 
-deploy:
-  
+
+
 
