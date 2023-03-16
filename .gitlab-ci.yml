@@ -35,6 +35,21 @@ package:
   only:
     - main
 
+deploy:
+  stage: deploy
+  image: docker:latest
+  services: 
+    - docker:dind
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker build -t ${CONTAINER_TEST_IMAGE}
+    - docker push ${CONTAINER_TEST_IMAGE}
+    - docker logout
+  script:
+    - echo "Maven Deployment Started"
+
+
+
 
 
 
