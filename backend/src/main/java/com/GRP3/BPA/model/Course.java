@@ -13,11 +13,20 @@ import lombok.Setter;
 public class Course {
     @Getter @Setter
     @Id
-   // @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private String course_id;
+    @Column(name="course_id")
+    private String courseId;
 
     @Getter @Setter
-    @Column
-    private String course_name;
+    @Column(name="course_name")
+    private String courseName;
+
+    @Getter @Setter
+    @Column(name="course_description")
+    private String courseDescription;
+
+    @Getter @Setter
+    @ManyToOne
+    @JoinColumn(name="teacher_id")
+    private Teacher teacher;
 
 }
