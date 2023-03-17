@@ -4,7 +4,8 @@ variables:
 
 default:
   image: maven:3.8.3-openjdk-17
-  tags: deployment
+  tags: 
+  - deployment
   services: 
   - docker:dind
 
