@@ -45,9 +45,9 @@ deploy:
     - docker:19-dind
   before_script:
     - echo $USER
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker build -t ${CONTAINER_TEST_IMAGE}
-    - docker push ${CONTAINER_TEST_IMAGE}
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CONTAINER_TEST_IMAGE
+    - docker push $CONTAINER_TEST_IMAGE
     - docker logout
   script:
     - echo $USER
