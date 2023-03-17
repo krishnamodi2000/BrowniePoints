@@ -45,7 +45,6 @@ package:
 
 deploy:
   stage: deploy
-  image: docker:19
   services: 
     - name: docker:dind
       entrypoint: ["env", "-u", "DOCKER_HOST"]
@@ -58,6 +57,7 @@ deploy:
 
   before_script:
     - echo $USER
+    - echo "ROSHIL"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $CONTAINER_TEST_IMAGE
     - docker push $CONTAINER_TEST_IMAGE
