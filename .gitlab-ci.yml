@@ -5,7 +5,7 @@ variables:
 
   
 default:
-  image: docker:19
+  image: docker:latest
   tags: 
   - rr11rr
   services: 
