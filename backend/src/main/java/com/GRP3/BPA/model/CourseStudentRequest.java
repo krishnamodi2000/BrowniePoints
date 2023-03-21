@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseStudentRequest {
-    private Student student;
-    private Course course;
+    private String studentId;
+    private String courseId;
+    private String teacherId;
 }

@@ -2,7 +2,10 @@ package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.Course;
 import com.GRP3.BPA.model.CourseRequest;
+import com.GRP3.BPA.model.CourseStudent;
+import com.GRP3.BPA.model.CourseStudentRequest;
 import com.GRP3.BPA.service.CourseService;
+import com.GRP3.BPA.service.CourseStudentService;
 import com.GRP3.BPA.service.JwtService;
 import com.GRP3.BPA.service.TeacherService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -18,6 +25,9 @@ import java.util.List;
 public class TeacherCourseStudentController {
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private CourseStudentService courseStudentService;
     @Autowired
     private TeacherService teacherService;
     @Autowired
@@ -106,4 +116,43 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/removeStudent")
+    public ResponseEntity<Object> removeStudent(@RequestBody CourseStudentRequest courseStudentRequest) {
+//        if (!isValidToken(token)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
+
+        try {
+            courseStudentService.removeStudent(courseStudentRequest);
+            return new ResponseEntity<>("Student removed successfully",HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/addStudent")
+    public ResponseEntity<Object> addStudent(@RequestBody CourseStudentRequest courseStudentRequest) {
+//        UserDetails userDetails = jwtService.extractUserDetails(token);
+//        if (!jwtService.isTokenValid(token,userDetails)) {
+//            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+//        }
+
+        try {
+            CourseStudent courseStudent = courseStudentService.addStudent(courseStudentRequest);
+            return new ResponseEntity<>(courseStudent, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+//    @PostMapping("/addStudents")
+//    public ResponseEntity<Object> addStudentsFromCsv(@RequestBody File file) {
+//        try {
+//            courseStudentService.addStudentsFromCsv(file);
+//            return new ResponseEntity<>("Students Added Succesfully",HttpStatus.CREATED);
+//        } catch (IllegalArgumentException e) {
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
 }
