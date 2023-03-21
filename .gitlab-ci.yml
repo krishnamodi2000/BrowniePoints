@@ -1,15 +1,14 @@
 variables:
-  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
-  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
-  DOCKER_TLS_CERTDIR: ""
+  MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+  DOCKER_HOST: tcp://localhost:2375/
 
-  
 default:
-  image: docker:latest
+  image: maven:3.8.3-openjdk-17
   tags: 
-  - rr11rr
+  - docker
   services: 
-  - docker:dind --prviliged
+  - docker:18.09.7-dind
 
 stages:
   - build
@@ -17,21 +16,20 @@ stages:
   - package
   - deploy
 
-# build:
-#   stage: build
-#   image: maven:3.8.3-openjdk-17
-#   script:
-#     - mvn -f backend/pom.xml install
+build:
+  stage: build
+  image: maven:3.8.3-openjdk-17
+  script:
+    - mvn -f backend/pom.xml install
 
-# test:
-#   stage: test
-#   image: maven:3.8.3-openjdk-17
-#   script:
-#     - mvn -f backend/pom.xml test
+test:
+  stage: test
+  image: maven:3.8.3-openjdk-17
+  script:
+    - mvn -f backend/pom.xml test
 
 package:
   stage: package
-  image: maven:3.8.3-openjdk-17
   script: 
     - echo "Maven Packaging Started"
     - mvn clean package
@@ -43,22 +41,11 @@ package:
 
 deploy:
   stage: deploy
-  services: 
-    - name: docker:dind
-      entrypoint: ["env", "-u", "DOCKER_HOST"]
-      command: ["dockerd-entrypoint.sh"]
-  variables:
-    DOCKER_DRIVER: overlay2
-    # See https://github.com/docker-library/docker/pull/166
-    DOCKER_TLS_CERTDIR: ""
-
+  image: docker:latest
   before_script:
-    - echo $USER
-    - echo "ROSHIL"
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CONTAINER_TEST_IMAGE
-    - docker push $CONTAINER_TEST_IMAGE
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker build -t ${CONTAINER_TEST_IMAGE}
+    - docker push ${CONTAINER_TEST_IMAGE}
     - docker logout
   script:
-    - echo $USER
     - echo "Maven Deployment Started"
