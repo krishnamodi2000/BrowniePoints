@@ -12,8 +12,6 @@ import {useEffect} from 'react';
 import Loading from './Screens/Loading';
 import store from './redux/index';
 import HomeScreen from './Screens/Teacher/HomeScreen';
-import Course from './Screens/Teacher/Course';
-import EditCourse from './Screens/Teacher/EditCourse';
 import UserProfile from './Screens/Student/UserProfile';
 
 const Stack = createNativeStackNavigator();
@@ -24,15 +22,12 @@ const noAuthComponents = [
   {name: 'Login', component: Login},
 ];
 
-const teacherComponents = [
-  {name: 'HomePage', component: HomeScreen},
-  {name: 'Course', component: Course},
-  {name: 'Edit Course', component: EditCourse},
-];
+const teacherComponents = [{name: 'HomePage', component: HomeScreen}];
 const studentComponents = [
   {name: 'HomePage', component: HomePage},
   {name: 'UserProfile', component: UserProfile},
 ];
+
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
@@ -42,6 +37,7 @@ export default function App() {
     </NativeBaseProvider>
   );
 }
+
 const ComponentProvider = () => {
   const dispatch = useDispatch();
   const {loading, user, role} = useSelector(state => state.user);

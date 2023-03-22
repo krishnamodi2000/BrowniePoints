@@ -1,44 +1,61 @@
-import {View, Text} from 'react-native';
 import React from 'react';
-import {Box, VStack} from 'native-base';
-import Wrapper from '../../wrapper/Wrapper';
-import {
-  Stack,
-  Heading,
-  Button,
-  Center,
-  Spinner,
-  FormControl,
-  WarningOutlineIcon,
-  Avatar,
-} from 'native-base';
-import Header from '../../components/Header/Header';
 import {useSelector} from 'react-redux';
+import {Box, Center, Heading, Text, Button, Avatar} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
+import Wrapper from '../../wrapper/Wrapper';
 
 export default function UserProfile() {
   const {user} = useSelector(state => state.user);
+  const navigation = useNavigation();
 
   const generateInitials = () => {
     return user.firstName[0].toUpperCase() + user.lastName[0];
   };
 
+  const handleUpdateProfile = () => {
+    // Code to update user information goes here
+    alert('User information will be changed');
+  };
+
   return (
     <Wrapper>
-      <Center height="30%">
-        <Heading
-          size="xl"
-          fontSize="36"
-          color="secondary.50"
-          textAlign="center"
-          mt="5"
-          mb="5">
-          User Profile
-        </Heading>
-        <Avatar bg="secondary.300" mr="1" size="xl">
-          {generateInitials()}
-        </Avatar>
-        <Box pt={2}></Box>
-      </Center>
+      <Box>
+        <Center>
+          <Heading size="xl" fontweight="bold" mb={12} color="secondary.200">
+            User Profile
+          </Heading>
+          <Avatar bg="secondary.300" mr={1} size="xl">
+            {generateInitials()}
+          </Avatar>
+          <Box
+            bg="#373737"
+            p={9}
+            borderRadius={8}
+            borderWidth={1}
+            borderColor="white"
+            mt={5}>
+            <Text color="secondary.100" fontSize={18} mb={2}>
+              First Name: <Text fontWeight="bold">{user.firstName}</Text>
+            </Text>
+            <Text color="secondary.100" fontSize={18} mb={2}>
+              Last Name: <Text fontWeight="bold">{user.lastName}</Text>
+            </Text>
+            <Text color="secondary.100" fontSize={18} mb={2}>
+              Banner ID: <Text fontWeight="bold">{user.bannerId}</Text>
+            </Text>
+            <Text color="secondary.100" fontSize={18} mb={2}>
+              Email ID: <Text fontWeight="bold">{user.emailId}</Text>
+            </Text>
+          </Box>
+          <Box mt={5}>
+            <Button onPress={handleUpdateProfile}>
+              <Text color="white" fontweight="bold">
+                Update Profile
+              </Text>
+            </Button>
+          </Box>
+        </Center>
+      </Box>
     </Wrapper>
   );
 }
