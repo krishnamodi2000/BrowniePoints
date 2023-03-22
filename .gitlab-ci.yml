@@ -36,6 +36,8 @@ package:
   artifacts:
     paths:
       - target/*.jar
+  only:
+    - PX-22_CD_Implementation
 
 
 deploy:
