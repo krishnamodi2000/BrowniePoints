@@ -13,10 +13,20 @@ export default function UserProfile() {
   };
 
   const handleUpdateProfile = () => {
-    // Code to update user information goes here
     alert('User information will be changed');
   };
 
+  if (!user) {
+    return (
+      <Wrapper>
+        <Center>
+          <Heading color="red.500" size="md">
+            Error: User information not found!
+          </Heading>
+        </Center>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       <Box>
@@ -35,10 +45,20 @@ export default function UserProfile() {
             borderColor="white"
             mt={5}>
             <Text color="secondary.100" fontSize={18} mb={2}>
-              First Name: <Text fontWeight="bold">{user.firstName}</Text>
+              First Name:{' '}
+              {user.firstName ? (
+                <Text fontWeight="bold">{user.firstName}</Text>
+              ) : (
+                <Text color="red.500">Not available</Text>
+              )}
             </Text>
             <Text color="secondary.100" fontSize={18} mb={2}>
-              Last Name: <Text fontWeight="bold">{user.lastName}</Text>
+              Last Name: {''}
+              {user.lastName ? (
+                <Text fontWeight="bold">{user.lastName}</Text>
+              ) : (
+                <Text color="red.500">Not available</Text>
+              )}
             </Text>
             <Text color="secondary.100" fontSize={18} mb={2}>
               Banner ID: <Text fontWeight="bold">{user.bannerId}</Text>
