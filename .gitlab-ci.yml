@@ -36,8 +36,7 @@ package:
   artifacts:
     paths:
       - target/*.jar
-  only:
-    - main
+
 
 deploy:
   stage: deploy
