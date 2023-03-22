@@ -32,7 +32,7 @@ package:
   stage: package
   script: 
     - echo "Maven Packaging Started"
-    - mvn clean package
+    - mvn -f backend/pom.xml clean package
   artifacts:
     paths:
       - target/*.jar
