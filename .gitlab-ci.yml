@@ -44,8 +44,8 @@ deploy:
   stage: deploy
   image: docker:latest
   before_script:
-    - echo "CI_REGISTRY:" ${CI_REGISTRY}
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - echo "CI_REGISTRY:" $CI_REGISTRY
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} $CI_REGISTRY
     - docker build -t ${CONTAINER_TEST_IMAGE}
     - docker push ${CONTAINER_TEST_IMAGE}
     - docker logout
