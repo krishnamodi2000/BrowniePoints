@@ -66,7 +66,7 @@ const Login = ({navigation}) => {
   const handleSubmit = () => {
     if (isValidated()) {
       setLoader(true);
-      Axios.post('/auth/authenticate', {
+      Axios.post('/auth/login', {
         email: formData.emailId,
         password: formData.password,
       })
@@ -118,13 +118,13 @@ const Login = ({navigation}) => {
 
           <Stack space={2}>
             {loader ? (
-              <Spinner color="secondary.500" size="lg" />
+              <Spinner color="secondary.400" size="lg" />
             ) : (
               <Button
                 size="lg"
                 background="secondary.400"
                 onPress={() => handleSubmit()}
-                _pressed={{backgroundColor: 'secondary.500'}}>
+                _pressed={{backgroundColor: 'secondary.400'}}>
                 login
               </Button>
             )}
