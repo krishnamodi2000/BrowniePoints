@@ -16,11 +16,11 @@ stages:
   - package
   - deploy
 
-build:
-  stage: build
-  image: maven:3.8.3-openjdk-17
-  script:
-    - mvn -f backend/pom.xml install
+#build:
+#  stage: build
+#  image: maven:3.8.3-openjdk-17
+#  script:
+#    - mvn -f backend/pom.xml install
 
 test:
   stage: test
