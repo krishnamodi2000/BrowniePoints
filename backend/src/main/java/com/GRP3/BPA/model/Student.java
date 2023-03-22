@@ -15,8 +15,9 @@ import lombok.Setter;
 public class Student {
     @Id
     @Getter @Setter
+    @Column(name="banner_id")
     //@GeneratedValue(strategy= GenerationType.IDENTITY)
-    private String banner_id;
+    private String bannerId;
     @Getter @Setter
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
