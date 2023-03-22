@@ -35,7 +35,7 @@ package:
     - mvn -f backend/pom.xml clean package
   artifacts:
     paths:
-      - target/*.jar
+      - backend/target/*.jar
   only:
     - PX-22_CD_Implementation
 
