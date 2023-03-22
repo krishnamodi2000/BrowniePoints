@@ -13,6 +13,7 @@ import Loading from './Screens/Loading';
 import store from './redux/index';
 import HomeScreen from './Screens/Teacher/HomeScreen';
 import UserProfile from './Screens/Student/UserProfile';
+import UpdateProfile from './Screens/Student/UpdateProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const teacherComponents = [{name: 'HomePage', component: HomeScreen}];
 const studentComponents = [
   {name: 'HomePage', component: HomePage},
   {name: 'UserProfile', component: UserProfile},
+  {name: 'UpdateProfile', component: UpdateProfile},
 ];
 
 export default function App() {

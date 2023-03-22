@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 import {Box, Center, Heading, Text, Button, Avatar} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
+import UpdateProfile from './UpdateProfile';
 
 export default function UserProfile() {
   const {user} = useSelector(state => state.user);
@@ -13,7 +14,8 @@ export default function UserProfile() {
   };
 
   const handleUpdateProfile = () => {
-    alert('User information will be changed');
+    alert('Are you sure you want to change your infrormation');
+    navigation.navigate('UpdateProfile');
   };
 
   if (!user) {
@@ -68,7 +70,9 @@ export default function UserProfile() {
             </Text>
           </Box>
           <Box mt={5}>
-            <Button onPress={handleUpdateProfile}>
+            <Button
+              onPress={() => handleUpdateProfile()}
+              _pressed={{backgroundColor: 'secondary.400'}}>
               <Text color="white" fontweight="bold">
                 Update Profile
               </Text>
