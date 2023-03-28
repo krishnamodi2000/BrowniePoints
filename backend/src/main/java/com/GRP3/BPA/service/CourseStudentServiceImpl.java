@@ -7,6 +7,7 @@ import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,8 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
     @Autowired
     private  final CourseStudentRepository courseStudentRepository;
+
+
 
     public CourseStudentServiceImpl(TeacherRepository teacherRepository,CourseRepository courseRepository,CourseStudentRepository courseStudentRepository, StudentRepository studentRepository) {
         this.teacherRepository = teacherRepository;
@@ -125,7 +128,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         courseStudentRepository.deleteAll(courseStudents);
     }
 
-    public void incrementPoints(String studentId, String courseId)
+    public PointsCreateResponse incrementPoints(String studentId, String courseId)
     {
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(studentId, courseId);
 
@@ -134,5 +137,12 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             courseStudent.setPoints(currentPoints);
             courseStudentRepository.save(courseStudent);
         }
+
+        PointsCreateResponse pointsCreateResponse = new PointsCreateResponse();
+        pointsCreateResponse.setSuccess(true);
+
+        pointsCreateResponse.setStudent(studentRepository.findByBannerId(studentId));
+
+        return pointsCreateResponse;
     }
 }

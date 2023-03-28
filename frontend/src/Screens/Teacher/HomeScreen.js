@@ -43,6 +43,7 @@ export default function HomeScreen({navigation}) {
             courseCode="5308"
             courseName="Adv. Topic in software development"
             naviagteToEditCourse={naviagteToEditCourse}
+            navigation={navigation}
           />
         </CustomCard>
       </ScrollView>
@@ -50,7 +51,12 @@ export default function HomeScreen({navigation}) {
   );
 }
 
-const CardContent = ({courseCode, courseName, naviagteToEditCourse}) => {
+const CardContent = ({
+  courseCode,
+  courseName,
+  naviagteToEditCourse,
+  navigation,
+}) => {
   return (
     <VStack>
       <Text fontSize={20} fontWeight="bold" color="white">
@@ -59,7 +65,8 @@ const CardContent = ({courseCode, courseName, naviagteToEditCourse}) => {
       <Button
         mt={3}
         background="secondary.400"
-        _pressed={{backgroundColor: 'secondary.600'}}>
+        _pressed={{backgroundColor: 'secondary.600'}}
+        onPress={() => navigation.navigate('Scanner')}>
         Scan QR
       </Button>
       <Button
