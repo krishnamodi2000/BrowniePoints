@@ -155,4 +155,14 @@ public class TeacherCourseStudentController {
 //            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 //        }
 //    }
+
+    @PutMapping ("/{courseId}/{studentId}")
+    public ResponseEntity<String> incrementPoints(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId){
+            try {
+                courseStudentService.incrementPoints(studentId, courseId);
+                return ResponseEntity.ok("Points updated successfully");
+            } catch (Exception e){
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
+    }
 }

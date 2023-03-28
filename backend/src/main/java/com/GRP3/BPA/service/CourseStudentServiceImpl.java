@@ -5,6 +5,7 @@ import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.courseStudent.CourseStudentRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,5 +123,16 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             e.printStackTrace();
         }
         courseStudentRepository.deleteAll(courseStudents);
+    }
+
+    public void incrementPoints(String studentId, String courseId)
+    {
+        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(studentId, courseId);
+
+        if(courseStudent != null){
+            int currentPoints = courseStudent.getPoints() +1;
+            courseStudent.setPoints(currentPoints);
+            courseStudentRepository.save(courseStudent);
+        }
     }
 }

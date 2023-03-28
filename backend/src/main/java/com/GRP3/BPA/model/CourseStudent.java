@@ -1,6 +1,7 @@
 package com.GRP3.BPA.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,8 @@ public class CourseStudent {
     @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
+    @Getter @Setter
+    @Column(name = "points")
+    private Integer points;
 }
 
