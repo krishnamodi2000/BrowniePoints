@@ -1,9 +1,6 @@
 package com.GRP3.BPA.controller;
 
-import com.GRP3.BPA.model.Course;
-import com.GRP3.BPA.model.CourseRequest;
-import com.GRP3.BPA.model.CourseStudent;
-import com.GRP3.BPA.model.CourseStudentRequest;
+import com.GRP3.BPA.model.*;
 import com.GRP3.BPA.service.CourseService;
 import com.GRP3.BPA.service.CourseStudentService;
 import com.GRP3.BPA.service.JwtService;
@@ -157,12 +154,25 @@ public class TeacherCourseStudentController {
 //    }
 
     @PutMapping ("/{courseId}/{studentId}")
-    public ResponseEntity<String> incrementPoints(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId){
+    public ResponseEntity<Object> incrementPoints(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId){
             try {
-                courseStudentService.incrementPoints(studentId, courseId);
-                return ResponseEntity.ok("Points updated successfully");
+
+                PointsCreateResponse pointsCreateResponse = courseStudentService.incrementPoints(studentId, courseId);;
+                return new ResponseEntity<>(pointsCreateResponse,HttpStatus.CREATED);
             } catch (Exception e){
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
     }
+
+
+//    @GetMapping("/points/{courseId}")
+//    public ResponseEntity<Object> getPointsByCourse(@PathVariable("courseId") String courseId){
+//            try {
+//
+//            }
+//            catch (Exception e){
+//                return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//    }
+
 }
