@@ -15,4 +15,5 @@ public interface CourseStudentService {
     void addStudentsFromCsv(File input);
 
     void removeStudentsFromCsv(File input);
+    void incrementPoints(String studentId, String courseId);
 }
