@@ -1,14 +1,17 @@
-import {Button, ScrollView, Text, VStack} from 'native-base';
-import React from 'react';
+import {Button, Center, ScrollView, Spinner, Text, VStack} from 'native-base';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomCard from '../../components/Commons/CustomCard';
 import Header from '../../components/Header/Header';
+import {getCourses} from '../../redux/course/actions';
 import {logoutAction} from '../../redux/user/actions';
 import Wrapper from '../../wrapper/Wrapper';
 
 export default function HomeScreen({navigation}) {
-  const {user} = useSelector(state => state.user);
   const dispatch = useDispatch();
+
+  const {user} = useSelector(state => state.user);
+  const {courses, loading} = useSelector(state => state.course);
 
   const logout = () => {
     dispatch(logoutAction());
@@ -18,18 +21,19 @@ export default function HomeScreen({navigation}) {
     navigation.navigate('Course');
   };
 
-  const naviagteToEditCourse = () => {
+  const naviagteToEditCourse = course => {
     navigation.navigate('Edit Course', {
-      courseDetails: {
-        courseCode: 'CSCI5308',
-        courseName: 'Adv. Topic in Software Development',
-      },
+      courseDetails: {...course},
     });
   };
 
   const navigateToScanner = courseCode => {
     navigation.navigate('Scanner', {courseCode});
   };
+
+  useEffect(() => {
+    dispatch(getCourses());
+  }, [dispatch]);
 
   return (
     <Wrapper>
@@ -41,16 +45,24 @@ export default function HomeScreen({navigation}) {
           {name: 'Logout', onPress: () => logout()},
         ]}
       />
-      <ScrollView>
-        <CustomCard>
-          <CardContent
-            courseCode="5308"
-            courseName="Adv. Topic in software development"
-            naviagteToEditCourse={naviagteToEditCourse}
-            navigateToScanner={navigateToScanner}
-          />
-        </CustomCard>
-      </ScrollView>
+      {loading ? (
+        <Center height="100%">
+          <Spinner color="secondary.400" size="lg" />
+        </Center>
+      ) : (
+        <ScrollView>
+          {courses.map((course, key) => (
+            <CustomCard key={key}>
+              <CardContent
+                courseCode={course.courseId}
+                courseName={course.courseName}
+                naviagteToEditCourse={() => naviagteToEditCourse(course)}
+                navigateToScanner={navigateToScanner}
+              />
+            </CustomCard>
+          ))}
+        </ScrollView>
+      )}
     </Wrapper>
   );
 }
