@@ -12,4 +12,6 @@ public interface UserService {
     User login(String email, String password) throws UsernameNotFoundException;
 
     User emailIsAlreadyExist(User user) throws RuntimeException;
+
+    User findByEmail(String email) throws UsernameNotFoundException;
 }

@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface CourseStudentService {
-    CourseStudent addStudent(CourseStudentRequest courseStudentRequest);
-    void removeStudent(CourseStudentRequest courseStudentRequest);
-    void addStudentsFromCsv(File input);
+    CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest);
+    void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest);
 
-    void removeStudentsFromCsv(File input);
 }
