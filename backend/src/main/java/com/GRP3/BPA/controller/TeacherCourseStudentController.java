@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -167,14 +168,15 @@ public class TeacherCourseStudentController {
     }
 
 
-//    @GetMapping("/points/{courseId}")
-//    public ResponseEntity<Object> getPointsByCourse(@PathVariable("courseId") String courseId){
-//            try {
-//
-//            }
-//            catch (Exception e){
-//                return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//    }
+    @GetMapping("/points/{courseId}")
+    public ResponseEntity<Object> getPointsByCourse(@PathVariable("courseId") String courseId){
+            try {
+                CourseStudentsResponse courseStudentsResponse = courseStudentService.dataOfStudent(courseId);
+                return new ResponseEntity<>(courseStudentsResponse, HttpStatus.CREATED);
+            }
+            catch (Exception e){
+                return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+    }
 
 }

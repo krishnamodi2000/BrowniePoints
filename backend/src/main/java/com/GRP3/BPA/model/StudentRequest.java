@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class StudentRequest {
         private String bannerId;
         private User user;
+
 }
