@@ -1,6 +1,6 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.Teacher;
+import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;

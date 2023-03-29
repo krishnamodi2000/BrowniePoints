@@ -1,6 +1,6 @@
 //package com.GRP3.BPA.repository.teacher;
 //
-//import com.GRP3.BPA.model.Teacher;
+//import com.GRP3.BPA.model.teacher.Teacher;
 //import jakarta.persistence.EntityManager;
 //import jakarta.persistence.PersistenceContext;
 //

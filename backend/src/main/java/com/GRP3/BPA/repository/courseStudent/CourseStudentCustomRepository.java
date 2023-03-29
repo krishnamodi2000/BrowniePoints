@@ -1,6 +1,6 @@
 //package com.GRP3.BPA.repository.courseStudent;
 //
-//import com.GRP3.BPA.model.CourseStudent;
+//import com.GRP3.BPA.model.CourseStudent.CourseStudent;
 //import java.util.List;
 //
 //public interface CourseStudentCustomRepository {

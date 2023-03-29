@@ -1,6 +1,6 @@
 package com.GRP3.BPA.repository.course;
 
-import com.GRP3.BPA.model.Course;
+import com.GRP3.BPA.model.course.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

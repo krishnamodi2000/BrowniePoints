@@ -1,22 +1,21 @@
 package com.GRP3.BPA.controller;
 
-import com.GRP3.BPA.model.*;
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.course.CourseException;
+import com.GRP3.BPA.model.course.CourseRequest;
+import com.GRP3.BPA.model.course.CourseResponse;
+import com.GRP3.BPA.model.courseStudent.*;
 import com.GRP3.BPA.service.*;
 import com.GRP3.BPA.service.CourseService;
 import com.GRP3.BPA.service.CourseStudentService;
 import com.GRP3.BPA.service.JwtService;
 import com.GRP3.BPA.service.TeacherService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import java.util.List;
 public class TeacherCourseStudentController {
     @Autowired
     private CourseService courseService;
-
     @Autowired
     private CourseStudentService courseStudentService;
     @Autowired
@@ -34,8 +32,6 @@ public class TeacherCourseStudentController {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public ResponseEntity<Object> getCourses(@RequestHeader("Authorization") String authorizationHeader) {
@@ -46,10 +42,24 @@ public class TeacherCourseStudentController {
         try {
             String email = jwtService.extractUsername(token);
             String teacherId = teacherService.findTeacherAssociatedWithUser(email);
-            List<Course> teacherCourses = courseService.getCoursesForTeacher(teacherId);
-            return new ResponseEntity<>(teacherCourses, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            List<Course> courses = courseService.getCoursesForTeacher(teacherId);
+
+            CourseResponse response = new CourseResponse();
+            response.setStatus(true);
+            List<CourseRequest> courseRequestList = new ArrayList<CourseRequest>();
+            for (Course course : courses) {
+                CourseRequest courseRequest = new CourseRequest();
+                courseRequest.setCourseName(course.getCourseName());
+                courseRequest.setCourseId(course.getCourseId());
+                courseRequest.setCourseDescription(course.getCourseDescription());
+                courseRequestList.add(courseRequest);
+            }
+            response.setCourseRequestList(courseRequestList);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (CourseException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -59,11 +69,17 @@ public class TeacherCourseStudentController {
         if (!jwtService.isJWTTokenValid(token)) {
             return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
         }
-
         try {
             String email = jwtService.extractUsername(token);
             String teacherId = teacherService.findTeacherAssociatedWithUser(email);
             Course course = courseService.addCourseForTeacher(teacherId, courseRequest);
+            List<CourseRequest> courseRequestList=new ArrayList<CourseRequest>();
+            CourseRequest courseRequestAdded=new CourseRequest();
+            courseRequestAdded.setCourseId(course.getCourseId());
+            courseRequestAdded.setCourseName(course.getCourseName());
+            courseRequestAdded.setCourseDescription(course.getCourseDescription());
+            courseRequestList.add(courseRequestAdded);
+            CourseResponse response= new CourseResponse(true,courseRequestList);
             return new ResponseEntity<>(course, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -166,7 +182,7 @@ public class TeacherCourseStudentController {
         }
     }
 
-    @PostMapping("/addStudent")
+    @PostMapping("/addStudents")
     public ResponseEntity<Object> addStudents(@RequestBody CourseStudentRequests courseStudentRequests, @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.substring(7);
         if (!jwtService.isJWTTokenValid(token)) {

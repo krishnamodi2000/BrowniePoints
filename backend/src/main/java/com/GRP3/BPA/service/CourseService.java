@@ -1,10 +1,15 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.*;
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.course.CourseException;
+import com.GRP3.BPA.model.course.CourseRequest;
+import com.GRP3.BPA.model.course.CourseResponse;
+import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.IssuerUriCondition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +33,14 @@ public class CourseService {
         this.userRepository = userRepository;
     }
 
-    public List<Course> getCoursesForTeacher(String teacherId) {
-        return courseRepository.findByTeacherTeacherId(teacherId);
+    public List<Course> getCoursesForTeacher(String teacherId) throws CourseException {
+        List<Course> course = courseRepository.findByTeacherTeacherId(teacherId);
+        if(course==null){
+            String message="Teacher with teacherId:"+teacherId+"does not take any courses";
+            throw new CourseException(false, message);
+        }
+        return course;
     }
-
     public Course addCourseForTeacher(String teacherId, CourseRequest courseRequest) {
         // Get the teacher from the database
         Teacher teacher = teacherRepository.findByTeacherId(teacherId);

@@ -1,22 +1,18 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.*;
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.courseStudent.*;
+import com.GRP3.BPA.model.student.Student;
+import com.GRP3.BPA.model.courseStudent.StudentInfoWithName;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.courseStudent.CourseStudentRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

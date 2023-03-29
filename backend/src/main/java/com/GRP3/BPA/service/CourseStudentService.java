@@ -1,15 +1,11 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.CourseStudent;
-import com.GRP3.BPA.model.CourseStudentRequest;
-import com.GRP3.BPA.model.CourseStudentRequests;
-import com.GRP3.BPA.model.CourseStudentsResponse;
-import com.GRP3.BPA.model.PointsCreateResponse;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.GRP3.BPA.model.courseStudent.CourseStudent;
+import com.GRP3.BPA.model.courseStudent.CourseStudentRequest;
+import com.GRP3.BPA.model.courseStudent.CourseStudentRequests;
+import com.GRP3.BPA.model.courseStudent.CourseStudentsResponse;
+import com.GRP3.BPA.model.courseStudent.PointsCreateResponse;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 
 public interface CourseStudentService {

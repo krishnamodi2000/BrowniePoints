@@ -1,4 +1,4 @@
-package com.GRP3.BPA.model;
+package com.GRP3.BPA.model.course;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentRequest {
-        private String bannerId;
-        private User user;
-
+public class CourseException extends Throwable {
+    private boolean status;
+    private String message;
 }
