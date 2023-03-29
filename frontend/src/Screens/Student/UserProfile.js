@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   Box,
@@ -11,31 +11,34 @@ import {
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
+import UpdateProfile from './UpdateProfile';
 import Header from '../../components/Header/Header';
+import {InputType1} from '../../components/Commons/Input';
+import axios from 'axios';
 
-export default function UserProfile() {
+const UserProfile = () => {
   const {user} = useSelector(state => state.user);
   const navigation = useNavigation();
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
 
-  const generateInitials = () => {
-    return user.firstName[0].toUpperCase() + user.lastName[0];
+  const generateInitials = () =>
+    user.firstName[0].toUpperCase() + user.lastName[0];
+
+  const handleUpdateProfile = () => {
+    Alert.alert('Are you sure you want to change your information');
+    navigation.navigate('UpdateProfile', {user});
   };
 
-  if (!user) {
-    return (
-      <Wrapper>
-        <Center>
-          <Heading color="red.500" size="md">
-            Error: User information not found!
-          </Heading>
-        </Center>
-      </Wrapper>
-    );
-  }
+  const inputFields = [
+    {placeholder: 'First Name', type: 'text', name: 'firstName'},
+    {placeholder: 'Last Name', type: 'text', name: 'lastName'},
+  ];
+
   return (
     <Wrapper>
+      <Header title="User Profile" />
       <Box>
-        <Header title="User Profile" />
         <Center>
           <Avatar bg="secondary.300" mr={1} size="xl" mt={10}>
             {generateInitials()}
@@ -47,72 +50,29 @@ export default function UserProfile() {
             borderWidth={1}
             borderColor="white"
             mt={10}>
-            <FormControl isDisabled>
-              <FormControl.Label
-                _text={{
-                  color: 'secondary.100',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                }}>
-                First Name:
-              </FormControl.Label>
-              <FormControl.Input
-                value={user.firstName}
-                borderColor="white"
-                _focus={{borderColor: 'secondary.200'}}
-              />
-            </FormControl>
-            <FormControl isDisabled>
-              <FormControl.Label
-                _text={{
-                  color: 'secondary.100',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                }}>
-                Last Name:
-              </FormControl.Label>
-              <FormControl.Input
-                value={user.lastName}
-                borderColor="white"
-                _focus={{borderColor: 'secondary.200'}}
-              />
-            </FormControl>
-            <FormControl isDisabled>
-              <FormControl.Label
-                _text={{
-                  color: 'secondary.100',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                }}>
-                Banner ID:
-              </FormControl.Label>
-              <FormControl.Input
-                value={user.bannerId}
-                borderColor="white"
-                _focus={{borderColor: 'secondary.200'}}
-              />
-            </FormControl>
-            <FormControl isDisabled>
-              <FormControl.Label
-                _text={{
-                  color: 'secondary.100',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                }}>
-                Email ID:
-              </FormControl.Label>
-              <FormControl.Input
-                value={user.emailId}
-                borderColor="white"
-                _focus={{borderColor: 'secondary.200'}}
-              />
-            </FormControl>
+            {inputFields.map(({placeholder, type, name}) => (
+              <FormControl key={name} isDisabled>
+                <FormControl.Label
+                  _text={{
+                    color: 'secondary.100',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                  }}>
+                  {placeholder}:
+                </FormControl.Label>
+                <FormControl.Input
+                  value={user[name]}
+                  borderColor="white"
+                  _focus={{borderColor: 'secondary.200'}}
+                />
+              </FormControl>
+            ))}
           </Box>
           <Box mt={5}>
             <Button
-              onPress={() => handleUpdateProfile()}
+              onPress={handleUpdateProfile}
               _pressed={{backgroundColor: 'secondary.400'}}>
-              <Text color="white" fontweight="bold">
+              <Text color="white" fontWeight="bold">
                 Update Profile
               </Text>
             </Button>
@@ -121,4 +81,6 @@ export default function UserProfile() {
       </Box>
     </Wrapper>
   );
-}
+};
+
+export default UserProfile;

@@ -5,7 +5,9 @@ import CustomCard from '../../components/Commons/CustomCard';
 import Header from '../../components/Header/Header';
 import {logoutAction} from '../../redux/user/actions';
 import Wrapper from '../../wrapper/Wrapper';
-
+import UserProile from './UserProfile';
+import QRGenerator from './QRGenerator';
+import axios from 'axios';
 export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
 
@@ -16,7 +18,9 @@ export default function HomePage({navigation}) {
   const handleProfilePress = () => {
     navigation.navigate('UserProfile');
   };
-
+  const handleQRGenerator = () => {
+    navigation.navigate('QRgenerator');
+  };
   return (
     <Wrapper>
       <Header
@@ -110,7 +114,8 @@ export default function HomePage({navigation}) {
           e.target.style.transform = 'none';
           e.target.style.boxShadow = '0px 2px 10px rgba(0, 0, 0, 0.3)';
         }}>
-        <Text>QR</Text>
+        onPress={() => handleQRGenerator()}
+        _pressed={{backgroundColor: 'secondary.400'}}
       </Button>
     </Wrapper>
   );
