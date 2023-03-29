@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -144,5 +145,26 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         pointsCreateResponse.setStudent(studentRepository.findByBannerId(studentId));
 
         return pointsCreateResponse;
+    }
+
+    public CourseStudentsResponse dataOfStudent(String courseId){
+        List<CourseStudent> courseStudents = courseStudentRepository.findByCourseCourseId(courseId);
+        CourseStudentsResponse courseStudentsResponse = new CourseStudentsResponse();
+        ArrayList<StudentInfoWithName> data = new ArrayList<>();
+
+        if(courseStudents != null){
+            for(int i=0; i<courseStudents.size(); i++){
+                CourseStudent courseStudent = courseStudents.get(i);
+                Student student = courseStudent.getStudent();
+                StudentInfoWithName studentInfoWithName = new StudentInfoWithName();
+                studentInfoWithName.setStudentName(student.getUser().getFirstName() + " " +student.getUser().getLastName());
+                studentInfoWithName.setBannerId(student.getBannerId());
+                studentInfoWithName.setPoints(courseStudent.getPoints());
+                data.add(studentInfoWithName);
+            }
+            courseStudentsResponse.setSuccess(true);
+            courseStudentsResponse.setData(data);
+        }
+        return courseStudentsResponse;
     }
 }
