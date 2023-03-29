@@ -11,8 +11,6 @@ import {
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
-import UpdateProfile from './UpdateProfile';
-import {Alert} from 'react-native';
 import Header from '../../components/Header/Header';
 
 export default function UserProfile() {
@@ -21,11 +19,6 @@ export default function UserProfile() {
 
   const generateInitials = () => {
     return user.firstName[0].toUpperCase() + user.lastName[0];
-  };
-
-  const handleUpdateProfile = () => {
-    alert('Are you sure you want to change your infrormation');
-    navigation.navigate('UpdateProfile');
   };
 
   if (!user) {
