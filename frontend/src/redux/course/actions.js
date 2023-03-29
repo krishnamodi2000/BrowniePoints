@@ -4,9 +4,10 @@ export const getCourses = () => ({
   type: actionTypes.GET_COURSES,
 });
 
-export const addCourse = courseDetails => ({
+export const addCourse = (courseDetails, onSuccess) => ({
   type: actionTypes.ADD_COURSE,
   courseDetails,
+  onSuccess,
 });
 
 export const updateCourse = courseDetails => ({
