@@ -15,7 +15,6 @@ const points = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.ADD_POINTS_SUCCESS:
-      console.log('G');
       return {
         ...state,
         addedPointDetails: action.payload,

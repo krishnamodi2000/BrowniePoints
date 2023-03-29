@@ -27,6 +27,10 @@ export default function HomeScreen({navigation}) {
     });
   };
 
+  const navigateToScanner = courseCode => {
+    navigation.navigate('Scanner', {courseCode});
+  };
+
   return (
     <Wrapper>
       <Header
@@ -43,7 +47,7 @@ export default function HomeScreen({navigation}) {
             courseCode="5308"
             courseName="Adv. Topic in software development"
             naviagteToEditCourse={naviagteToEditCourse}
-            navigation={navigation}
+            navigateToScanner={navigateToScanner}
           />
         </CustomCard>
       </ScrollView>
@@ -55,7 +59,7 @@ const CardContent = ({
   courseCode,
   courseName,
   naviagteToEditCourse,
-  navigation,
+  navigateToScanner,
 }) => {
   return (
     <VStack>
@@ -66,7 +70,7 @@ const CardContent = ({
         mt={3}
         background="secondary.400"
         _pressed={{backgroundColor: 'secondary.600'}}
-        onPress={() => navigation.navigate('Scanner')}>
+        onPress={() => navigateToScanner(courseCode)}>
         Scan QR
       </Button>
       <Button

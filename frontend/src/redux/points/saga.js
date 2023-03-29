@@ -4,15 +4,12 @@ import * as actionTypes from './actionTypes';
 
 function* addPointsSaga({courseId, bannerId}) {
   try {
-    console.log('Called');
     yield put({type: actionTypes.SET_POINTS_LOADING});
 
     const {data} = yield AxiosInstance.put(
       `teachers/courses/${courseId}/${bannerId}`,
     );
-
     if (data) {
-      console.log(data);
       yield put({
         type: actionTypes.ADD_POINTS_SUCCESS,
         payload: data,
