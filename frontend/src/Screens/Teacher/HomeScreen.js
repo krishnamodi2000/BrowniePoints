@@ -1,4 +1,13 @@
-import {Button, Center, ScrollView, Spinner, Text, VStack} from 'native-base';
+import {
+  Box,
+  Button,
+  Center,
+  HStack,
+  ScrollView,
+  Spinner,
+  Text,
+  VStack,
+} from 'native-base';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomCard from '../../components/Commons/CustomCard';
@@ -31,6 +40,10 @@ export default function HomeScreen({navigation}) {
     navigation.navigate('Scanner', {courseCode});
   };
 
+  const navigateCourseInfo = course => {
+    navigation.navigate('Course Info', {...course});
+  };
+
   useEffect(() => {
     dispatch(getCourses());
   }, [dispatch]);
@@ -58,6 +71,7 @@ export default function HomeScreen({navigation}) {
                 courseName={course.courseName}
                 naviagteToEditCourse={() => naviagteToEditCourse(course)}
                 navigateToScanner={navigateToScanner}
+                navigateCourseInfo={() => navigateCourseInfo(course)}
               />
             </CustomCard>
           ))}
@@ -72,26 +86,40 @@ const CardContent = ({
   courseName,
   naviagteToEditCourse,
   navigateToScanner,
+  navigateCourseInfo,
 }) => {
   return (
-    <VStack>
-      <Text fontSize={20} fontWeight="bold" color="white">
-        {courseCode} - {courseName}
-      </Text>
-      <Button
-        mt={3}
-        background="secondary.400"
-        _pressed={{backgroundColor: 'secondary.600'}}
-        onPress={() => navigateToScanner(courseCode)}>
-        Scan QR
-      </Button>
-      <Button
-        mt={3}
-        background="primary.200"
-        _pressed={{backgroundColor: 'primary.600'}}
-        onPress={() => naviagteToEditCourse()}>
-        Edit Information
-      </Button>
-    </VStack>
+    <Box p={4} borderColor="white" borderWidth={2} borderRadius={5}>
+      <VStack>
+        <Text fontSize={20} fontWeight="bold" color="white">
+          {courseCode} - {courseName}
+        </Text>
+        <Button
+          mt={3}
+          background="secondary.400"
+          _pressed={{backgroundColor: 'secondary.600'}}
+          onPress={() => navigateToScanner(courseCode)}>
+          Scan QR
+        </Button>
+        <HStack justifyContent="space-between">
+          <Button
+            mt={3}
+            width="45%"
+            background="primary.200"
+            _pressed={{backgroundColor: 'primary.600'}}
+            onPress={() => navigateCourseInfo()}>
+            Info
+          </Button>
+          <Button
+            width="45%"
+            mt={3}
+            background="primary.200"
+            _pressed={{backgroundColor: 'primary.600'}}
+            onPress={() => naviagteToEditCourse()}>
+            Edit Information
+          </Button>
+        </HStack>
+      </VStack>
+    </Box>
   );
 };

@@ -19,3 +19,8 @@ export const deleteCourse = courseId => ({
   type: actionTypes.DELETE_COURSE,
   courseId,
 });
+
+export const getStudentsByCourseId = courseId => ({
+  type: actionTypes.GET_STUDENTS_BY_COURSE,
+  courseId,
+});

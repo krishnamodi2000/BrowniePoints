@@ -5,6 +5,7 @@ const initialState = {
   courseDetails: null,
   error: null,
   loading: false,
+  students: [],
 };
 
 const courses = (state = initialState, action) => {
@@ -15,6 +16,7 @@ const courses = (state = initialState, action) => {
         loading: true,
         error: false,
         success: false,
+        students: [],
       };
     case actionTypes.GET_COURSES_SUCCESS:
       return {
@@ -44,6 +46,12 @@ const courses = (state = initialState, action) => {
         loading: false,
         error: false,
       };
+
+    case actionTypes.GET_STUDENTS_BY_COURSE_SUCCESS:
+      return {...state, students: action.payload, loading: false};
+
+    case actionTypes.GET_STUDENTS_BY_COURSE_FAIL:
+      return {...state, students: [], loading: false, error: true};
 
     default:
       return state;
