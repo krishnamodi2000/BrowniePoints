@@ -5,9 +5,11 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
-public class CourseStudentsResponse {
-    @Getter @Setter
+public class CourseStudentResponse {
+
+    @Getter
+    @Setter
     boolean status;
     @Getter @Setter
-    ArrayList<StudentInfoWithName> data;
+    StudentInfoWithName data;
 }

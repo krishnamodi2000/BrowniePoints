@@ -1,6 +1,7 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.GlobalException;
 import com.GRP3.BPA.model.courseStudent.*;
 import com.GRP3.BPA.model.student.Student;
 import com.GRP3.BPA.model.courseStudent.StudentInfoWithName;
@@ -27,7 +28,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     private final CourseRepository courseRepository;
 
     @Autowired
-    private final CourseStudentRepository courseStudentRepository;
+    private CourseStudentRepository courseStudentRepository;
 
 
 
@@ -43,7 +44,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      * @return
      */
     @Override
-    public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) {
+    public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
         CourseStudent courseStudent = new CourseStudent(); //push this in if after creating response
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
@@ -52,6 +53,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             Course course = courseRepository.findByCourseId(courseId);
             courseStudent.setStudent(student);
             courseStudent.setCourse(course);
+            courseStudent.setPoints(0);
             courseStudentRepository.save(courseStudent);
         } else {
             throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
@@ -63,7 +65,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      * @param courseStudentRequest
      */
     @Override
-    public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) {
+    public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
         if (!checkCourseStatus(teacherId, courseId, bannerId)) {
@@ -73,20 +75,21 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
     }
 
-    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) {
+    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
+
         // Create a list of courses to save to the database
         List<CourseStudent> studentList = new ArrayList<>();
         List<String> bannerIds = courseStudentRequests.getBannerIds();
         String courseId = courseStudentRequests.getCourseId();
         for (String bannerId : bannerIds) {
-            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(courseId, bannerId);
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(bannerId,courseId);
             CourseStudent courseStudent = addStudent(teacherId, courseStudentRequest);
             studentList.add(courseStudent);
         }
         return studentList;
     }
 
-    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) {
+    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
         List<String> bannerIds = courseStudentRequests.getBannerIds();
         String courseId = courseStudentRequests.getCourseId();
         for (String bannerId : bannerIds) {
@@ -95,14 +98,17 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         }
     }
 
-    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) {
+    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) throws GlobalException {
         Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
         if (course == null) {
-            throw new RuntimeException("Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.");
+            String message="Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.";
+            throw new GlobalException(false,message);
         }
-        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
-        if (courseStudent != null) {
-            return true;
+
+        CourseStudent ds = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+        if (ds != null) {
+            String message="Student with ID " + bannerId + " taking course with courseID " + courseId + " already exists.";
+            throw new GlobalException(false,message);
         }
         return false;
     }
@@ -140,7 +146,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
                 studentInfoWithName.setPoints(courseStudent.getPoints());
                 data.add(studentInfoWithName);
             }
-            courseStudentsResponse.setSuccess(true);
+            courseStudentsResponse.setStatus(true);
             courseStudentsResponse.setData(data);
         }
         return courseStudentsResponse;

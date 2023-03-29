@@ -1,4 +1,4 @@
-package com.GRP3.BPA.model.course;
+package com.GRP3.BPA.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseException extends Throwable {
+public class GlobalException extends Throwable {
     private boolean status;
     private String message;
 }

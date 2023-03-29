@@ -1,7 +1,10 @@
 package com.GRP3.BPA.controller;
 
+import com.GRP3.BPA.model.GlobalException;
+import com.GRP3.BPA.model.CourseRequest;
 import com.GRP3.BPA.model.course.*;
 import com.GRP3.BPA.model.courseStudent.*;
+import com.GRP3.BPA.model.student.Student;
 import com.GRP3.BPA.service.CourseService;
 import com.GRP3.BPA.service.CourseStudentService;
 import com.GRP3.BPA.service.JwtService;
@@ -12,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,7 @@ public class TeacherCourseStudentController {
             List<CourseRequest> courseRequestList = addCourseRequests(courses);
             response.setCourseRequestList(courseRequestList);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (CourseException e) {
+        } catch (GlobalException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -62,6 +66,8 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -73,7 +79,6 @@ public class TeacherCourseStudentController {
         }
         String teacherId = teacherIdResponse.getBody();
         try {
-
             List<Course> courses = courseService.addCoursesForTeacher(teacherId, courseRequests);
             CoursesResponse response = new CoursesResponse();
             response.setStatus(true);
@@ -82,6 +87,8 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -100,25 +107,29 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/removeCourses")
-    public ResponseEntity<Object> removeCourses(@RequestBody List<String> courseIds, @RequestHeader("Authorization") String authorizationHeader) {
-        ResponseEntity<String> teacherIdResponse = validateAuthorizationHeader(authorizationHeader);
-        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
-        }
-        String teacherId = teacherIdResponse.getBody();
-        try {
-            courseService.removeCoursesForTeacher(teacherId, courseIds);
-            CourseResponse response = new CourseResponse();
-            response.setStatus(true);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @DeleteMapping("/removeCourses")
+//    public ResponseEntity<Object> removeCourses(@RequestBody List<String> courseIds, @RequestHeader("Authorization") String authorizationHeader) {
+//        ResponseEntity<String> teacherIdResponse = validateAuthorizationHeader(authorizationHeader);
+//        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
+//            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
+//        }
+//        String teacherId = teacherIdResponse.getBody();
+//        try {
+//            courseService.removeCoursesForTeacher(teacherId, courseIds);
+//            CourseResponse response = new CourseResponse();
+//            response.setStatus(true);
+//            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+//        } catch (IllegalArgumentException e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        } catch (GlobalException e) {
+//            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @DeleteMapping("/removeStudent")
     public ResponseEntity<Object> removeStudent(@RequestBody CourseStudentRequest courseStudentRequest, @RequestHeader("Authorization") String authorizationHeader) {
@@ -129,11 +140,14 @@ public class TeacherCourseStudentController {
         String teacherId = teacherIdResponse.getBody();
         try {
             courseStudentService.removeStudent(teacherId, courseStudentRequest);
-            CourseResponse response = new CourseResponse();
+            CourseStudentsResponse response = new CourseStudentsResponse();
             response.setStatus(true);
+
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -146,12 +160,15 @@ public class TeacherCourseStudentController {
         String teacherId = teacherIdResponse.getBody();
         try {
             CourseStudent courseStudent = courseStudentService.addStudent(teacherId, courseStudentRequest);
-            CourseResponse response=new CourseResponse();
+            CourseStudentResponse response = new CourseStudentResponse();
             response.setStatus(true);
-
+            StudentInfoWithName studentInfoWithName=addedStudent(courseStudent);
+            response.setData(studentInfoWithName);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -168,6 +185,8 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>("Student removed successfully", HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -180,9 +199,15 @@ public class TeacherCourseStudentController {
         String teacherId = teacherIdResponse.getBody();
         try {
             List<CourseStudent> courseStudent = courseStudentService.addStudents(teacherId, courseStudentRequests);
+            CourseStudentsResponse response=new CourseStudentsResponse();
+            response.setStatus(true);
+            ArrayList<StudentInfoWithName> studentInfoWithNames=addedStudents(courseStudent);
+            response.setData(studentInfoWithNames);
             return new ResponseEntity<>(courseStudent, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -218,6 +243,24 @@ public class TeacherCourseStudentController {
         return courseRequest;
     }
 
+    public StudentInfoWithName addedStudent(CourseStudent courseStudent) {
+        Student student = courseStudent.getStudent();
+        StudentInfoWithName studentInfoWithName = new StudentInfoWithName();
+        studentInfoWithName.setStudentName(student.getUser().getFirstName() + " " + student.getUser().getLastName());
+        studentInfoWithName.setBannerId(student.getBannerId());
+        studentInfoWithName.setPoints(courseStudent.getPoints());
+        return (studentInfoWithName);
+    }
+
+    public ArrayList<StudentInfoWithName> addedStudents(List<CourseStudent> courseStudents) {
+        ArrayList<StudentInfoWithName> studentInfoWithNameList=new ArrayList<>();
+        for(CourseStudent courseStudent:courseStudents){
+            StudentInfoWithName studentInfoWithName=addedStudent(courseStudent);
+            studentInfoWithNameList.add(studentInfoWithName);
+        }
+        return studentInfoWithNameList;
+    }
+
     public List<CourseRequest> addCourseRequests(List<Course> courses) {
         List<CourseRequest> courseRequestList = new ArrayList<>();
         for (Course course : courses) {
@@ -232,8 +275,7 @@ public class TeacherCourseStudentController {
         String email = jwtService.extractUsername(token);
         String teacherId = teacherService.findTeacherAssociatedWithUser(email);
         if (!jwtService.isJWTTokenValid(token)) {
-            String status="false";
-            return new ResponseEntity<>(status, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Invalid Token", HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok(teacherId);
     }

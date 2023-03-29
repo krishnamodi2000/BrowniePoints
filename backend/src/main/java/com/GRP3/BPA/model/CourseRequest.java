@@ -1,4 +1,4 @@
-package com.GRP3.BPA.model.course;
+package com.GRP3.BPA.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
