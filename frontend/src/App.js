@@ -15,6 +15,7 @@ import HomeScreen from './Screens/Teacher/HomeScreen';
 import Course from './Screens/Teacher/Course';
 import EditCourse from './Screens/Teacher/EditCourse';
 import UserProfile from './Screens/Student/UserProfile';
+import Scanner from './Screens/Teacher/Scanner';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const teacherComponents = [
   {name: 'HomePage', component: HomeScreen},
   {name: 'Course', component: Course},
   {name: 'Edit Course', component: EditCourse},
+  {name: 'Scanner', component: Scanner},
 ];
 const studentComponents = [
   {name: 'HomePage', component: HomePage},

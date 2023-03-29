@@ -2,6 +2,7 @@ package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.model.CourseStudent;
 import com.GRP3.BPA.model.CourseStudentRequest;
+import com.GRP3.BPA.model.PointsCreateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,4 +16,5 @@ public interface CourseStudentService {
     void addStudentsFromCsv(File input);
 
     void removeStudentsFromCsv(File input);
+    PointsCreateResponse incrementPoints(String studentId, String courseId);
 }
