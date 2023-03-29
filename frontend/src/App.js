@@ -34,6 +34,7 @@ const teacherComponents = [
 const studentComponents = [
   {name: 'HomePage', component: HomePage},
   {name: 'UserProfile', component: UserProfile},
+  {name: 'UpadteProfile', component: UpdateProfile},
 ];
 export default function App() {
   return (

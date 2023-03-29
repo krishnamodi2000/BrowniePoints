@@ -1,9 +1,19 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
-import {Box, Center, Heading, Text, Button, Avatar} from 'native-base';
+import {
+  Box,
+  Center,
+  Heading,
+  Text,
+  Button,
+  Avatar,
+  FormControl,
+} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
 import UpdateProfile from './UpdateProfile';
+import {Alert} from 'react-native';
+import Header from '../../components/Header/Header';
 
 export default function UserProfile() {
   const {user} = useSelector(state => state.user);
@@ -32,42 +42,78 @@ export default function UserProfile() {
   return (
     <Wrapper>
       <Box>
+        <Header title="User Profile" />
         <Center>
-          <Heading size="xl" fontweight="bold" mb={12} color="secondary.200">
-            User Profile
-          </Heading>
-          <Avatar bg="secondary.300" mr={1} size="xl">
+          <Avatar bg="secondary.300" mr={1} size="xl" mt={10}>
             {generateInitials()}
           </Avatar>
           <Box
             bg="#373737"
-            p={9}
+            p={10}
             borderRadius={8}
             borderWidth={1}
             borderColor="white"
-            mt={5}>
-            <Text color="secondary.100" fontSize={18} mb={2}>
-              First Name:{' '}
-              {user.firstName ? (
-                <Text fontWeight="bold">{user.firstName}</Text>
-              ) : (
-                <Text color="red.500">Not available</Text>
-              )}
-            </Text>
-            <Text color="secondary.100" fontSize={18} mb={2}>
-              Last Name: {''}
-              {user.lastName ? (
-                <Text fontWeight="bold">{user.lastName}</Text>
-              ) : (
-                <Text color="red.500">Not available</Text>
-              )}
-            </Text>
-            <Text color="secondary.100" fontSize={18} mb={2}>
-              Banner ID: <Text fontWeight="bold">{user.bannerId}</Text>
-            </Text>
-            <Text color="secondary.100" fontSize={18} mb={2}>
-              Email ID: <Text fontWeight="bold">{user.emailId}</Text>
-            </Text>
+            mt={10}>
+            <FormControl isDisabled>
+              <FormControl.Label
+                _text={{
+                  color: 'secondary.100',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                First Name:
+              </FormControl.Label>
+              <FormControl.Input
+                value={user.firstName}
+                borderColor="white"
+                _focus={{borderColor: 'secondary.200'}}
+              />
+            </FormControl>
+            <FormControl isDisabled>
+              <FormControl.Label
+                _text={{
+                  color: 'secondary.100',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                Last Name:
+              </FormControl.Label>
+              <FormControl.Input
+                value={user.lastName}
+                borderColor="white"
+                _focus={{borderColor: 'secondary.200'}}
+              />
+            </FormControl>
+            <FormControl isDisabled>
+              <FormControl.Label
+                _text={{
+                  color: 'secondary.100',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                Banner ID:
+              </FormControl.Label>
+              <FormControl.Input
+                value={user.bannerId}
+                borderColor="white"
+                _focus={{borderColor: 'secondary.200'}}
+              />
+            </FormControl>
+            <FormControl isDisabled>
+              <FormControl.Label
+                _text={{
+                  color: 'secondary.100',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                }}>
+                Email ID:
+              </FormControl.Label>
+              <FormControl.Input
+                value={user.emailId}
+                borderColor="white"
+                _focus={{borderColor: 'secondary.200'}}
+              />
+            </FormControl>
           </Box>
           <Box mt={5}>
             <Button
