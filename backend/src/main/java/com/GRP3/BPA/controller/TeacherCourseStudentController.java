@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teachers/courses")
+@RequestMapping("/api/teachers/courses")
 public class TeacherCourseStudentController {
     @Autowired
     private CourseService courseService;
