@@ -66,7 +66,7 @@ const Login = ({navigation}) => {
   const handleSubmit = () => {
     if (isValidated()) {
       setLoader(true);
-      Axios.post('/auth/authenticate', {
+      Axios.post('/auth/login', {
         email: formData.emailId,
         password: formData.password,
       })
