@@ -43,20 +43,13 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      */
     @Override
     public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) {
-        Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseStudentRequest.getCourseId());
-        if (course == null) {
-            throw new RuntimeException("Teacher with ID" + teacherId + "taking course with with courseID " + courseStudentRequest.getCourseId() + " not found.");
-        }
-        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getStudentId(), courseStudentRequest.getCourseId());
-        if (courseStudent != null) {
-            throw new RuntimeException("Student with ID" + courseStudentRequest.getStudentId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
-        }
-        Student student = studentRepository.findByBannerId(courseStudentRequest.getStudentId());
-        CourseStudent courseStudentToAdd = new CourseStudent();
-        courseStudentToAdd.setCourse(course);
-        courseStudentToAdd.setStudent(student);
 
-        return courseStudentRepository.save(courseStudentToAdd);
+        CourseStudent courseStudent=new CourseStudent();
+//        CourseStudent courseStudentToAdd = checkCourseStatus(teacherId,courseStudentRequest);
+//        if(courseStudentToAdd==null){
+//            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
+//        }
+        return courseStudentRepository.save(courseStudent);
     }
 
     /**
@@ -68,11 +61,46 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         if (course == null) {
             throw new RuntimeException("Teacher with ID" + teacherId + "taking course with with courseID " + courseStudentRequest.getCourseId() + " not found.");
         }
-        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getStudentId(), courseStudentRequest.getCourseId());
+        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getBannerId(), courseStudentRequest.getCourseId());
         if (courseStudent == null) {
-            throw new RuntimeException("Student with ID" + courseStudentRequest.getStudentId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " is not enrolled in it.");
+            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " is not enrolled in it.");
         }
         courseStudentRepository.delete(courseStudent);
     }
 
-}
+    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) {
+
+        // Create a list of courses to save to the database
+        List<CourseStudent> students = new ArrayList<>();
+        List<String> bannerIds = courseStudentRequests.getBannerIds();
+        // Loop through the course requests and create a new Course object for each one
+        for (String bannerId : bannerIds) {
+            String courseId = courseStudentRequests.getCourseId();
+            if (checkCourseStatus(teacherId, courseId, bannerId)) {
+                CourseStudent courseStudent = new CourseStudent();
+                students.add(courseStudent);
+            }
+        }
+            // Save the courses to the database
+            return courseStudentRepository.saveAll(students);
+
+    }
+    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests){
+
+      //  List<CourseStudent> courseStudents= courseStudentRepository.findByStudentBannerIdAndCourseCourseId();
+    }
+
+    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId){
+            Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
+            if (course == null) {
+                throw new RuntimeException("Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.");
+            }
+            CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+            if (courseStudent == null) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
