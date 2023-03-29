@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teachers/courses")
+@RequestMapping("/api/teachers/courses")
+@PreAuthorize("hasRole('TEACHER')")
 public class TeacherCourseStudentController {
     @Autowired
     private CourseService courseService;
@@ -31,8 +33,8 @@ public class TeacherCourseStudentController {
     @Autowired
     private JwtService jwtService;
 
-        @GetMapping
-    public ResponseEntity<Object> getCourses(@RequestParam String teacherId) {
+        @GetMapping("/{teacherId}")
+    public ResponseEntity<Object> getCourses(@PathVariable("teacherId") String teacherId) {
 //        if (!isValidToken(token)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }

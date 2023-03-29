@@ -1,4 +1,3 @@
-import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import Wrapper from '../../wrapper/Wrapper';
 import Header from '../../components/Header/Header';
@@ -6,30 +5,45 @@ import {
   Button,
   Center,
   FormControl,
+  Spinner,
   Stack,
   WarningOutlineIcon,
 } from 'native-base';
 import {InputType1} from '../../components/Commons/Input';
+import {useDispatch, useSelector} from 'react-redux';
+import {addCourse, getCourses} from '../../redux/course/actions';
+import CustomModal from '../../components/Commons/CustomModal';
 
 const inputFields = [
   {
     placeholder: 'Course Code',
     type: 'text',
-    name: 'courseCode',
+    name: 'courseId',
   },
   {placeholder: 'Course Name', type: 'text', name: 'courseName'},
+  {placeholder: 'Course Description', type: 'text', name: 'courseDescription'},
 ];
 
-export default function Course() {
-  const [courseDetails, setCourseDetails] = useState({
-    courseName: '',
-    courseCode: '',
-  });
+const initialState = {
+  courseId: '',
+  courseCode: '',
+  courseDescription: '',
+};
 
+export default function Course({navigation}) {
+  const dispatch = useDispatch();
+  const {courseDetails: courseDetailsStore, loading} = useSelector(
+    state => state.course,
+  );
+
+  const [courseDetails, setCourseDetails] = useState({
+    ...initialState,
+  });
   const [errors, setErrors] = useState({
     courseName: '',
     courseCode: '',
   });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleTextChange = (field, value) => {
     setCourseDetails(current => ({...current, [field]: value}));
@@ -47,7 +61,7 @@ export default function Course() {
       error.courseName = 'Course name must be 6 characters long.';
     }
 
-    if (courseDetails.courseCode.length !== 8) {
+    if (courseDetails.courseId.length !== 8) {
       isValid = false;
       error.courseCode = 'Course code is invalid.';
     }
@@ -58,14 +72,37 @@ export default function Course() {
 
   const handleSubmit = () => {
     if (isFieldsValid()) {
-      console.log('VALID');
+      dispatch(addCourse(courseDetails, onSuccess));
     }
+  };
+
+  const handleBack = () => {
+    navigation.goBack();
+    dispatch(getCourses());
+  };
+
+  const onSuccess = () => {
+    setCourseDetails({...initialState});
+    setShowSuccessModal(true);
   };
 
   return (
     <Wrapper>
       <Header title="Add Course" />
       <Center height="100%">
+        <CustomModal
+          showModal={showSuccessModal}
+          setShowModal={setShowSuccessModal}
+          heading="Successfully"
+          body={
+            <Center>
+              Course {courseDetailsStore?.courseId} was added successfully.
+              <Button mt="2" minWidth="100" onPress={handleBack}>
+                Back
+              </Button>
+            </Center>
+          }
+        />
         <Stack p="4" space={3} width="100%">
           {inputFields.map((inputField, key) => (
             <Stack space={2} key={key}>
@@ -85,13 +122,17 @@ export default function Course() {
           ))}
 
           <Stack>
-            <Button
-              size="lg"
-              background="secondary.400"
-              onPress={() => handleSubmit()}
-              _pressed={{backgroundColor: 'secondary.400'}}>
-              Add Course
-            </Button>
+            {loading ? (
+              <Spinner color="secondary.400" size="lg" />
+            ) : (
+              <Button
+                size="lg"
+                background="secondary.400"
+                onPress={() => handleSubmit()}
+                _pressed={{backgroundColor: 'secondary.400'}}>
+                Add Course
+              </Button>
+            )}
           </Stack>
         </Stack>
       </Center>
