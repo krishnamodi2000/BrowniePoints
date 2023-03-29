@@ -43,13 +43,19 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      */
     @Override
     public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) {
-
-        CourseStudent courseStudent=new CourseStudent();
-//        CourseStudent courseStudentToAdd = checkCourseStatus(teacherId,courseStudentRequest);
-//        if(courseStudentToAdd==null){
-//            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
-//        }
-        return courseStudentRepository.save(courseStudent);
+        CourseStudent courseStudent = new CourseStudent(); //push this in if after creating response
+        String courseId = courseStudentRequest.getCourseId();
+        String bannerId = courseStudentRequest.getBannerId();
+        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
+            Student student = studentRepository.findByBannerId(bannerId);
+            Course course = courseRepository.findByCourseId(courseId);
+            courseStudent.setStudent(student);
+            courseStudent.setCourse(course);
+            courseStudentRepository.save(courseStudent);
+        } else {
+            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
+        }
+        return courseStudent;
     }
 
     /**
@@ -57,50 +63,48 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      */
     @Override
     public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) {
-        Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseStudentRequest.getCourseId());
-        if (course == null) {
-            throw new RuntimeException("Teacher with ID" + teacherId + "taking course with with courseID " + courseStudentRequest.getCourseId() + " not found.");
+        String courseId = courseStudentRequest.getCourseId();
+        String bannerId = courseStudentRequest.getBannerId();
+        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
+            CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+            courseStudentRepository.delete(courseStudent);
         }
-        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getBannerId(), courseStudentRequest.getCourseId());
-        if (courseStudent == null) {
-            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " is not enrolled in it.");
-        }
-        courseStudentRepository.delete(courseStudent);
+
     }
 
     public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) {
-
         // Create a list of courses to save to the database
-        List<CourseStudent> students = new ArrayList<>();
+        List<CourseStudent> studentList = new ArrayList<>();
         List<String> bannerIds = courseStudentRequests.getBannerIds();
-        // Loop through the course requests and create a new Course object for each one
+        String courseId = courseStudentRequests.getCourseId();
         for (String bannerId : bannerIds) {
-            String courseId = courseStudentRequests.getCourseId();
-            if (checkCourseStatus(teacherId, courseId, bannerId)) {
-                CourseStudent courseStudent = new CourseStudent();
-                students.add(courseStudent);
-            }
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(courseId, bannerId);
+            CourseStudent courseStudent = addStudent(teacherId, courseStudentRequest);
+            studentList.add(courseStudent);
         }
-            // Save the courses to the database
-            return courseStudentRepository.saveAll(students);
-
-    }
-    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests){
-
-      //  List<CourseStudent> courseStudents= courseStudentRepository.findByStudentBannerIdAndCourseCourseId();
+        return studentList;
     }
 
-    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId){
-            Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
-            if (course == null) {
-                throw new RuntimeException("Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.");
-            }
-            CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
-            if (courseStudent == null) {
-                return false;
-            }
+    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) {
+        List<String> bannerIds = courseStudentRequests.getBannerIds();
+        String courseId = courseStudentRequests.getCourseId();
+        for (String bannerId : bannerIds) {
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(courseId, bannerId);
+            removeStudent(teacherId, courseStudentRequest);
+        }
+    }
+
+    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) {
+        Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
+        if (course == null) {
+            throw new RuntimeException("Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.");
+        }
+        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+        if (courseStudent != null) {
             return true;
         }
-
+        return false;
     }
+
+}
 
