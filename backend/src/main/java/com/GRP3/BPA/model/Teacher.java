@@ -14,8 +14,9 @@ import lombok.Setter;
 public class Teacher {
     @Id
     @Getter @Setter
+    @Column(name="teacher_id")
     //@GeneratedValue(strategy= GenerationType.IDENTITY)
-    private String teacher_id;
+    private String teacherId;
 
     @Getter@Setter
     @OneToOne(cascade=CascadeType.ALL)
