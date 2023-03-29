@@ -2,17 +2,17 @@ package com.GRP3.BPA.model.course;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseResponse {
+public class CoursesResponse {
     @Getter
     @Setter
     private boolean status;
     @Getter
     @Setter
-    private CourseRequest courseRequest;
-
-
+    private List<CourseRequest> courseRequestList;
 }

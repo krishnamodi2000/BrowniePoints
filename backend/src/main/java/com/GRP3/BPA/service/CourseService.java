@@ -3,13 +3,11 @@ package com.GRP3.BPA.service;
 import com.GRP3.BPA.model.course.Course;
 import com.GRP3.BPA.model.course.CourseException;
 import com.GRP3.BPA.model.course.CourseRequest;
-import com.GRP3.BPA.model.course.CourseResponse;
 import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.IssuerUriCondition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
