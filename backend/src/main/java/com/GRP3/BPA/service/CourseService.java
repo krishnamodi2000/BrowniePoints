@@ -25,14 +25,12 @@ public class CourseService {
     public CourseService(TeacherRepository teacherRepository, CourseRepository courseRepository, UserRepository userRepository) {
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
-        this.userRepository=userRepository;
+        this.userRepository = userRepository;
     }
-
 
     public List<Course> getCoursesForTeacher(String teacherId) {
         return courseRepository.findByTeacherTeacherId(teacherId);
     }
-
 
     public Course addCourseForTeacher(String teacherId, CourseRequest courseRequest) {
         // Get the teacher from the database
@@ -63,19 +61,15 @@ public class CourseService {
             course.setCourseName(courseRequest.getCourseName());
             course.setCourseDescription(courseRequest.getCourseDescription());
             course.setTeacher(teacher);
-
             courses.add(course);
         }
-
         // Save the courses to the database
         return courseRepository.saveAll(courses);
     }
 
-
-
-     public void removeCourseForTeacher(String teacherId, String courseId) {
-            Course courseDelete= courseRepository.findByTeacherTeacherIdAndCourseId(teacherId,courseId);
-            courseRepository.delete(courseDelete);
+    public void removeCourseForTeacher(String teacherId, String courseId) {
+        Course courseDelete = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
+        courseRepository.delete(courseDelete);
     }
 
     public void removeCoursesForTeacher(String teacherId, List<String> courseIds) {

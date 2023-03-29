@@ -5,7 +5,9 @@ import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.courseStudent.CourseStudentRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,7 +33,9 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     @Autowired
     private final CourseStudentRepository courseStudentRepository;
 
-    public CourseStudentServiceImpl(TeacherRepository teacherRepository, CourseRepository courseRepository, CourseStudentRepository courseStudentRepository, StudentRepository studentRepository) {
+
+
+    public CourseStudentServiceImpl(TeacherRepository teacherRepository,CourseRepository courseRepository,CourseStudentRepository courseStudentRepository, StudentRepository studentRepository) {
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
@@ -106,5 +111,43 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         return false;
     }
 
+    public PointsCreateResponse incrementPoints(String studentId, String courseId)
+    {
+        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(studentId, courseId);
+
+        if(courseStudent != null){
+            int currentPoints = courseStudent.getPoints() +1;
+            courseStudent.setPoints(currentPoints);
+            courseStudentRepository.save(courseStudent);
+        }
+
+        PointsCreateResponse pointsCreateResponse = new PointsCreateResponse();
+        pointsCreateResponse.setSuccess(true);
+
+        pointsCreateResponse.setStudent(studentRepository.findByBannerId(studentId));
+
+        return pointsCreateResponse;
+    }
+
+    public CourseStudentsResponse dataOfStudent(String courseId){
+        List<CourseStudent> courseStudents = courseStudentRepository.findByCourseCourseId(courseId);
+        CourseStudentsResponse courseStudentsResponse = new CourseStudentsResponse();
+        ArrayList<StudentInfoWithName> data = new ArrayList<>();
+
+        if(courseStudents != null){
+            for(int i=0; i<courseStudents.size(); i++){
+                CourseStudent courseStudent = courseStudents.get(i);
+                Student student = courseStudent.getStudent();
+                StudentInfoWithName studentInfoWithName = new StudentInfoWithName();
+                studentInfoWithName.setStudentName(student.getUser().getFirstName() + " " +student.getUser().getLastName());
+                studentInfoWithName.setBannerId(student.getBannerId());
+                studentInfoWithName.setPoints(courseStudent.getPoints());
+                data.add(studentInfoWithName);
+            }
+            courseStudentsResponse.setSuccess(true);
+            courseStudentsResponse.setData(data);
+        }
+        return courseStudentsResponse;
+    }
 }
 
