@@ -30,8 +30,8 @@ public class TeacherCourseStudentController {
     @Autowired
     private JwtService jwtService;
 
-        @GetMapping
-    public ResponseEntity<Object> getCourses(@RequestParam String teacherId) {
+        @GetMapping("/{teacherId}")
+    public ResponseEntity<Object> getCourses(@PathVariable("teacherId") String teacherId) {
 //        if (!isValidToken(token)) {
 //            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 //        }
