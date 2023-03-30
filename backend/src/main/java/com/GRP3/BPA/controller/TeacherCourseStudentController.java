@@ -143,7 +143,7 @@ public class TeacherCourseStudentController {
             courseService.removeCoursesForTeacher(teacherId, courseIdsList.getCourseIds());
             CourseResponse response = new CourseResponse();
             response.setStatus(true);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GlobalException e) {
@@ -163,7 +163,7 @@ public class TeacherCourseStudentController {
             CourseStudentsResponse response = new CourseStudentsResponse();
             response.setStatus(true);
 
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GlobalException e) {
@@ -202,7 +202,9 @@ public class TeacherCourseStudentController {
         try {
 
             courseStudentService.removeStudents(teacherId, courseStudentRequests);
-            return new ResponseEntity<>("Student removed successfully", HttpStatus.NO_CONTENT);
+            CourseStudentResponse response = new CourseStudentResponse();
+            response.setStatus(true);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GlobalException e) {
@@ -223,7 +225,7 @@ public class TeacherCourseStudentController {
             response.setStatus(true);
             ArrayList<StudentInfoWithName> studentInfoWithNames=addedStudents(courseStudent);
             response.setData(studentInfoWithNames);
-            return new ResponseEntity<>(courseStudent, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (GlobalException e) {
