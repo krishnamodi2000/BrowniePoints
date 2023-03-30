@@ -1,7 +1,7 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.GlobalException;
-import com.GRP3.BPA.model.CourseRequest;
+import com.GRP3.BPA.model.course.CourseRequest;
 import com.GRP3.BPA.model.course.*;
 import com.GRP3.BPA.model.courseStudent.*;
 import com.GRP3.BPA.model.student.Student;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +92,7 @@ public class TeacherCourseStudentController {
     }
 
     @DeleteMapping("/removeCourse")
-    public ResponseEntity<Object> removeCourse(@RequestBody String courseId, @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<Object> removeCourse(@RequestBody CourseIdRequest courseId, @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> teacherIdResponse = validateAuthorizationHeader(authorizationHeader);
         if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
@@ -101,10 +100,12 @@ public class TeacherCourseStudentController {
         String teacherId = teacherIdResponse.getBody();
         try {
 
-            courseService.removeCourseForTeacher(teacherId, courseId);
+            courseService.removeCourseForTeacher(teacherId, courseId.getCourseId());
             CourseResponse response = new CourseResponse();
             response.setStatus(true);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+           //response.setCourseRequest(null);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GlobalException e) {
@@ -113,14 +114,14 @@ public class TeacherCourseStudentController {
     }
 
 //    @DeleteMapping("/removeCourses")
-//    public ResponseEntity<Object> removeCourses(@RequestBody List<String> courseIds, @RequestHeader("Authorization") String authorizationHeader) {
+//    public ResponseEntity<Object> removeCourses(@RequestBody RemoveCourseDAO courseIds, @RequestHeader("Authorization") String authorizationHeader) {
 //        ResponseEntity<String> teacherIdResponse = validateAuthorizationHeader(authorizationHeader);
 //        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
 //            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
 //        }
 //        String teacherId = teacherIdResponse.getBody();
 //        try {
-//            courseService.removeCoursesForTeacher(teacherId, courseIds);
+//            courseService.removeCoursesForTeacher(teacherId, courseIds.getCourseList());
 //            CourseResponse response = new CourseResponse();
 //            response.setStatus(true);
 //            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
@@ -130,6 +131,25 @@ public class TeacherCourseStudentController {
 //            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 //        }
 //    }
+//
+    @DeleteMapping("/removeCourses")
+    public ResponseEntity<Object> removeCourses(@RequestBody CourseIdsRequest courseIdsList, @RequestHeader("Authorization") String authorizationHeader) {
+        ResponseEntity<String> teacherIdResponse = validateAuthorizationHeader(authorizationHeader);
+        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
+        }
+        String teacherId = teacherIdResponse.getBody();
+        try {
+            courseService.removeCoursesForTeacher(teacherId, courseIdsList.getCourseIds());
+            CourseResponse response = new CourseResponse();
+            response.setStatus(true);
+            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @DeleteMapping("/removeStudent")
     public ResponseEntity<Object> removeStudent(@RequestBody CourseStudentRequest courseStudentRequest, @RequestHeader("Authorization") String authorizationHeader) {

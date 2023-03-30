@@ -1,6 +1,5 @@
 package com.GRP3.BPA.model.course;
 
-import com.GRP3.BPA.model.CourseRequest;
 import lombok.*;
 
 @Data
@@ -16,4 +15,7 @@ public class CourseResponse {
     private CourseRequest courseRequest;
 
 
+    public boolean getStatus() {
+        return status;
+    }
 }

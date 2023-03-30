@@ -2,7 +2,7 @@ package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.model.course.Course;
 import com.GRP3.BPA.model.GlobalException;
-import com.GRP3.BPA.model.CourseRequest;
+import com.GRP3.BPA.model.course.CourseRequest;
 import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.course.CourseRepository;
