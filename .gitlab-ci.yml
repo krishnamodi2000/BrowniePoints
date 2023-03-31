@@ -2,7 +2,7 @@ variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
   IMAGE_NAME: csci5308vm3/registry
   IMAGE_TAG: CICD-BPA
-  DOCKER_HOST: tcp://localhost:2375/
+  DOCKER_HOST: tcp://thedockerhost:2375/
   CI_REGISTRY_IMAGE: latest
 
 default:
