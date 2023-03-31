@@ -113,9 +113,10 @@ export default function HomePage({navigation}) {
           e.target.style.backgroundColor = '#fcd12a';
           e.target.style.transform = 'none';
           e.target.style.boxShadow = '0px 2px 10px rgba(0, 0, 0, 0.3)';
-        }}>
+        }}
         onPress={() => handleQRGenerator()}
-        _pressed={{backgroundColor: 'secondary.400'}}
+        _pressed={{backgroundColor: 'secondary.400'}}>
+        QR
       </Button>
     </Wrapper>
   );
