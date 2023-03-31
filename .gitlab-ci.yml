@@ -15,8 +15,7 @@ stages:
   - build
   - test
   - package
-  - ssh-connection
-  - docker_build
+  - deploy
 
 #build:
 #  stage: build
@@ -42,20 +41,18 @@ stages:
 #     - PX-22_CD_Implementation
 
 
-# deploy:
-#   stage: deploy
-#   image: docker:latest
-#   before_script:
-#     - echo "SSH_PRIVATE_KEY:" ${SSH_PRIVATE_KEY}
-#     - echo "CI_REGISTRY:" $CI_REGISTRY
-#     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} $CI_REGISTRY
-#     - docker build -t ${CONTAINER_TEST_IMAGE}
-#     - docker push ${CONTAINER_TEST_IMAGE}
-#     - docker logout
-#   script:
-#     - echo "Maven Deployment Started"
+deploy:
+  stage: deploy
+  image: docker:latest
+  before_script:
+    - echo "SSH_PRIVATE_KEY:" ${SSH_PRIVATE_KEY}
+    - echo "CI_REGISTRY:" $CI_REGISTRY
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} $CI_REGISTRY
+    - docker build -t ${CONTAINER_TEST_IMAGE}
+    - docker push ${CONTAINER_TEST_IMAGE}
+    - docker logout
+  script:
+    - echo "Maven Deployment Started"
 
-ssh-connection:
-  stage: ssh-connection
   
 
