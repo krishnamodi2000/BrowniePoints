@@ -18,11 +18,11 @@ stages:
   - package
   - build_image
 
-build:
-  stage: build
-  image: maven:3.8.3-openjdk-17
-  script:
-    - mvn -f backend/pom.xml install
+# build:
+#   stage: build
+#   image: maven:3.8.3-openjdk-17
+#   script:
+#     - mvn -f backend/pom.xml install
 
 #test:
 #  stage: test
@@ -50,7 +50,7 @@ build_image:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
-    - echo ls
+    - pwd
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
     - docker push $IMAGE_NAME:$IMAGE_TAG
