@@ -54,7 +54,28 @@ package:
 #   script:
 #     - echo "Maven Deployment Started"
 
-deploy:
+build_job_docker:
+  stage: docker
+  script:
+    - docker login -u ${CI_REGISTRY_USERNAME} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker build -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE
+    - docker logout
+  only:
+    - main
+
+
+deploy_job:
   stage: deploy
   script:
-    - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_SSH_KEY}" target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:/home/${DEPLOY_USER}/${DEPLOY_DIR}/bpa-0.0.1-SNAPSHOT.jar"
+    - echo "Maven deploy started"
+    - echo "${DEPLOY_SSH_KEY}"
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
+    - ssh-add -l
+    - scp -r -o StrictHostKeyChecking=no target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
+    - ssh -o StrictHostKeyChecking=no  csci5308vm3@csci5308vm3.research.cs.dal.ca /home/csci5308vm3/project/stop_container.sh
+    - ssh -o StrictHostKeyChecking=no  csci5308vm3@csci5308vm3.research.cs.dal.ca docker pull $CONTAINER_TEST_IMAGE
+    - ssh -o StrictHostKeyChecking=no  csci5308vm3@csci5308vm3.research.cs.dal.ca docker run -d -p $EXPOSED_PORT:8080 --name project_app --rm $CONTAINER_TEST_IMAGE_VERSION
+  only:
+    - main
