@@ -15,6 +15,7 @@ stages:
   - build
   - test
   - package
+  - docker
   - deploy
 
 #build:
@@ -65,7 +66,7 @@ build_job_docker:
     - main
 
 
-deploy_job:
+deploy:
   stage: deploy
   script:
     - echo "Maven deploy started"
