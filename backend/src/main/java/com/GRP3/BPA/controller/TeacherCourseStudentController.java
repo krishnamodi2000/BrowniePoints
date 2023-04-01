@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/teachers/courses")
-@PreAuthorize("hasRole('TEACHER')")
+//@PreAuthorize("hasRole('TEACHER')")
 public class TeacherCourseStudentController {
     @Autowired
     private CourseService courseService;
@@ -300,5 +300,14 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>("Invalid Token", HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok(teacherId);
+    @GetMapping("/studentPoints/{bannerId}")
+    public ResponseEntity<Object> getPointsByBannerId(@PathVariable("bannerId") String bannerId){
+            try{
+                List<StudentPointsAllSubject> studentPointsByBannerId = courseStudentService.pointsAllSubject(bannerId);
+                return new ResponseEntity<>(studentPointsByBannerId, HttpStatus.CREATED);
+            }
+            catch (Exception e){
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
     }
 }

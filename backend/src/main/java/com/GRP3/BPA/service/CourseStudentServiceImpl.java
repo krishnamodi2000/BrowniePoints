@@ -151,5 +151,23 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         }
         return courseStudentsResponse;
     }
+
+    public List<StudentPointsAllSubject> pointsAllSubject(String bannerId){
+        List<CourseStudent> allCoursesEnrolled = courseStudentRepository.findByStudentBannerId(bannerId);
+        List<StudentPointsAllSubject> response = new ArrayList<>();
+
+        if(allCoursesEnrolled != null){
+            for(int i=0; i<allCoursesEnrolled.size(); i++){
+                CourseStudent courseStudent = allCoursesEnrolled.get(i);
+                Course course = courseStudent.getCourse();
+                StudentPointsAllSubject studentPointsAllSubject = new StudentPointsAllSubject();
+                studentPointsAllSubject.setCourseId(course.getCourseId());
+                studentPointsAllSubject.setCourseName(course.getCourseName());
+                studentPointsAllSubject.setPoints(courseStudent.getPoints());
+                response.add(studentPointsAllSubject);
+            }
+        }
+        return response;
+    }
 }
 

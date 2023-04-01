@@ -6,6 +6,9 @@ import com.GRP3.BPA.model.courseStudent.CourseStudentRequest;
 import com.GRP3.BPA.model.courseStudent.CourseStudentRequests;
 import com.GRP3.BPA.model.courseStudent.CourseStudentsResponse;
 import com.GRP3.BPA.model.courseStudent.PointsCreateResponse;
+import com.GRP3.BPA.model.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,4 +19,5 @@ public interface CourseStudentService {
     void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException;
     PointsCreateResponse incrementPoints(String studentId, String courseId);
     CourseStudentsResponse dataOfStudent(String courseId);
+    List<StudentPointsAllSubject> pointsAllSubject(String bannerId);
 }
