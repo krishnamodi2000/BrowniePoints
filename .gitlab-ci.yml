@@ -1,9 +1,9 @@
 variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
-  IMAGE_NAME: docker.io/sardock01/cicdregistry
-  IMAGE_TAG: CICD-BPA
+  #IMAGE_NAME: docker.io/sardock01/cicdregistry
+  #IMAGE_TAG: CICD-BPA
   #DOCKER_HOST: tcp://localhost:2375/
-  CI_REGISTRY_IMAGE: latest
+  CONTAINER_IMAGE: CI_REGISTRY_IMAGE:latest
 
 default:
   image: maven:3.8.3-openjdk-17
@@ -51,9 +51,9 @@ build_image:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - pwd
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker build -t $CONTAINER_IMAGE .
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker push $IMAGE_NAME:$IMAGE_TAG
+    - docker push $CONTAINER_IMAGE
   script:
     - echo "Docker Image Build"
 
