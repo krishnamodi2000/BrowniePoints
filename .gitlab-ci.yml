@@ -1,6 +1,6 @@
 variables:
   MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
-  IMAGE_NAME: sardock01/cicdregistry
+  IMAGE_NAME: docker.io/sardock01/cicdregistry
   IMAGE_TAG: CICD-BPA
   #DOCKER_HOST: tcp://localhost:2375/
   CI_REGISTRY_IMAGE: latest
