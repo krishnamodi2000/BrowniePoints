@@ -61,7 +61,7 @@ stages:
 deploy:
   stage: deploy
   before_script:
-    - echo "$DEPLOY_SSH_KEY" | base64 -d > key
+    - echo "${DEPLOY_SSH_KEY}" | base64 -d > key
     - chmod 600 key
     - eval $(ssh-agent -s)
     - ssh-add -k key
