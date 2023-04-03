@@ -61,11 +61,10 @@ stages:
 deploy:
   stage: deploy
   before_script:
-    - echo "${DEPLOY_SSH_KEY}" | base64 -d > key
-    - echo key
-    - chmod 600 key
+    - echo "${DEPLOY_SSH_KEY}"
     - eval $(ssh-agent -s)
-    - ssh-add -k key
+    - sudo chmod 600 key
+    - ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
   script: 
     - echo "Maven Deploy Started"
     #- echo "${DEPLOY_SSH_KEY}"
