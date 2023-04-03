@@ -64,7 +64,7 @@ deploy:
     - echo "Maven Deploy Started"
     - echo "${DEPLOY_SSH_KEY}"
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
+    - ssh-add <(echo "${DEPLOY_SSH_KEY}")
     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
   
 
