@@ -17,6 +17,7 @@ stages:
   - test
   - package
   - build_image
+  - deploy
 
 # build:
 #   stage: build
@@ -30,32 +31,38 @@ stages:
  # script:
 #    - mvn -f backend/pom.xml test
 
-package:
-  stage: package
+# package:
+#   stage: package
+#   script: 
+#      - echo "Maven Packaging Started"
+#      - mvn -f backend/pom.xml clean package
+#   artifacts:
+#     paths:
+#       - backend/target/*.jar
+#   only:
+#     - PX-22_CD_Implementation
+
+
+# build_image:
+#   stage: build_image
+#   image: docker:20.10.16
+#   services:
+#     - docker:20.10.16-dind
+#   variables:
+#     DOCKER_TLS_CERTDIR: "/certs"
+#   before_script:
+#     - pwd
+#     - docker build -t $CONTAINER_IMAGE .
+#     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+#     - docker push $CONTAINER_IMAGE
+#   script:
+#     - echo "Docker Image Build"
+
+deploy:
+  stage: deploy
   script: 
-     - echo "Maven Packaging Started"
-     - mvn -f backend/pom.xml clean package
-  artifacts:
-    paths:
-      - backend/target/*.jar
-  only:
-    - PX-22_CD_Implementation
-
-
-build_image:
-  stage: build_image
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  before_script:
-    - pwd
-    - docker build -t $CONTAINER_IMAGE .
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker push $CONTAINER_IMAGE
-  script:
-    - echo "Docker Image Build"
-
+    - echo "Maven Deploy Started"
+    - echo "${DEPLOY_SSH_KEY}"
+    - eval $(ssh-agent-s)
   
 
