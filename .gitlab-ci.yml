@@ -64,7 +64,6 @@ deploy:
     - echo "$DEPLOY_SSH_KEY" | base64 -d > key
     - chmod 600 key
     - eval $(ssh-agent -s)
-    - echo "y" | ssh-keygen -p -P "" -N "" -f /home/csci5308vm3/.ssh/keyname
     - ssh-add -k key
   script: 
     - echo "Maven Deploy Started"
