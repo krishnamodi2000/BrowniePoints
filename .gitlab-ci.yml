@@ -63,6 +63,6 @@ deploy:
   script: 
     - echo "Maven Deploy Started"
     - echo "${DEPLOY_SSH_KEY}"
-    - eval $(ssh-agent-s)
+    - eval $(ssh-agent -s)
   
 
