@@ -103,7 +103,6 @@ export default function HomePage({navigation}) {
           borderRadius: 25,
         }}
         floating
-        onPress={() => console.log('Pressed')}
         onMouseOver={e => {
           e.target.style.backgroundColor = '#f5b800';
           e.target.style.transform = 'translateY(-3px)';
