@@ -1,15 +1,15 @@
-import {Button, Box, Text, VStack, Fab, Icon} from 'native-base';
-import React from 'react';
+import {Button, Box, Text, VStack, Spinner} from 'native-base';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomCard from '../../components/Commons/CustomCard';
 import Header from '../../components/Header/Header';
 import {logoutAction} from '../../redux/user/actions';
 import Wrapper from '../../wrapper/Wrapper';
-import UserProile from './UserProfile';
-import QRGenerator from './QRGenerator';
-import axios from 'axios';
+import {getEnrolledCourseInfo} from '../../redux/student/actions';
+
 export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
+  const {subjectInfo, loading} = useSelector(state => state.student);
 
   const dispatch = useDispatch();
   const logout = () => {
@@ -21,6 +21,17 @@ export default function HomePage({navigation}) {
   const handleQRGenerator = () => {
     navigation.navigate('QRgenerator');
   };
+
+  const reloadPoints = () => {
+    //Make it dynamic
+    dispatch(getEnrolledCourseInfo('B00917345'));
+  };
+
+  useEffect(() => {
+    //Please make it dynamic
+    dispatch(getEnrolledCourseInfo('B00917345'));
+  }, [dispatch]);
+
   return (
     <Wrapper>
       <Header
@@ -28,69 +39,18 @@ export default function HomePage({navigation}) {
         menuItemsList={[
           {name: 'Profile', onPress: () => handleProfilePress()},
           {name: 'Logout', onPress: () => logout()},
+          {name: 'Reload Points', onPress: () => reloadPoints()},
         ]}
       />
-      <CustomCard>
+      {loading ? (
+        <Spinner color="secondary.500" size="lg" mt={4} />
+      ) : (
         <VStack space="2">
-          <Box
-            px="4"
-            py="5"
-            borderRadius={8}
-            bg="#373737"
-            borderWidth={1}
-            borderColor="gray.300"
-            shadow={2}
-            transition="all 0.2s"
-            _hover={{
-              transform: 'translateY(-8px)',
-              shadow: '2xl',
-            }}>
-            <Text fontSize={22} fontWeight="bold" color="white" mb="2">
-              CSCI 5308 - Advanced Topics in Software Development
-            </Text>
-
-            <Box
-              borderRadius={5}
-              bg="secondary.100"
-              px="3"
-              py="1"
-              alignSelf="flex-start"
-              mb="2">
-              <Text fontSize={16} fontWeight="bold" color="black">
-                Points: 5
-              </Text>
-            </Box>
-          </Box>
-          <Box
-            px="4"
-            py="5"
-            borderRadius={8}
-            bg="#373737"
-            borderWidth={1}
-            borderColor="gray.300"
-            shadow={2}
-            transition="all 0.2s"
-            _hover={{
-              transform: 'translateY(-8px)',
-              shadow: '2xl',
-            }}>
-            <Text fontSize={22} fontWeight="bold" color="white" mb="2">
-              CSCI 5309 - Data Management Warehousing Analysis
-            </Text>
-            <Box
-              borderRadius={5}
-              bg="secondary.100"
-              px="3"
-              py="1"
-              alignSelf="flex-start"
-              mb="2">
-              <Text fontSize={16} fontWeight="bold" color="black">
-                Points: 2
-              </Text>
-            </Box>
-          </Box>
+          {subjectInfo.map((subject, key) => (
+            <CourseDetailCard {...subject} key={key} />
+          ))}
         </VStack>
-      </CustomCard>
+      )}
 
       <Button
         style={{
@@ -120,3 +80,36 @@ export default function HomePage({navigation}) {
     </Wrapper>
   );
 }
+
+const CourseDetailCard = ({courseId, courseName, points}) => (
+  <CustomCard>
+    <Box
+      px="4"
+      py="5"
+      borderRadius={8}
+      bg="#373737"
+      borderWidth={1}
+      borderColor="gray.300"
+      shadow={2}
+      transition="all 0.2s"
+      _hover={{
+        transform: 'translateY(-8px)',
+        shadow: '2xl',
+      }}>
+      <Text fontSize={22} fontWeight="bold" color="white" mb="2">
+        {courseId} - {courseName}
+      </Text>
+
+      <Box
+        borderRadius={5}
+        bg="secondary.100"
+        px="3"
+        py="1"
+        alignSelf="flex-start">
+        <Text fontSize={16} fontWeight="bold" color="black">
+          Points: {points}
+        </Text>
+      </Box>
+    </Box>
+  </CustomCard>
+);

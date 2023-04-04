@@ -7,12 +7,11 @@ function* getCoursesSaga({}) {
     yield put({type: actionTypes.SET_COURSE_LOADING});
 
     //Make sure to remove hardcoded teacher ID ie 12345
-    const {data} = yield AxiosInstance.get(`teachers/courses/12345`);
-
+    const {data} = yield AxiosInstance.get(`teachers/courses`);
     if (data) {
       yield put({
         type: actionTypes.GET_COURSES_SUCCESS,
-        payload: data,
+        payload: data.courseRequestList,
       });
     } else {
       yield put({
