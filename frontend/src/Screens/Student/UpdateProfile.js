@@ -1,48 +1,48 @@
-import {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Button,
-  Avatar,
-  FormControl,
-} from 'native-base';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Box, Center, Heading, Text, Button, FormControl} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
-import UpdateProfile from './UpdateProfile';
 import Header from '../../components/Header/Header';
 import {InputType1} from '../../components/Commons/Input';
 import axios from 'axios';
 
-const UserProfile = () => {
+export default function UpdateProfile() {
+  const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
   const navigation = useNavigation();
+
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
+  const [bannerId, setBannerId] = useState(user.bannerId);
+  const [emailId, setEmailId] = useState(user.emailId);
 
-  const generateInitials = () =>
-    user.firstName[0].toUpperCase() + user.lastName[0];
-
-  const handleUpdateProfile = () => {
-    Alert.alert('Are you sure you want to change your information');
-    navigation.navigate('UpdateProfile', {user});
+  const handleSaveChanges = () => {
+    dispatch({
+      type: 'UPDATE_USER_INFO',
+      payload: {
+        firstName,
+        lastName,
+        bannerId,
+        emailId,
+      },
+    });
+    alert('Profile updated successfully!');
+    navigation.goBack();
   };
 
   const inputFields = [
     {placeholder: 'First Name', type: 'text', name: 'firstName'},
     {placeholder: 'Last Name', type: 'text', name: 'lastName'},
+    {placeholder: 'Banner ID', type: 'text', name: 'bannerId'},
+    {placeholder: 'Email ID', type: 'email', name: 'emailId'},
   ];
 
   return (
     <Wrapper>
-      <Header title="User Profile" />
+      <Header title="Update Profile" />
       <Box>
         <Center>
-          <Avatar bg="secondary.300" mr={1} size="xl" mt={10}>
-            {generateInitials()}
-          </Avatar>
           <Box
             bg="#373737"
             p={10}
@@ -51,7 +51,7 @@ const UserProfile = () => {
             borderColor="white"
             mt={10}>
             {inputFields.map(({placeholder, type, name}) => (
-              <FormControl key={name} isDisabled>
+              <FormControl key={name}>
                 <FormControl.Label
                   _text={{
                     color: 'secondary.100',
@@ -60,20 +60,35 @@ const UserProfile = () => {
                   }}>
                   {placeholder}:
                 </FormControl.Label>
-                <FormControl.Input
+                <InputType1
+                  type={type}
                   value={user[name]}
-                  borderColor="white"
-                  _focus={{borderColor: 'secondary.200'}}
+                  onChangeText={value => {
+                    switch (name) {
+                      case 'firstName':
+                        setFirstName(value);
+                        break;
+                      case 'lastName':
+                        setLastName(value);
+                        break;
+                      case 'bannerId':
+                        setBannerId(value);
+                        break;
+                      case 'emailId':
+                        setEmailId(value);
+                        break;
+                    }
+                  }}
                 />
               </FormControl>
             ))}
           </Box>
           <Box mt={5}>
             <Button
-              onPress={handleUpdateProfile}
+              onPress={() => handleSaveChanges()}
               _pressed={{backgroundColor: 'secondary.400'}}>
               <Text color="white" fontWeight="bold">
-                Update Profile
+                Save Changes
               </Text>
             </Button>
           </Box>
@@ -81,6 +96,4 @@ const UserProfile = () => {
       </Box>
     </Wrapper>
   );
-};
-
-export default UserProfile;
+}

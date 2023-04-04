@@ -5,10 +5,12 @@ import CustomCard from '../../components/Commons/CustomCard';
 import Header from '../../components/Header/Header';
 import {logoutAction} from '../../redux/user/actions';
 import Wrapper from '../../wrapper/Wrapper';
-
+import UserProile from './UserProfile';
+import QRGenerator from './QRGenerator';
+import axios from 'axios';
 export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
-  console.log(user);
+
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutAction());
@@ -16,7 +18,9 @@ export default function HomePage({navigation}) {
   const handleProfilePress = () => {
     navigation.navigate('UserProfile');
   };
-
+  const handleQRGenerator = () => {
+    navigation.navigate('QRgenerator');
+  };
   return (
     <Wrapper>
       <Header
@@ -99,8 +103,19 @@ export default function HomePage({navigation}) {
           borderRadius: 25,
         }}
         floating
-        onPress={() => console.log('Pressed')}>
-        <Text>QR</Text>
+        onMouseOver={e => {
+          e.target.style.backgroundColor = '#f5b800';
+          e.target.style.transform = 'translateY(-3px)';
+          e.target.style.boxShadow = '0px 5px 15px rgba(0, 0, 0, 0.4)';
+        }}
+        onMouseOut={e => {
+          e.target.style.backgroundColor = '#fcd12a';
+          e.target.style.transform = 'none';
+          e.target.style.boxShadow = '0px 2px 10px rgba(0, 0, 0, 0.3)';
+        }}
+        onPress={() => handleQRGenerator()}
+        _pressed={{backgroundColor: 'secondary.400'}}>
+        QR
       </Button>
     </Wrapper>
   );
