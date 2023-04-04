@@ -1,5 +1,6 @@
 package com.GRP3.BPA.service;
 
+import com.GRP3.BPA.model.StudentPointsAllSubject;
 import com.GRP3.BPA.model.course.Course;
 import com.GRP3.BPA.model.GlobalException;
 import com.GRP3.BPA.model.courseStudent.*;

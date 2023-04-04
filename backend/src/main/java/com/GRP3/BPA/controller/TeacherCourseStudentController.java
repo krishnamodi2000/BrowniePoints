@@ -1,6 +1,7 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.GlobalException;
+import com.GRP3.BPA.model.StudentPointsAllSubject;
 import com.GRP3.BPA.model.course.CourseRequest;
 import com.GRP3.BPA.model.course.*;
 import com.GRP3.BPA.model.courseStudent.*;
@@ -300,6 +301,7 @@ public class TeacherCourseStudentController {
             return new ResponseEntity<>("Invalid Token", HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok(teacherId);
+    }
     @GetMapping("/studentPoints/{bannerId}")
     public ResponseEntity<Object> getPointsByBannerId(@PathVariable("bannerId") String bannerId){
             try{
