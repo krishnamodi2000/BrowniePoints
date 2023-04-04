@@ -8,8 +8,6 @@ import axios from 'axios';
 import {TextInput} from 'react-native';
 
 export default function QRGenerator() {
-  const [qrCodeText, setQrCodeText] = useState('');
-
   return (
     <Wrapper>
       <Header title="QR Code" />
@@ -20,11 +18,7 @@ export default function QRGenerator() {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Qrcode
-            value={'B0012324'}
-            size={300}
-            //  logo={require('../../assets/img/logo.png')}
-          />
+          <Qrcode value={'B0012324'} size={300} />
         </View>
       </View>
     </Wrapper>

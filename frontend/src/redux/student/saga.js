@@ -6,7 +6,9 @@ function* getEnrolledCoursesInfoSaga({bannerId}) {
   try {
     yield put({type: actionTypes.SET_STUDENT_DETAILS_LOADING});
 
-    const {data} = yield AxiosInstance.get(`studentsPoints/${bannerId}`);
+    const {data} = yield AxiosInstance.get(
+      `/teachers/courses/studentPoints/${bannerId}`,
+    );
     if (data) {
       yield put({
         type: actionTypes.GET_ENROLLED_COURSES_INFO_SUCCESS,
