@@ -1,9 +1,10 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.Course;
-import com.GRP3.BPA.model.CourseRequest;
-import com.GRP3.BPA.model.Teacher;
-import com.GRP3.BPA.model.TeacherRequest;
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.GlobalException;
+import com.GRP3.BPA.model.course.CourseRequest;
+import com.GRP3.BPA.model.teacher.Teacher;
+import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,25 +22,30 @@ public class CourseService {
 
     @Autowired
     private final CourseRepository courseRepository;
+    @Autowired
+    private final UserRepository userRepository;
 
-    public CourseService(TeacherRepository teacherRepository,CourseRepository courseRepository) {
+    public CourseService(TeacherRepository teacherRepository, CourseRepository courseRepository, UserRepository userRepository) {
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
     }
 
-
-    public List<Course> getCoursesForTeacher(String teacherId) {
-        return courseRepository.findByTeacherTeacherId(teacherId);
-    }
-
-
-    public Course addCourseForTeacher(CourseRequest courseRequest) {
-        // Get the teacher from the database
-        Teacher teacher = teacherRepository.findByTeacherId(courseRequest.getTeacherId());
-        if (teacher == null) {
-            throw new RuntimeException("Teacher with ID " + courseRequest.getTeacherId() + " not found.");
+    public List<Course> getCoursesForTeacher(String teacherId) throws GlobalException {
+        List<Course> course = courseRepository.findByTeacherTeacherId(teacherId);
+        if(course==null){
+            String message="Teacher with teacherId:"+teacherId+"does not take any courses";
+            throw new GlobalException(false, message);
         }
-
+        return course;
+    }
+    public Course addCourseForTeacher(String teacherId, CourseRequest courseRequest) throws GlobalException {
+        // Get the teacher from the database
+        Teacher teacher = teacherRepository.findByTeacherId(teacherId);
+        if(teacher==null){
+            String message="Teacher with teacherId:"+teacherId+"does not exists";
+            throw new GlobalException(false, message);
+        }
         // Create a new course object
         Course course = new Course();
         course.setCourseId(courseRequest.getCourseId());
@@ -53,16 +59,13 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public List<Course> addCoursesForTeacher(List<CourseRequest> courseRequests) {
-// Get the teacher ID from the first course request
-        String teacherId = courseRequests.get(0).getTeacherId();
-
+    public List<Course> addCoursesForTeacher(String teacherId, List<CourseRequest> courseRequests) throws GlobalException {
         // Get the teacher from the database
         Teacher teacher = teacherRepository.findByTeacherId(teacherId);
-        if (teacher == null) {
-            throw new RuntimeException("Teacher with ID " + teacherId + " not found.");
+        if(teacher==null){
+            String message="Teacher with teacherId:"+teacherId+"does not exists";
+            throw new GlobalException(false, message);
         }
-
         // Create a list of courses to save to the database
         List<Course> courses = new ArrayList<>();
 
@@ -73,36 +76,27 @@ public class CourseService {
             course.setCourseName(courseRequest.getCourseName());
             course.setCourseDescription(courseRequest.getCourseDescription());
             course.setTeacher(teacher);
-
             courses.add(course);
         }
-
         // Save the courses to the database
         return courseRepository.saveAll(courses);
     }
 
-
-
-     public void removeCourseForTeacher(CourseRequest courseRequest) {
-            Course courseDelete= courseRepository.findByTeacherTeacherIdAndCourseId(courseRequest.getTeacherId(),courseRequest.getCourseId());
-            courseRepository.delete(courseDelete);
+    public void removeCourseForTeacher(String teacherId, String courseId) throws GlobalException {
+        Course courseDelete = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
+        if(courseDelete==null){
+            String message="Teacher with teacherId:"+teacherId+"does not exists";
+            throw new GlobalException(false, message);
+        }
+        courseRepository.delete(courseDelete);
     }
 
-    public void removeCoursesForTeacher(List<CourseRequest> courseRequests) {
-        String teacherId = courseRequests.get(0).getTeacherId();
-        Teacher teacher= teacherRepository.findByTeacherId(teacherId);
-        if (teacher == null) {
-            throw new RuntimeException("Teacher with ID " + teacherId + " not found.");
-        }
-
-        // Create a list of courses to save to the database
-        List<String> courseIds = new ArrayList<>();
-
-        for (CourseRequest courseRequest : courseRequests) {
-            courseIds.add(courseRequest.getCourseId());
-        }
-
+    public void removeCoursesForTeacher(String teacherId, List<String> courseIds) throws GlobalException {
         List<Course> coursesDelete = courseRepository.findByTeacherTeacherIdAndCourseIdIn(teacherId, courseIds);
+        if(coursesDelete.isEmpty()){
+            String message="Teacher with teacherId:"+teacherId+"does not exists";
+            throw new GlobalException(false, message);
+        }
         courseRepository.deleteAll(coursesDelete);
     }
 }

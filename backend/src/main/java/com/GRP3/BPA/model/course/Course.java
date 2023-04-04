@@ -1,5 +1,6 @@
-package com.GRP3.BPA.model;
+package com.GRP3.BPA.model.course;
 
+import com.GRP3.BPA.model.teacher.Teacher;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

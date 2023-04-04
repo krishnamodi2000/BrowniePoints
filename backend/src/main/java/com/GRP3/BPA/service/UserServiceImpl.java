@@ -37,6 +37,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * @param email
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public User findByEmail(String email) throws UsernameNotFoundException {
+       User user= userRepository.findByEmail(email);
+       return user;
+    }
+
     @Override
     public UserDTO getUser(String token) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(token);

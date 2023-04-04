@@ -1,5 +1,6 @@
-package com.GRP3.BPA.model;
+package com.GRP3.BPA.model.student;
 
+import com.GRP3.BPA.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TeacherRequest {
-    private User user;
-    private String teacherId;
+public class StudentRequest {
+        private String bannerId;
+        private User user;
+
 }

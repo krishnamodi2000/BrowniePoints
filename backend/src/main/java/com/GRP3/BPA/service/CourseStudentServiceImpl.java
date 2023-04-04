@@ -1,20 +1,18 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.*;
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.GlobalException;
+import com.GRP3.BPA.model.courseStudent.*;
+import com.GRP3.BPA.model.student.Student;
+import com.GRP3.BPA.model.courseStudent.StudentInfoWithName;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.courseStudent.CourseStudentRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     private final CourseRepository courseRepository;
 
     @Autowired
-    private  final CourseStudentRepository courseStudentRepository;
+    private CourseStudentRepository courseStudentRepository;
 
 
 
@@ -38,94 +36,81 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
-        this.courseStudentRepository=courseStudentRepository;
+        this.courseStudentRepository = courseStudentRepository;
     }
+
     /**
      * @param courseStudentRequest
      * @return
      */
     @Override
-    public CourseStudent addStudent(CourseStudentRequest courseStudentRequest) {
-        Course course= courseRepository.findByTeacherTeacherIdAndCourseId(courseStudentRequest.getTeacherId(),courseStudentRequest.getCourseId());
-        if(course==null){
-            throw new RuntimeException("Teacher with ID"+courseStudentRequest.getTeacherId()+"taking course with with courseID " + courseStudentRequest.getCourseId() + " not found.");
+    public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
+        CourseStudent courseStudent = new CourseStudent(); //push this in if after creating response
+        String courseId = courseStudentRequest.getCourseId();
+        String bannerId = courseStudentRequest.getBannerId();
+        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
+            Student student = studentRepository.findByBannerId(bannerId);
+            Course course = courseRepository.findByCourseId(courseId);
+            courseStudent.setStudent(student);
+            courseStudent.setCourse(course);
+            courseStudent.setPoints(0);
+            courseStudentRepository.save(courseStudent);
+        } else {
+            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
         }
-        CourseStudent courseStudent= courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getStudentId(),courseStudentRequest.getCourseId());
-        if(courseStudent!=null){
-            throw new RuntimeException("Student with ID"+courseStudentRequest.getStudentId()+"taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
-        }
-        Student student= studentRepository.findByBannerId(courseStudentRequest.getStudentId());
-        courseStudent=new CourseStudent();
-        courseStudent.setCourse(course);
-        courseStudent.setStudent(student);
-
-        return courseStudentRepository.save(courseStudent);
+        return courseStudent;
     }
 
     /**
      * @param courseStudentRequest
      */
     @Override
-    public void removeStudent(CourseStudentRequest courseStudentRequest) {
-        Course course= courseRepository.findByTeacherTeacherIdAndCourseId(courseStudentRequest.getTeacherId(), courseStudentRequest.getCourseId());
-        if(course==null){
-            throw new RuntimeException("Teacher with ID"+courseStudentRequest.getTeacherId()+"taking course with with courseID " + courseStudentRequest.getCourseId() + " not found.");
+    public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
+        String courseId = courseStudentRequest.getCourseId();
+        String bannerId = courseStudentRequest.getBannerId();
+        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
+            CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+            courseStudentRepository.delete(courseStudent);
         }
-        CourseStudent courseStudent= courseStudentRepository.findByStudentBannerIdAndCourseCourseId(courseStudentRequest.getStudentId(),courseStudentRequest.getCourseId());
-        if(courseStudent==null){
-            throw new RuntimeException("Student with ID"+courseStudentRequest.getStudentId()+"taking course with with courseID " + courseStudentRequest.getCourseId() + " is not enrolled in it.");
-        }
-        courseStudentRepository.delete(courseStudent);
+
     }
 
+    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
 
-    public void addStudentsFromCsv(File input) {
-        List<CourseStudent> courseStudents = new ArrayList<>(); // create a list to store students
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            String line;
-            while ((line = reader.readLine()) != null) { // read each line of the CSV file
-                String[] fields = line.split(","); // split the line into fields
-                String bannerId = fields[0];
-                Student student= studentRepository.findByBannerId(bannerId);
-                String courseId = fields[1];
-                Course course= courseRepository.findByCourseId(courseId);
-                CourseStudent courseStudent= courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId,courseId);
-                if(courseStudent==null){
-                    courseStudent=new CourseStudent();
-                    courseStudent.setStudent(student);
-                    courseStudent.setCourse(course);
-                    courseStudents.add(courseStudent);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Create a list of courses to save to the database
+        List<CourseStudent> studentList = new ArrayList<>();
+        List<String> bannerIds = courseStudentRequests.getBannerIds();
+        String courseId = courseStudentRequests.getCourseId();
+        for (String bannerId : bannerIds) {
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(bannerId,courseId);
+            CourseStudent courseStudent = addStudent(teacherId, courseStudentRequest);
+            studentList.add(courseStudent);
         }
-        courseStudentRepository.saveAll(courseStudents);
-        // do something with the list of students, e.g. add them to a database or display them on the screen
+        return studentList;
     }
 
-    @Override
-    public void removeStudentsFromCsv(File input) {
-        List<CourseStudent> courseStudents = new ArrayList<>(); // create a list to store students
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(input))) {
-            String line;
-            while ((line = reader.readLine()) != null) { // read each line of the CSV file
-                String[] fields = line.split(","); // split the line into fields
-                String bannerId = fields[0];
-                String courseId = fields[1];
-                CourseStudent courseStudent= courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId,courseId);
-                if(courseStudent!=null){
-                    courseStudents.add(courseStudent);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
+        List<String> bannerIds = courseStudentRequests.getBannerIds();
+        String courseId = courseStudentRequests.getCourseId();
+        for (String bannerId : bannerIds) {
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(courseId, bannerId);
+            removeStudent(teacherId, courseStudentRequest);
         }
-        courseStudentRepository.deleteAll(courseStudents);
+    }
+
+    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) throws GlobalException {
+        Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
+        if (course == null) {
+            String message="Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.";
+            throw new GlobalException(false,message);
+        }
+
+        CourseStudent ds = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+        if (ds != null) {
+            String message="Student with ID " + bannerId + " taking course with courseID " + courseId + " already exists.";
+            throw new GlobalException(false,message);
+        }
+        return false;
     }
 
     public PointsCreateResponse incrementPoints(String studentId, String courseId)
@@ -145,4 +130,44 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
         return pointsCreateResponse;
     }
+
+    public CourseStudentsResponse dataOfStudent(String courseId){
+        List<CourseStudent> courseStudents = courseStudentRepository.findByCourseCourseId(courseId);
+        CourseStudentsResponse courseStudentsResponse = new CourseStudentsResponse();
+        ArrayList<StudentInfoWithName> data = new ArrayList<>();
+
+        if(courseStudents != null){
+            for(int i=0; i<courseStudents.size(); i++){
+                CourseStudent courseStudent = courseStudents.get(i);
+                Student student = courseStudent.getStudent();
+                StudentInfoWithName studentInfoWithName = new StudentInfoWithName();
+                studentInfoWithName.setStudentName(student.getUser().getFirstName() + " " +student.getUser().getLastName());
+                studentInfoWithName.setBannerId(student.getBannerId());
+                studentInfoWithName.setPoints(courseStudent.getPoints());
+                data.add(studentInfoWithName);
+            }
+            courseStudentsResponse.setStatus(true);
+            courseStudentsResponse.setData(data);
+        }
+        return courseStudentsResponse;
+    }
+
+    public List<StudentPointsAllSubject> pointsAllSubject(String bannerId){
+        List<CourseStudent> allCoursesEnrolled = courseStudentRepository.findByStudentBannerId(bannerId);
+        List<StudentPointsAllSubject> response = new ArrayList<>();
+
+        if(allCoursesEnrolled != null){
+            for(int i=0; i<allCoursesEnrolled.size(); i++){
+                CourseStudent courseStudent = allCoursesEnrolled.get(i);
+                Course course = courseStudent.getCourse();
+                StudentPointsAllSubject studentPointsAllSubject = new StudentPointsAllSubject();
+                studentPointsAllSubject.setCourseId(course.getCourseId());
+                studentPointsAllSubject.setCourseName(course.getCourseName());
+                studentPointsAllSubject.setPoints(courseStudent.getPoints());
+                response.add(studentPointsAllSubject);
+            }
+        }
+        return response;
+    }
 }
+

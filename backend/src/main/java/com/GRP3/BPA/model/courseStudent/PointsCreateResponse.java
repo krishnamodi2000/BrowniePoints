@@ -1,5 +1,6 @@
-package com.GRP3.BPA.model;
+package com.GRP3.BPA.model.courseStudent;
 
+import com.GRP3.BPA.model.student.Student;
 import lombok.Getter;
 import lombok.Setter;
 

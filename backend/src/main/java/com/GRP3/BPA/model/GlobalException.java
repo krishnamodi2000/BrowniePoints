@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseRequest {
-    private String courseId;
-    private String courseName;
-    private String courseDescription;
-    private String teacherId;
+public class GlobalException extends Throwable {
+    private boolean status;
+    private String message;
 }

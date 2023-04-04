@@ -19,6 +19,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private int id;
 
     @Getter @Setter
@@ -89,10 +90,6 @@ public class User implements UserDetails {
 
     public boolean isPresent() {
         return true;
-    }
-
-    public int getId() {
-        return 0;
     }
 
     public String getToken() {
