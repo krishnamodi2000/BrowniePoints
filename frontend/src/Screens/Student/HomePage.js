@@ -22,6 +22,11 @@ export default function HomePage({navigation}) {
     navigation.navigate('QRgenerator');
   };
 
+  const reloadPoints = () => {
+    //Make it dynamic
+    dispatch(getEnrolledCourseInfo('B00917345'));
+  };
+
   useEffect(() => {
     //Please make it dynamic
     dispatch(getEnrolledCourseInfo('B00917345'));
@@ -34,6 +39,7 @@ export default function HomePage({navigation}) {
         menuItemsList={[
           {name: 'Profile', onPress: () => handleProfilePress()},
           {name: 'Logout', onPress: () => logout()},
+          {name: 'Reload Points', onPress: () => reloadPoints()},
         ]}
       />
       {loading ? (
