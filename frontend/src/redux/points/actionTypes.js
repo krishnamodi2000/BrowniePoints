@@ -1,0 +1,5 @@
+export const SET_POINTS_LOADING = 'SET_POINTS_LOADING';
+
+export const ADD_POINTS = 'ADD_POINTS';
+export const ADD_POINTS_SUCCESS = 'ADD_POINTS_SUCCESS';
+export const ADD_POINTS_FAIL = 'ADD_POINTS_FAIL';

@@ -8,7 +8,7 @@ const inputFields = [
   {
     placeholder: 'Course Code',
     type: 'text',
-    name: 'courseCode',
+    name: 'courseId',
   },
   {placeholder: 'Course Name', type: 'text', name: 'courseName'},
 ];

@@ -15,6 +15,10 @@ import HomeScreen from './Screens/Teacher/HomeScreen';
 import Course from './Screens/Teacher/Course';
 import EditCourse from './Screens/Teacher/EditCourse';
 import UserProfile from './Screens/Student/UserProfile';
+import UpdateProfile from './Screens/Student/UpdateProfile';
+import QRgenerator from './Screens/Student/QRGenerator';
+import Scanner from './Screens/Teacher/Scanner';
+import CourseInfo from './Screens/Teacher/CourseInfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,10 +32,14 @@ const teacherComponents = [
   {name: 'HomePage', component: HomeScreen},
   {name: 'Course', component: Course},
   {name: 'Edit Course', component: EditCourse},
+  {name: 'Scanner', component: Scanner},
+  {name: 'Course Info', component: CourseInfo},
 ];
 const studentComponents = [
   {name: 'HomePage', component: HomePage},
   {name: 'UserProfile', component: UserProfile},
+  {name: 'UpadteProfile', component: UpdateProfile},
+  {name: 'QRgenerator', component: QRgenerator},
 ];
 export default function App() {
   return (

@@ -1,5 +1,7 @@
-package com.GRP3.BPA.model;
+package com.GRP3.BPA.model.courseStudent;
 
+import com.GRP3.BPA.model.course.Course;
+import com.GRP3.BPA.model.student.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +25,8 @@ public class CourseStudent {
     @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
+    @Getter @Setter
+    @Column(name = "points")
+    private Integer points;
 }
 
