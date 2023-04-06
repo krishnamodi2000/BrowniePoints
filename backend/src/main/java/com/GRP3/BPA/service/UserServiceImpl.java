@@ -2,7 +2,11 @@ package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.DTO.UserDTO;
 import com.GRP3.BPA.model.User;
+import com.GRP3.BPA.model.student.Student;
+import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
+import com.GRP3.BPA.repository.student.StudentRepository;
+import com.GRP3.BPA.repository.teacher.TeacherRepository;
 import com.GRP3.BPA.service.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +23,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     public User saveUser(User user) throws RuntimeException {
         String password = user.getPassword();
@@ -52,8 +62,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public UserDTO getUser(String token) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(token);
         if(user == null) throw new UsernameNotFoundException("User does not exist");
-        UserDTO userDTO = new UserDTO(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
-        return userDTO;
+        if(user.getRole().equals("ROLE_TEACHER")){
+            Teacher teacher = teacherRepository.findByUserId(user.getId());
+            UserDTO userDTO = new UserDTO(user.getId(),  teacher.getTeacherId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            return userDTO;
+        }
+        else if(user.getRole().equals("ROLE_STUDENT")){
+            Student student = studentRepository.findByUserId(user.getId());
+            UserDTO userDTO = new UserDTO(user.getId(),  student.getBannerId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            return userDTO;
+        }
+        return null;
     }
 
     @Override
