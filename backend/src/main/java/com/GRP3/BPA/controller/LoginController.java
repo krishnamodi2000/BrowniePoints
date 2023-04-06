@@ -26,24 +26,12 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/api/auth/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request)
-    {
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             AuthenticationResponse response = authenticationService.authenticate(request);
             return ResponseEntity.ok(response);
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(new UserException(e.getMessage()), HttpStatus.OK);
         }
-//        catch(RuntimeException e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-//        }
     }
-//        try {
-//            return ResponseEntity.ok(authenticationService.authenticate(request));
-//        }
-//        catch(RuntimeException e){
-//            return ResponseEntity.ok(e.getMessage());
-//        }
-//    }
 }
