@@ -37,9 +37,6 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Getter @Setter
-    @Column(name = "contact_number")
-    private Integer contactNumber;
 
     @Getter @Setter
     @Column
