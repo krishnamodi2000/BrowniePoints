@@ -71,12 +71,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user == null) throw new UsernameNotFoundException("User does not exist");
         if(user.getRole().equals("ROLE_TEACHER")){
             Teacher teacher = teacherRepository.findByUserId(user.getId());
-            UserDTO userDTO = new UserDTO(user.getId(),  teacher.getTeacherId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            UserDTO userDTO = new UserDTO(user.getId(),  teacher.getTeacherId(), user.getEmail(), user.getFirstName(), user.getLastName(),  user.getRole(), user.getToken());
             return userDTO;
         }
         else if(user.getRole().equals("ROLE_STUDENT")){
             Student student = studentRepository.findByUserId(user.getId());
-            UserDTO userDTO = new UserDTO(user.getId(),  student.getBannerId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            UserDTO userDTO = new UserDTO(user.getId(),  student.getBannerId(), user.getEmail(), user.getFirstName(), user.getLastName(),  user.getRole(), user.getToken());
             return userDTO;
         }
         return null;
