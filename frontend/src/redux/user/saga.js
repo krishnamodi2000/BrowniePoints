@@ -7,13 +7,14 @@ function* getUserInfoSaga() {
   try {
     yield put({type: actionTypes.SET_USER_INFO_LOADING});
 
-    const {data} = yield AxiosInstance.post('/user');
+    const {data} = yield AxiosInstance.get('/user');
     if (data) {
       yield put({
         type: actionTypes.GET_USER_INFO_SUCCESS,
         payload: data,
         role: data.role,
       });
+      console.log(data);
     } else {
       yield put({
         type: actionTypes.GET_USER_INFO_FAIL,
