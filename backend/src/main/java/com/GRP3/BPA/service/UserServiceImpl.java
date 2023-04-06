@@ -35,7 +35,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(!Utils.isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
         user.setPassword(passwordEncoder.encode(password));
         emailIsAlreadyExist(user);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        //Check if SRP is followed or not in the following code
+        Student student = new Student();
+        student.setBannerId(user.getUserId());
+        student.setUser(user);
+        studentRepository.save(student);
+        return savedUser;
     }
 
 

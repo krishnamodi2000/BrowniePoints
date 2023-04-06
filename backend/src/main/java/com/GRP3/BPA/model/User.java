@@ -23,6 +23,9 @@ public class User implements UserDetails {
     private int id;
 
     @Getter @Setter
+    private String userId;
+
+    @Getter @Setter
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
