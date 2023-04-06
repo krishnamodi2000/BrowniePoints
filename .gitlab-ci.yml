@@ -70,5 +70,6 @@ deploy:
     #- eval $(ssh-agent -s)
     #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
+    
   
 
