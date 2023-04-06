@@ -24,7 +24,7 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/api/auth/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request)
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
     {
         try {
             AuthenticationResponse response = authenticationService.authenticate(request);
