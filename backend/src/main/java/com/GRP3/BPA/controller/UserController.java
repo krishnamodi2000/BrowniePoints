@@ -39,7 +39,6 @@ public class UserController {
             userService.saveUser(user);
             SuccessResponse successResponse = new SuccessResponse("User successfully registered.");
             return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
-//            return new ResponseEntity<>("success", HttpStatus.CREATED);
         }
         catch (RuntimeException e){
             return new ResponseEntity<>(new UserException(e.getMessage()), HttpStatus.OK);
