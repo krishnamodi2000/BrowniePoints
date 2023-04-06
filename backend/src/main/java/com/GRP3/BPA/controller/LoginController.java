@@ -1,6 +1,7 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.AuthenticationRequest;
+import com.GRP3.BPA.model.AuthenticationResponse;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.service.AuthenticationService;
 import com.GRP3.BPA.service.UserService;
@@ -26,10 +27,17 @@ public class LoginController {
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request)
     {
         try {
-            return ResponseEntity.ok(authenticationService.authenticate(request));
-        }
-        catch(RuntimeException e){
-            return ResponseEntity.ok(e.getMessage());
+            AuthenticationResponse response = authenticationService.authenticate(request);
+            return ResponseEntity.ok(response);
+        } catch(RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
+//        try {
+//            return ResponseEntity.ok(authenticationService.authenticate(request));
+//        }
+//        catch(RuntimeException e){
+//            return ResponseEntity.ok(e.getMessage());
+//        }
+//    }
 }
