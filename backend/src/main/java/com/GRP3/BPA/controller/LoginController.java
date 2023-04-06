@@ -25,6 +25,10 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/status")
+    public String getStatus() {
+        return "Application is running.";
+    }
     @PostMapping("/api/auth/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
