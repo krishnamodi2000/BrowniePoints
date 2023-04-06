@@ -14,4 +14,6 @@ public interface UserService {
     User emailIsAlreadyExist(User user) throws RuntimeException;
 
     User findByEmail(String email) throws UsernameNotFoundException;
+
+    User updateUser(User user, String email);
 }
