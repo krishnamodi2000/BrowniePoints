@@ -2,10 +2,12 @@ package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.AuthenticationRequest;
 import com.GRP3.BPA.model.AuthenticationResponse;
+import com.GRP3.BPA.model.UserException;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.service.AuthenticationService;
 import com.GRP3.BPA.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +26,18 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/api/auth/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request)
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request)
     {
         try {
             AuthenticationResponse response = authenticationService.authenticate(request);
             return ResponseEntity.ok(response);
-        } catch(RuntimeException e) {
-            return ResponseEntity.badRequest().build();
         }
+        catch (RuntimeException e){
+            return new ResponseEntity<>(new UserException(e.getMessage()), HttpStatus.OK);
+        }
+//        catch(RuntimeException e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+//        }
     }
 //        try {
 //            return ResponseEntity.ok(authenticationService.authenticate(request));
