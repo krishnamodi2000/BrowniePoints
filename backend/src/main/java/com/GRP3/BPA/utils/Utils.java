@@ -1,4 +1,4 @@
-package com.GRP3.BPA.service.utils;
+package com.GRP3.BPA.utils;
 
 public class Utils {
     public static boolean isValidPassword(String password) {
