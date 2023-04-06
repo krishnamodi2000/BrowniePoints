@@ -4,7 +4,7 @@ import com.GRP3.BPA.service.EmailValidator;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.UserException;
 import com.GRP3.BPA.service.UserService;
-import com.GRP3.BPA.utils.SuccessResponse;
+import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,7 @@ public class UserController {
                 throw new IllegalArgumentException("Invalid email address.");
             }
             userService.saveUser(user);
-            SuccessResponse successResponse = new SuccessResponse("User successfully registered.");
+            Utils successResponse = new Utils("User successfully registered.");
             return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
         }
         catch (RuntimeException e){
