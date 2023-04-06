@@ -11,7 +11,6 @@ import {
 } from 'native-base';
 import Wrapper from '../wrapper/Wrapper';
 import {InputType1} from '../components/Commons/Input';
-import axios from 'axios';
 import {CustomAlert} from '../components/Commons/CustomAlert';
 import CustomModal from '../components/Commons/CustomModal';
 import {validateEmail} from '../helpers/functions';
@@ -124,7 +123,7 @@ const Signup = ({navigation}) => {
         lastName: formData.lastName,
         password: formData.password,
         role: 'ROLE_STUDENT',
-        bannerId: formData.bannerId,
+        userId: formData.bannerId,
       })
         .then(res => {
           if (res.data) {
@@ -132,6 +131,7 @@ const Signup = ({navigation}) => {
           }
         })
         .catch(e => {
+          console.log(e, 'A');
           setAlert('Unable to register the user.');
         })
         .finally(() => {

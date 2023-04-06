@@ -6,6 +6,7 @@ const initialState = {
   error: null,
   loading: false,
   students: [],
+  studentsAdded: [],
 };
 
 const courses = (state = initialState, action) => {
@@ -15,7 +16,7 @@ const courses = (state = initialState, action) => {
         ...state,
         loading: true,
         error: false,
-        success: false,
+        studentAdded: [],
         students: [],
       };
     case actionTypes.GET_COURSES_SUCCESS:
@@ -52,6 +53,12 @@ const courses = (state = initialState, action) => {
 
     case actionTypes.GET_STUDENTS_BY_COURSE_FAIL:
       return {...state, students: [], loading: false, error: true};
+
+    case actionTypes.ADD_STUDENTS_TO_COURSE_SUCCESS:
+      return {...state, loading: false, studentAdded: action.payload};
+
+    case actionTypes.ADD_STUDENTS_TO_COURSE_FAIL:
+      return {...state, studentAdded: [], loading: false, error: true};
 
     default:
       return state;

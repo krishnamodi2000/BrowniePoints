@@ -78,7 +78,6 @@ const Login = ({navigation}) => {
         })
         .catch(e => {
           setAlert('Unable to Login the user.');
-          console.log(JSON.stringify(e), e);
         })
         .finally(() => {
           setLoader(false);

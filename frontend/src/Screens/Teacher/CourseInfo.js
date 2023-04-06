@@ -23,7 +23,6 @@ import Wrapper from '../../wrapper/Wrapper';
 export default function CourseInfo({route}) {
   const dispatch = useDispatch();
   const {students, loading} = useSelector(state => state.course);
-  console.log(students);
 
   useEffect(() => {
     dispatch(getStudentsByCourseId(route.params.courseId));
