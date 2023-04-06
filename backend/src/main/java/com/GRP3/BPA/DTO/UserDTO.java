@@ -8,9 +8,10 @@ import lombok.Setter;
 
 public class UserDTO {
 
-    public UserDTO(int id, String email, String firstName, String lastName,
+    public UserDTO(int id, String userId, String email, String firstName, String lastName,
                    Integer contactNumber, String role, String token) {
         this.id = id;
+        this.userId = userId;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +23,9 @@ public class UserDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Getter @Setter
+    private String userId;
 
     @Getter
     @Setter
