@@ -19,6 +19,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addStudentsToCourse} from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
 import {useNavigation} from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
+import Papa from 'papaparse';
+import {readFile} from 'react-native-fs';
 
 const inputFields = [
   {
@@ -70,31 +73,48 @@ export default function EditCourse({route}) {
 
   const handleAddBannerId = () => {
     dispatch(
-      addStudentsToCourse(courseInformation.courseId, [bannerId], () => {
-        setShowSuccessModal(true);
-      }),
+      addStudentsToCourse(
+        (courseCode = courseInformation.courseId),
+        [bannerId],
+        () => {
+          setShowSuccessModal(true);
+        },
+      ),
     );
   };
+
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     setShowAddStudents(false);
     setBannerId(null);
   };
 
-  const navigateToScanner = () => {
-    navigation.navigate('Scanner', {
-      courseId: courseInformation.courseId,
-      onScan: bannerIdScanned => {
+  const selectFile = async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.allFiles],
+      });
+      readFile(res.uri, 'ascii').then(res => {
+        const data = res
+          .split(',')
+          .map(item => item.replace(/(\r\n|\n|\r)/gm, ''));
         dispatch(
           addStudentsToCourse(
-            courseInformation.courseId,
-            [bannerIdScanned],
+            (courseCode = courseInformation.courseId),
+            data,
             () => {
               setShowSuccessModal(true);
             },
           ),
         );
-      },
+      });
+    } catch (err) {}
+  };
+
+  const navigateToScanner = () => {
+    navigation.navigate('Scanner', {
+      courseCode: courseInformation.courseId,
+      addStudent: true,
     });
   };
 
@@ -184,7 +204,8 @@ export default function EditCourse({route}) {
                     mt={2}
                     size="md"
                     backgroundColor="green.500"
-                    _pressed={{backgroundColor: 'green.600'}}>
+                    _pressed={{backgroundColor: 'green.600'}}
+                    onPress={selectFile}>
                     Upload Excel
                   </Button>
                 </VStack>

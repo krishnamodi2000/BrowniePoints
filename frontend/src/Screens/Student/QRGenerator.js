@@ -14,8 +14,8 @@ export default function QRGenerator() {
       <Header title="QR Code" />
       <CustomCard>
         <Center style={{height: '90%'}}>
-          <Box p={6} background="white" borderRadius={16}>
-            <Qrcode value={user.userId} size={300} />
+          <Box p={10} background="white" borderRadius={16}>
+            <Qrcode value={user.userId} size={250} />
           </Box>
         </Center>
       </CustomCard>
