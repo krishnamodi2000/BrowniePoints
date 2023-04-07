@@ -47,8 +47,8 @@ public class User implements UserDetails {
     private String role;
 
     @Getter @Setter
-    @Column(name = "reset_token")
-    private String resetToken;
+    @Column(name = "otp")
+    private String otp;
 
     @Getter @Setter
     @Column(name = "is_authenticated")

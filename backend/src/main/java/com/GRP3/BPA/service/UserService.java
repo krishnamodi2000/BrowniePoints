@@ -16,9 +16,13 @@ public interface UserService {
 
     User findByEmail(String email) throws UsernameNotFoundException;
 
-    void generatePasswordResetToken(User user, String token);
+    User updateOTP(User user);
 
-    void resetPassword(User user, String password);
 
-    User updatePasswordResetToken(User user);
+//    User generateOtp();
+//    void generatePasswordResetToken(User user, String token);
+//
+//    void resetPassword(User user, String password);
+//
+//    User updatePasswordResetToken(User user);
 }
