@@ -14,7 +14,6 @@ function* getUserInfoSaga() {
         payload: data,
         role: data.role,
       });
-      console.log(data);
     } else {
       yield put({
         type: actionTypes.GET_USER_INFO_FAIL,
