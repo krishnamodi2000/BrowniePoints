@@ -47,6 +47,10 @@ public class User implements UserDetails {
     private String role;
 
     @Getter @Setter
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Getter @Setter
     @Column(name = "is_authenticated")
     private Boolean isAuthenticated;
 
