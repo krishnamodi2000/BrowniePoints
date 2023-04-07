@@ -47,6 +47,10 @@ public class User implements UserDetails {
     private String role;
 
     @Getter @Setter
+    @Column(name = "otp")
+    private String otp;
+
+    @Getter @Setter
     @Column(name = "is_authenticated")
     private Boolean isAuthenticated;
 
