@@ -122,10 +122,9 @@ const Signup = ({navigation}) => {
         email: formData.emailId,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        contactNumber: Math.random(0) * 1020,
         password: formData.password,
         role: 'ROLE_STUDENT',
-        isAuthenticated: true,
+        bannerId: formData.bannerId,
       })
         .then(res => {
           if (res.data) {

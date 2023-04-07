@@ -7,7 +7,7 @@ import com.GRP3.BPA.model.teacher.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
-import com.GRP3.BPA.service.utils.Utils;
+import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,7 +35,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(!Utils.isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
         user.setPassword(passwordEncoder.encode(password));
         emailIsAlreadyExist(user);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        //Check if SRP is followed or not in the following code
+        Student student = new Student();
+        student.setBannerId(user.getUserId());
+        student.setUser(user);
+        studentRepository.save(student);
+        return savedUser;
     }
 
 
@@ -64,12 +71,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(user == null) throw new UsernameNotFoundException("User does not exist");
         if(user.getRole().equals("ROLE_TEACHER")){
             Teacher teacher = teacherRepository.findByUserId(user.getId());
-            UserDTO userDTO = new UserDTO(user.getId(),  teacher.getTeacherId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            UserDTO userDTO = new UserDTO(user.getId(),  teacher.getTeacherId(), user.getEmail(), user.getFirstName(), user.getLastName(),  user.getRole(), user.getToken());
             return userDTO;
         }
         else if(user.getRole().equals("ROLE_STUDENT")){
             Student student = studentRepository.findByUserId(user.getId());
-            UserDTO userDTO = new UserDTO(user.getId(),  student.getBannerId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getContactNumber(), user.getRole(), user.getToken());
+            UserDTO userDTO = new UserDTO(user.getId(),  student.getBannerId(), user.getEmail(), user.getFirstName(), user.getLastName(),  user.getRole(), user.getToken());
             return userDTO;
         }
         return null;
