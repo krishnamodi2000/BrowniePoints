@@ -66,8 +66,7 @@ function* getStudentsByCourseSaga({courseId}) {
     const {data} = yield AxiosInstance.get(
       `/teachers/courses/points/${courseId}`,
     );
-    console.log(data);
-    if (data.success) {
+    if (data.status) {
       yield put({
         type: actionTypes.GET_STUDENTS_BY_COURSE_SUCCESS,
         payload: data.data,
