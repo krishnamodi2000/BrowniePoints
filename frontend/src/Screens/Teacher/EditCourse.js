@@ -1,8 +1,24 @@
-import {Button, FormControl, Stack, Text} from 'native-base';
+import {
+  Box,
+  Button,
+  Center,
+  Column,
+  Divider,
+  FormControl,
+  HStack,
+  Spinner,
+  Stack,
+  Text,
+  VStack,
+} from 'native-base';
 import {useState} from 'react';
 import {InputType1} from '../../components/Commons/Input';
 import Header from '../../components/Header/Header';
 import Wrapper from '../../wrapper/Wrapper';
+import {useDispatch, useSelector} from 'react-redux';
+import {addStudentsToCourse} from '../../redux/course/actions';
+import CustomModal from '../../components/Commons/CustomModal';
+import {useNavigation} from '@react-navigation/native';
 
 const inputFields = [
   {
@@ -13,11 +29,24 @@ const inputFields = [
   {placeholder: 'Course Name', type: 'text', name: 'courseName'},
 ];
 
+const bannerIdField = {
+  placeholder: 'Banner ID',
+  type: 'text',
+  name: 'bannerId',
+};
+
 export default function EditCourse({route}) {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const {loading, studentAdded} = useSelector(state => state.course);
+
   const [courseInformation, setCourseInformation] = useState({
     ...route.params.courseDetails,
   });
+  const [bannerId, setBannerId] = useState();
+  const [showAddStudents, setShowAddStudents] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleEdit = () => {
     setDisabled(false);
@@ -29,6 +58,44 @@ export default function EditCourse({route}) {
 
   const handleSave = () => {
     setDisabled(true);
+  };
+
+  const addBannerIdField = () => {
+    setShowAddStudents(true);
+  };
+
+  const handleBannerIdChange = value => {
+    setBannerId(value);
+  };
+
+  const handleAddBannerId = () => {
+    dispatch(
+      addStudentsToCourse(courseInformation.courseId, [bannerId], () => {
+        setShowSuccessModal(true);
+      }),
+    );
+  };
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    setShowAddStudents(false);
+    setBannerId(null);
+  };
+
+  const navigateToScanner = () => {
+    navigation.navigate('Scanner', {
+      courseId: courseInformation.courseId,
+      onScan: bannerIdScanned => {
+        dispatch(
+          addStudentsToCourse(
+            courseInformation.courseId,
+            [bannerIdScanned],
+            () => {
+              setShowSuccessModal(true);
+            },
+          ),
+        );
+      },
+    });
   };
 
   return (
@@ -78,7 +145,75 @@ export default function EditCourse({route}) {
             </Button>
           )}
         </Stack>
+        <Divider />
+        <Stack>
+          {loading ? (
+            <Spinner color="secondary.500" size="lg" />
+          ) : (
+            <>
+              {showAddStudents ? (
+                <VStack>
+                  <FormControl>
+                    <InputType1
+                      {...bannerIdField}
+                      value={bannerId}
+                      onChangeText={value => handleBannerIdChange(value)}
+                    />
+                  </FormControl>
+                  <Button
+                    mt={2}
+                    size="md"
+                    backgroundColor="secondary.400"
+                    _pressed={{backgroundColor: 'secondary.500'}}
+                    fontWeight={'600'}
+                    onPress={() => handleAddBannerId()}>
+                    Add Student
+                  </Button>
+                  <Text mt={2} fontSize={18} textAlign="center" color="white">
+                    OR
+                  </Text>
+                  <Button
+                    mt={2}
+                    size="md"
+                    backgroundColor="blue.500"
+                    _pressed={{backgroundColor: 'blue.600'}}
+                    onPress={() => navigateToScanner()}>
+                    Scan QR
+                  </Button>
+                  <Button
+                    mt={2}
+                    size="md"
+                    backgroundColor="green.500"
+                    _pressed={{backgroundColor: 'green.600'}}>
+                    Upload Excel
+                  </Button>
+                </VStack>
+              ) : (
+                <Button
+                  size="lg"
+                  backgroundColor="secondary.400"
+                  _pressed={{backgroundColor: 'secondary.500'}}
+                  onPress={() => addBannerIdField()}>
+                  Add Students
+                </Button>
+              )}
+            </>
+          )}
+        </Stack>
       </Stack>
+      <CustomModal
+        showModal={showSuccessModal}
+        setShowModal={setShowSuccessModal}
+        heading="Added Students"
+        body={
+          <Center>
+            Successfully added {studentAdded.length} students.
+            <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+              Back
+            </Button>
+          </Center>
+        }
+      />
     </Wrapper>
   );
 }

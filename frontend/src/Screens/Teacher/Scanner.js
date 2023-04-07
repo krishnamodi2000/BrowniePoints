@@ -10,6 +10,8 @@ export default function Scanner({navigation, route}) {
   const dispatch = useDispatch();
   const {addedPointDetails, loading} = useSelector(state => state.points);
 
+  console.log(route);
+
   const onRead = e => {
     dispatch(addPoints('CSCI5100', e.data));
     setShowScanner(false);
