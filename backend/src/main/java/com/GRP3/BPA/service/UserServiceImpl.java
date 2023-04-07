@@ -1,6 +1,7 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.DTO.UserDTO;
+import com.GRP3.BPA.model.PasswordResetToken.PasswordResetToken;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.student.Student;
 import com.GRP3.BPA.model.teacher.Teacher;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 @Service
@@ -29,6 +32,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private PasswordResetTokenService passwordResetTokenService;
 
     public User saveUser(User user) throws RuntimeException {
         String password = user.getPassword();
@@ -63,6 +68,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User findByEmail(String email) throws UsernameNotFoundException {
        User user= userRepository.findByEmail(email);
        return user;
+    }
+
+    @Override
+    public void generatePasswordResetToken(User user, String token) {
+        PasswordResetToken passwordResetToken = passwordResetTokenService.createPasswordResetToken(user);
+//        passwordResetToken.setToken(token);
+        passwordResetTokenService.deletePasswordResetToken(passwordResetToken);
+    }
+
+    @Override
+    public void resetPassword(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
+    public User updatePasswordResetToken(User user) {
+        String resetToken = UUID.randomUUID().toString();
+        user.setResetToken(resetToken);
+        return userRepository.save(user);
     }
 
     @Override
