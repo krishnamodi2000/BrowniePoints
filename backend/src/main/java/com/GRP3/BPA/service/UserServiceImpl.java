@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         String otp = generateOtp();
         user.setOtp(otp);
-
+        userRepository.save(user);
         return user;
     }
 

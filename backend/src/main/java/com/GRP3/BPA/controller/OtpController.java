@@ -3,7 +3,9 @@ package com.GRP3.BPA.controller;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.service.EmailService;
 import com.GRP3.BPA.service.UserService;
+import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +31,9 @@ public class OtpController {
         }
         user = userService.updateOTP(user);
         emailService.sendOtp(user.getEmail(), user.getOtp());
-        return ResponseEntity.ok("OTP sent to " +user.getEmail());
+        Utils successResponse = new Utils("OTP sent to " + user.getEmail());
+        return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
+//        return ResponseEntity.ok("OTP sent to " + user.getEmail());
 //        return "OTP sent to " + email;
     }
 
