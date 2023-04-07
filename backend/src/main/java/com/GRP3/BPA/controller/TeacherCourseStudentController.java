@@ -23,6 +23,8 @@ import java.util.List;
 @RequestMapping("/api/teachers/courses")
 //@PreAuthorize("hasRole('TEACHER')")
 public class TeacherCourseStudentController {
+
+    private static final int BEGIN_INDEX=7;
     @Autowired
     private CourseService courseService;
     @Autowired
@@ -294,7 +296,7 @@ public class TeacherCourseStudentController {
     }
 
     public ResponseEntity<String> validateAuthorizationHeader(String authorizationHeader) {
-        String token = authorizationHeader.substring(7);
+        String token = authorizationHeader.substring(BEGIN_INDEX);
         String email = jwtService.extractUsername(token);
         String teacherId = teacherService.findTeacherAssociatedWithUser(email);
         if (!jwtService.isJWTTokenValid(token)) {

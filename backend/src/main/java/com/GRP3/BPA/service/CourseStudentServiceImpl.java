@@ -57,7 +57,11 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             courseStudent.setPoints(0);
             courseStudentRepository.save(courseStudent);
         } else {
-            throw new RuntimeException("Student with ID" + courseStudentRequest.getBannerId() + "taking course with with courseID " + courseStudentRequest.getCourseId() + " already enrolled in it.");
+            // made change to solve Long Statement Smell but couldn't solve it
+            String bannerID=courseStudentRequest.getBannerId();
+            String courseID=courseStudentRequest.getCourseId();
+            String message="Student with ID "+bannerID+" taking course with with courseID "+courseID+" already enrolled in it.";
+            throw new GlobalException(false,message);
         }
         return courseStudent;
     }
