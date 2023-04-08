@@ -26,7 +26,7 @@ smells_job:
   script:
   - echo "Start smells job"
   - mkdir smells/
-  - java -jar backend/.gitlab/DesigniteJava.jar/ -i backend -o smells/ -d 
+  - java -jar backend/.gitlab/DesigniteJava.jar -i backend -o smells/ -d 
   - cd smells/
   - ls -a
 
