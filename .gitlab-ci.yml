@@ -14,13 +14,14 @@ default:
 
 stages:
   - smells
+  - issue
   - build
   - test
   - package
   - build_image
   - deploy
 
-smells_job:
+smells-job:
   stage: smells
   image: maven:3.8.3-openjdk-17
   script:
@@ -29,6 +30,11 @@ smells_job:
   - java -jar backend/.gitlab/DesigniteJava.jar -i backend -o smells/ -d 
   - cd smells/
   - ls -a
+  artifacts:
+    paths:
+      - smells/
+      - backend
+
 
 # build:
 #   stage: build
