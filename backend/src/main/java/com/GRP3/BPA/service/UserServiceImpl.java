@@ -90,6 +90,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public Utils validateResetPassword(User user) {
+        if(user.getEmail() == null) {
+            return new Utils("User not found.", false);
+        }
+        if (!isValid(user.getEmail())) {
+            return new Utils("Invalid email.", false);
+        }
+        user = findByEmail(user.getEmail());
+        user = updateOTP(user);
+        emailService.sendOtp(user.getEmail(), user.getOtp());
+        return new Utils("OTP sent to " + user.getEmail(), true);
+    }
+
+    @Override
     public Utils matchOtp(ConfirmOTP confirmOTP) {
         if (confirmOTP == null) {
             return new Utils("User not found.", false);
@@ -137,20 +151,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             return userRepository.save(user);
         }
         return null;
-    }
-
-    @Override
-    public Utils validateResetPassword(User user) {
-        if(user.getEmail() == null) {
-            return new Utils("User not found.", false);
-        }
-        if (!isValid(user.getEmail())) {
-            return new Utils("Invalid email.", false);
-        }
-        user = findByEmail(user.getEmail());
-        user = updateOTP(user);
-        emailService.sendOtp(user.getEmail(), user.getOtp());
-        return new Utils("OTP sent to " + user.getEmail(), true);
     }
 
 
