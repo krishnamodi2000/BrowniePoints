@@ -7,3 +7,14 @@ export const getUserInfoAction = () => ({
 export const logoutAction = () => ({
   type: actionTypes.LOGOUT_USER,
 });
+
+export const generateResetPasswordOTP = email => ({
+  type: actionTypes.GENERATE_RESET_PASSWORD_OTP,
+  email,
+});
+
+export const validateResetPasswordOTP = (email, otp) => ({
+  type: actionTypes.VALIDATE_RESET_PASSWORD_OTP,
+  email,
+  otp,
+});
