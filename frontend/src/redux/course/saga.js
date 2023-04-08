@@ -63,8 +63,7 @@ function* getStudentsByCourseSaga({courseId}) {
     const {data} = yield AxiosInstance.get(
       `/teachers/courses/points/${courseId}`,
     );
-
-    if (data.success) {
+    if (data.status) {
       yield put({
         type: actionTypes.GET_STUDENTS_BY_COURSE_SUCCESS,
         payload: data.data,
@@ -87,6 +86,7 @@ function* getStudentsByCourseSaga({courseId}) {
 function* addStudentsToCourseSaga({courseId, bannerIds, successCallBack}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
+
     const {data} = yield AxiosInstance.post(`/teachers/courses/addStudents`, {
       courseId,
       bannerIds,
