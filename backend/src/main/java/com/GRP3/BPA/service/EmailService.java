@@ -17,17 +17,6 @@ public class EmailService {
         mailMessage.setText("Your One-Time Password is: " + otp);
         javaMailSender.send(mailMessage);
     }
-
-//    public void sendResetPasswordEmail(String email, String token) {
-//        String url = "http://localhost:8080/resetPassword?token=" + token;
-//        String subject = "Password reset request";
-//        String text = "Please click the following link to reset your password: " + url;
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(email);
-//        message.setSubject(subject);
-//        message.setText(text);
-//        javaMailSender.send(message);
-//    }
 }
 
 
