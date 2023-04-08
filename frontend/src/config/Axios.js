@@ -12,6 +12,7 @@ AxiosInstance.interceptors.request.use(async request => {
 
   if (request.url.endsWith('register')) return request;
   if (request.url.endsWith('reset-password')) return request;
+  if (request.url.endsWith('reset-password-matchotp')) return request;
 
   const token = await AsyncStorage.getItem('token');
   request.headers.Authorization = `Bearer ${token}`;

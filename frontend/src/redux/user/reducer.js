@@ -7,6 +7,7 @@ const initialState = {
   resetPasswordLoading: false,
   role: null,
   otpGenerated: false,
+  otpValidated: false,
 };
 
 const user = (state = initialState, action) => {
@@ -57,6 +58,18 @@ const user = (state = initialState, action) => {
         ...state,
         resetPasswordLoading: false,
         otpGenerated: false,
+      };
+    case actionTypes.VALIDATE_RESET_PASSWORD_OTP_SUCCESS:
+      return {
+        ...state,
+        resetPasswordLoading: false,
+        otpValidated: true,
+      };
+    case actionTypes.VALIDATE_RESET_PASSWORD_OTP_FAIL:
+      return {
+        ...state,
+        resetPasswordLoading: false,
+        otpValidated: false,
       };
 
     default:
