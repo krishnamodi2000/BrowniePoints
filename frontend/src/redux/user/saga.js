@@ -31,8 +31,7 @@ function* getUserInfoSaga() {
 
 function* generateResetPasswordOTPSaga({email}) {
   try {
-    yield put({type: actionTypes.SET_USER_INFO_LOADING});
-
+    yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
     const {data} = yield AxiosInstance.post('/auth/reset-password', {email});
     if (data) {
       yield put({

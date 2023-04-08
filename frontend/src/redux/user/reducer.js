@@ -4,6 +4,7 @@ const initialState = {
   user: null,
   error: null,
   loading: false,
+  resetPasswordLoading: false,
   role: null,
   otpGenerated: false,
 };
@@ -14,6 +15,11 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+      };
+    case actionTypes.SET_RESET_PASSWORD_LOADING:
+      return {
+        ...state,
+        resetPasswordLoading: true,
       };
     case actionTypes.GET_USER_INFO_SUCCESS:
       return {
@@ -43,13 +49,13 @@ const user = (state = initialState, action) => {
     case actionTypes.GENERATE_RESET_PASSWORD_OTP_SUCCESS:
       return {
         ...state,
-        loading: false,
+        resetPasswordLoading: false,
         otpGenerated: true,
       };
     case actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL:
       return {
         ...state,
-        loading: false,
+        resetPasswordLoading: false,
         otpGenerated: false,
       };
 
