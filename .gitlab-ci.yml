@@ -47,8 +47,6 @@ issue-job:
     - echo "CI_COMMIT_SHA:" $CI_COMMIT_SHA
     - python backend/.gitlab/issue.py $CI_COMMIT_SHA
 
-
-
 build:
   stage: build
   image: maven:3.8.3-openjdk-17
@@ -69,8 +67,8 @@ package:
   artifacts:
     paths:
       - backend/target/*.jar
-  only:
-    - Develop
+  # only:
+  #   - Develop
 
 build_image:
   stage: build_image
@@ -86,8 +84,8 @@ build_image:
     - docker push $CONTAINER_IMAGE
   script:
     - echo "Docker Image Build"
-  only:
-    - Develop
+  # only:
+  #   - Develop
 
 deploy:
   stage: deploy
@@ -101,8 +99,8 @@ deploy:
     #- eval $(ssh-agent -s)
     #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
-  only:
-    - Develop
+  # only:
+  #   - Develop
     
   
 
