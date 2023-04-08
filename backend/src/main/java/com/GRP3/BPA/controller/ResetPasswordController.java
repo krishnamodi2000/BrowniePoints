@@ -25,14 +25,13 @@ public class ResetPasswordController {
         System.out.println(user.getEmail());
         user = userService.findByEmail(user.getEmail());
         if (user == null) {
-            return ResponseEntity.badRequest().body("User not found.");
+            Utils errorResponse =new Utils("User not found.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
         }
         user = userService.updateOTP(user);
         emailService.sendOtp(user.getEmail(), user.getOtp());
         Utils successResponse = new Utils("OTP sent to " + user.getEmail());
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
-//        return ResponseEntity.ok("OTP sent to " + user.getEmail());
-//        return "OTP sent to " + email;
     }
 
     @PostMapping("/api/auth/reset-password-matchotp")

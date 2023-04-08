@@ -21,12 +21,4 @@ public interface UserService {
     User updateOTP(User user);
 
     User changePassword(String email, String newPassword);
-
-
-//    User generateOtp();
-//    void generatePasswordResetToken(User user, String token);
-//
-//    void resetPassword(User user, String password);
-//
-//    User updatePasswordResetToken(User user);
 }
