@@ -1,6 +1,7 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.DTO.UserDTO;
+import com.GRP3.BPA.model.PasswordResetToken.ConfirmOTP;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.student.Student;
 import com.GRP3.BPA.model.teacher.Teacher;
@@ -14,7 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Random;
-
+import static com.GRP3.BPA.service.EmailValidator.isValid;
+import static com.GRP3.BPA.utils.Utils.isValidPassword;
 
 
 @Service
@@ -34,10 +36,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    @Autowired
+    private EmailValidator emailValidator;
+
+    @Autowired
+    private EmailService emailService;
+
 
     public User saveUser(User user) throws RuntimeException {
         String password = user.getPassword();
-        if(!Utils.isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
+        if(!isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
         user.setPassword(passwordEncoder.encode(password));
         emailIsAlreadyExist(user);
         User savedUser = userRepository.save(user);
@@ -72,6 +80,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User updateOTP(User user) {
+        if (user == null || !isValid(user.getEmail())) {
+            throw new IllegalArgumentException("Invalid user.");
+        }
         String otp = generateOtp();
         user.setOtp(otp);
         userRepository.save(user);
@@ -79,21 +90,47 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public boolean matchOtp(String email, String otp) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return false;
+    public Utils matchOtp(ConfirmOTP confirmOTP) {
+        if (confirmOTP == null) {
+            return new Utils("User not found.", false);
         }
-        if (user.getOtp().equals(otp)) {
-            return true;
+        String email = confirmOTP.getEmail();
+        String otp = confirmOTP.getOtp();
+        if (email == null || email.isEmpty()) {
+            return new Utils("Email cannot be null or empty.", false);
         }
-        else {
-            return false;
+        if (!isValid(email)) {
+            return new Utils("Invalid email format.", false);
+        }
+        if (otp == null || !otp.matches("\\d{6}")) {
+            return new Utils("Invalid format, OTP should be 6 digit..", false);
+        }
+        User currentUser = userRepository.findByEmail(email);
+        if(currentUser == null) {
+            return new Utils("User not found.", false);
+        } else {
+            if(currentUser.getOtp().equals(otp)) {
+                return new Utils("OTP matched successfully.", true);
+            } else {
+                return new Utils("OTP is invalid.", false);
+            }
         }
     }
 
     @Override
     public User changePassword(String email, String newPassword) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty.");
+        }
+        if (!isValid(email)) {
+            throw new IllegalArgumentException("Invalid email format.");
+        }
+        if (newPassword == null || newPassword.isEmpty()) {
+            throw new IllegalArgumentException("New password cannot be null or empty.");
+        }
+        if (!isValidPassword(newPassword)) {
+            throw new IllegalArgumentException("New password does not meet requirements.");
+        }
         User user = userRepository.findByEmail(email);
         if (user != null) {
             user.setPassword(bcryptEncoder.encode(newPassword));
@@ -101,6 +138,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return null;
     }
+
+    @Override
+    public Utils validateResetPassword(User user) {
+        if(user.getEmail() == null) {
+            return new Utils("User not found.", false);
+        }
+        if (!isValid(user.getEmail())) {
+            return new Utils("Invalid email.", false);
+        }
+        user = findByEmail(user.getEmail());
+        user = updateOTP(user);
+        emailService.sendOtp(user.getEmail(), user.getOtp());
+        return new Utils("OTP sent to " + user.getEmail(), true);
+    }
+
 
     private static String generateOtp() {
         return String.format("%06d", new Random().nextInt(999999));

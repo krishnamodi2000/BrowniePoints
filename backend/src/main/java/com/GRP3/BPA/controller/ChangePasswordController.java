@@ -1,7 +1,6 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.model.PasswordResetToken.ChangePassword;
-import com.GRP3.BPA.model.PasswordResetToken.ConfirmOTP;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.service.EmailService;
 import com.GRP3.BPA.service.UserService;
@@ -20,6 +19,7 @@ public class ChangePasswordController {
     private UserService userService;
     @Autowired
     private EmailService emailService;
+
     @PostMapping("/api/auth/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword) {
             User user = userService.changePassword(changePassword.getEmail(), changePassword.getNewPassword());
