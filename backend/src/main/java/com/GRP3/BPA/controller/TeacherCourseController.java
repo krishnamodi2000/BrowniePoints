@@ -133,9 +133,9 @@ public class TeacherCourseController {
         }
         String teacherId = teacherIdResponse.getBody();
         try {
-            courseService.updateCourseForTeacher(teacherId, courseRequest);
-            CourseResponse response = new CourseResponse();
-            response.setStatus(true);
+            Course course=courseService.updateCourseForTeacher(teacherId, courseRequest);
+            CourseRequest courseUpdated = addCourseRequest(course);
+            CourseResponse response = new CourseResponse(true, courseUpdated);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
