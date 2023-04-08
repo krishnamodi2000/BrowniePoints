@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -29,7 +31,7 @@ public class UserController {
                 throw new IllegalArgumentException("Invalid email address.");
             }
             userService.saveUser(user);
-            Utils successResponse = new Utils("User successfully registered.");
+            Utils successResponse = new Utils("User successfully registered.", true);
             return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
         }
         catch (RuntimeException e){
