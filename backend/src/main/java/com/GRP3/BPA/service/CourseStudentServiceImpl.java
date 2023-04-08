@@ -73,10 +73,8 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
-        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
             CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
             courseStudentRepository.delete(courseStudent);
-        }
 
     }
 
