@@ -93,4 +93,26 @@ public class CourseServiceImpl implements CourseService{
         }
         courseRepository.deleteAll(coursesDelete);
     }
+
+    /**
+     * @param teacherId
+     * @param courseRequest
+     * @return
+     * @throws GlobalException
+     */
+    @Override
+    public Course updateCourseForTeacher(String teacherId, CourseRequest courseRequest) throws GlobalException {
+        String courseId= courseRequest.getCourseId();
+        Course course= courseRepository.findByTeacherTeacherIdAndCourseId(teacherId,courseId);
+        if(course==null){
+            boolean status=false;
+            String message="The course with "+courseId+" for teacher with "+teacherId+" does not exist";
+            throw new GlobalException(status, message);
+        }
+        course.setCourseId(courseId);
+        course.setCourseName(courseRequest.getCourseName());
+        course.setCourseDescription(courseRequest.getCourseDescription());
+        courseRepository.save(course);
+        return course;
+    }
 }

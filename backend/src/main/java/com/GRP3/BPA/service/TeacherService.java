@@ -24,6 +24,6 @@ public class TeacherService {
             Teacher teacher= teacherRepository.findByUserId(id);
             return teacher.getTeacherId();
         }
-        return null; //return exception of sometype
+        return null; //return some type of exception
     }
 }

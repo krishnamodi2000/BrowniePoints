@@ -125,6 +125,24 @@ public class TeacherCourseController {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
+    @PutMapping("/updateCourse")
+    public ResponseEntity<Object> updateCourse(@RequestBody CourseRequest courseRequest, @RequestHeader("Authorization") String authorizationHeader){
+        ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
+        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
+        }
+        String teacherId = teacherIdResponse.getBody();
+        try {
+            courseService.updateCourseForTeacher(teacherId, courseRequest);
+            CourseResponse response = new CourseResponse();
+            response.setStatus(true);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (GlobalException e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     public CourseRequest addCourseRequest(Course course) {
 

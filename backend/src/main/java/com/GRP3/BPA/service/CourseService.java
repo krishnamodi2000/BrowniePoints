@@ -14,4 +14,6 @@ public interface CourseService {
 
     void removeCoursesForTeacher(String teacherId, List<String> courseIds) throws GlobalException;
 
+    Course updateCourseForTeacher(String teacherId, CourseRequest courseRequest) throws GlobalException;
+
     }
