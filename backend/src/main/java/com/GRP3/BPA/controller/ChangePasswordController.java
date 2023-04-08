@@ -24,10 +24,10 @@ public class ChangePasswordController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePassword changePassword) {
             User user = userService.changePassword(changePassword.getEmail(), changePassword.getNewPassword());
             if(user != null){
-            Utils successResponse = new Utils("Password updated successfully.");
+            Utils successResponse = new Utils("Password updated successfully.", true);
             return new ResponseEntity<>(successResponse, HttpStatus.OK);
         } else {
-            Utils errorResponse =new Utils("something went wrong");
+            Utils errorResponse =new Utils("something went wrong", false);
             return new ResponseEntity<>(errorResponse, HttpStatus.OK);
         }
     }

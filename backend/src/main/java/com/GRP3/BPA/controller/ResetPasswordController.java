@@ -25,12 +25,12 @@ public class ResetPasswordController {
         System.out.println(user.getEmail());
         user = userService.findByEmail(user.getEmail());
         if (user == null) {
-            Utils errorResponse =new Utils("User not found.");
+            Utils errorResponse =new Utils("User not found.", false);
             return new ResponseEntity<>(errorResponse, HttpStatus.OK);
         }
         user = userService.updateOTP(user);
         emailService.sendOtp(user.getEmail(), user.getOtp());
-        Utils successResponse = new Utils("OTP sent to " + user.getEmail());
+        Utils successResponse = new Utils("OTP sent to " + user.getEmail(), true);
         return new ResponseEntity<>(successResponse, HttpStatus.OK);
     }
 
@@ -42,11 +42,11 @@ public class ResetPasswordController {
             isOtpMatched = user.getOtp().equals(confirmOTP.getOtp());
         }
         if (isOtpMatched) {
-            Utils successResponse = new Utils("OTP matched successfully.");
+            Utils successResponse = new Utils("OTP matched successfully.", false);
             return new ResponseEntity<>(successResponse, HttpStatus.OK);
         }
         else {
-            Utils errorResponse =new Utils("Invalid OTP.");
+            Utils errorResponse =new Utils("Invalid OTP.", true);
             return new ResponseEntity<>(errorResponse, HttpStatus.OK);
         }
     }
