@@ -100,7 +100,7 @@ deploy:
     #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
     - ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} docker pull $CONTAINER_IMAGE
-    - ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@csci5308vm3.research.cs.dal.ca  docker run -d -p 8080:8080 bpa 
+    - ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@csci5308vm3.research.cs.dal.ca  docker run -d -p 8080:8080 csci5308vm3.research.cs.dal.ca:5000/bpa:latest
   # only:
   #   - Develop
     
