@@ -22,14 +22,6 @@ public class UserController {
     @Autowired
     private EmailValidator emailValidator;
 
-
-    public UserController (UserService userService)
-    {
-        super();
-        this.userService = userService;
-    }
-
-
     @PostMapping(value = "/api/auth/register")
     public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
