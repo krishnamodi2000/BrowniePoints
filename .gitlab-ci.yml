@@ -13,11 +13,22 @@ default:
   - docker:18.09.7-dind
 
 stages:
+  - smells
   - build
   - test
   - package
   - build_image
   - deploy
+
+smells_job:
+  stage: smells
+  image: maven:3.8.3-openjdk-17
+  script:
+  - echo "Start smells job"
+  - mkdir smells/
+  - java -jar backend/.gitlab/DesigniteJava.jar -i backend -o smells/ -d 
+  - cd smells/
+  - ls -a
 
 # build:
 #   stage: build
@@ -31,51 +42,48 @@ stages:
  # script:
 #    - mvn -f backend/pom.xml test
 
-package:
-  stage: package
-  script: 
-     - echo "Maven Packaging Started"
-     - mvn -f backend/pom.xml clean package
-  artifacts:
-    paths:
-      - backend/target/*.jar
-  only:
-    - Develop
+# package:
+#   stage: package
+#   script: 
+#      - echo "Maven Packaging Started"
+#      - mvn -f backend/pom.xml clean package
+#   artifacts:
+#     paths:
+#       - backend/target/*.jar
+#   only:
+#     - Develop
 
-      
+# build_image:
+#   stage: build_image
+#   image: docker:20.10.16
+#   services:
+#     - docker:20.10.16-dind
+#   variables:
+#     DOCKER_TLS_CERTDIR: "/certs"
+#   before_script:
+#     - pwd
+#     - docker build -t $CONTAINER_IMAGE .
+#     - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+#     - docker push $CONTAINER_IMAGE
+#   script:
+#     - echo "Docker Image Build"
+#   only:
+#     - Develop
 
-
-build_image:
-  stage: build_image
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-  before_script:
-    - pwd
-    - docker build -t $CONTAINER_IMAGE .
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-    - docker push $CONTAINER_IMAGE
-  script:
-    - echo "Docker Image Build"
-  only:
-    - Develop
-
-deploy:
-  stage: deploy
-  before_script:
-    - echo "${DEPLOY_SSH_KEY}"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
-  script: 
-    - echo "Maven Deploy Started"
-    #- echo "${DEPLOY_SSH_KEY}"
-    #- eval $(ssh-agent -s)
-    #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
-    - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
-  only:
-    - Develop
+# deploy:
+#   stage: deploy
+#   before_script:
+#     - echo "${DEPLOY_SSH_KEY}"
+#     - eval $(ssh-agent -s)
+#     - ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
+#   script: 
+#     - echo "Maven Deploy Started"
+#     #- echo "${DEPLOY_SSH_KEY}"
+#     #- eval $(ssh-agent -s)
+#     #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
+#     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
+#   only:
+#     - Develop
     
   
 
