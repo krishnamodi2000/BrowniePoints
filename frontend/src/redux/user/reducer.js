@@ -5,6 +5,7 @@ const initialState = {
   error: null,
   loading: false,
   role: null,
+  otpGenerated: false,
 };
 
 const user = (state = initialState, action) => {
@@ -38,6 +39,18 @@ const user = (state = initialState, action) => {
     case actionTypes.LOGOUT_USER_FAIL:
       return {
         ...state,
+      };
+    case actionTypes.GENERATE_RESET_PASSWORD_OTP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        otpGenerated: true,
+      };
+    case actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL:
+      return {
+        ...state,
+        loading: false,
+        otpGenerated: false,
       };
 
     default:
