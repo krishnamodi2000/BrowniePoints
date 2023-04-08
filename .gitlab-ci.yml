@@ -21,43 +21,43 @@ stages:
   - build_image
   - deploy
 
-smells-job:
-  stage: smells
-  image: maven:3.8.3-openjdk-17
-  script:
-  - echo "Start smells job"
-  - mkdir smells/
-  - java -jar backend/.gitlab/DesigniteJava.jar -i backend -o smells/ -d 
-  - cd smells/
-  - ls -a
-  artifacts:
-    paths:
-      - smells/
-      - backend
+# smells-job:
+#   stage: smells
+#   image: maven:3.8.3-openjdk-17
+#   script:
+#   - echo "Start smells job"
+#   - mkdir smells/
+#   - java -jar backend/.gitlab/DesigniteJava.jar -i backend -o smells/ -d 
+#   - cd smells/
+#   - ls -a
+#   artifacts:
+#     paths:
+#       - smells/
+#       - backend
 
-issue-job:
-  stage: issue
-  dependencies:
-    - smells-job
-  image: "python:3.10"
-  script:
-    - ls smells/ -a
-    - python --version
-    - pip install -r backend/.gitlab/requirements.txt
-    - echo "CI_COMMIT_SHA:" $CI_COMMIT_SHA
-    - python backend/.gitlab/issue.py $CI_COMMIT_SHA
+# issue-job:
+#   stage: issue
+#   dependencies:
+#     - smells-job
+#   image: "python:3.10"
+#   script:
+#     - ls smells/ -a
+#     - python --version
+#     - pip install -r backend/.gitlab/requirements.txt
+#     - echo "CI_COMMIT_SHA:" $CI_COMMIT_SHA
+#     - python backend/.gitlab/issue.py $CI_COMMIT_SHA
 
-build:
-  stage: build
-  image: maven:3.8.3-openjdk-17
-  script:
-    - mvn -f backend/pom.xml install
+# build:
+#   stage: build
+#   image: maven:3.8.3-openjdk-17
+#   script:
+#     - mvn -f backend/pom.xml install
 
-test:
- stage: test
- image: maven:3.8.3-openjdk-17
- script:
-   - mvn -f backend/pom.xml test
+# test:
+#  stage: test
+#  image: maven:3.8.3-openjdk-17
+#  script:
+#    - mvn -f backend/pom.xml test
 
 package:
   stage: package
@@ -99,6 +99,8 @@ deploy:
     #- eval $(ssh-agent -s)
     #- ssh-add <(echo "${DEPLOY_SSH_KEY}" | base64 -d)
     - scp -r -o StrictHostKeyChecking=no backend/target/*.jar "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/project.jar"
+    - ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} docker pull $CONTAINER_IMAGE
+    - ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@{DEPLOY_HOST} docker run -d -p 8080:8080 bpa 
   # only:
   #   - Develop
     
