@@ -1,10 +1,11 @@
 package com.GRP3.BPA.controller;
 
+import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.Course;
-import com.GRP3.BPA.exceptions.GlobalException;
 import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.request.course.CourseIdRequest;
 import com.GRP3.BPA.request.course.CourseIdsRequest;
+import com.GRP3.BPA.response.ExceptionResponse;
 import com.GRP3.BPA.response.course.CourseResponse;
 import com.GRP3.BPA.response.course.CoursesResponse;
 import com.GRP3.BPA.service.*;
@@ -20,14 +21,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/teachers/courses")
 //@PreAuthorize("hasRole('TEACHER')")
-public class TeacherCourseController {
+public class CourseController {
     @Autowired
     private CourseService courseService;
     @Autowired
     private JWTAuthenticationUtil jwtAuthenticationUtil;
 
     @GetMapping
-    public ResponseEntity<Object> getCourses(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<Object> getCourses(@RequestHeader("Authorization") String authorizationHeader){
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
         if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
@@ -40,8 +41,9 @@ public class TeacherCourseController {
             List<CourseRequest> courseRequestList = addCourseRequests(courses);
             response.setCourseRequestList(courseRequestList);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        } catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -57,10 +59,9 @@ public class TeacherCourseController {
             CourseRequest courseRequestToAdd = addCourseRequest(course);
             CourseResponse response = new CourseResponse(true, courseRequestToAdd);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        } catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -78,10 +79,9 @@ public class TeacherCourseController {
             List<CourseRequest> courseRequestList = addCourseRequests(courses);
             response.setCourseRequestList(courseRequestList);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        } catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -100,10 +100,9 @@ public class TeacherCourseController {
             //response.setCourseRequest(null);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        } catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -119,10 +118,9 @@ public class TeacherCourseController {
             CourseResponse response = new CourseResponse();
             response.setStatus(true);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        } catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
     @PutMapping("/updateCourse")
@@ -137,10 +135,9 @@ public class TeacherCourseController {
             CourseRequest courseUpdated = addCourseRequest(course);
             CourseResponse response = new CourseResponse(true, courseUpdated);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }  catch (CustomizableException e) {
+            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -1,6 +1,6 @@
 package com.GRP3.BPA.controller;
 
-import com.GRP3.BPA.exceptions.GlobalException;
+import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.CourseStudent;
 import com.GRP3.BPA.model.Student;
 import com.GRP3.BPA.request.courseStudent.CourseStudentRequest;
@@ -41,7 +41,7 @@ public class CourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
+        } catch (CustomizableException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -62,7 +62,7 @@ public class CourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
+        } catch (CustomizableException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -82,7 +82,7 @@ public class CourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (GlobalException e) {
+        } catch (CustomizableException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
@@ -103,7 +103,7 @@ public class CourseStudentController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (GlobalException e) {
+        } catch (CustomizableException e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,8 +1,8 @@
 package com.GRP3.BPA.service;
 
+import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.model.Course;
-import com.GRP3.BPA.exceptions.GlobalException;
 import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.CourseRepository;
@@ -68,7 +68,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void getCoursesForTeacher() throws GlobalException {
+    public void getCoursesForTeacher() throws CustomizableException {
 
         when(courseRepository.findByTeacherTeacherId("1")).thenReturn(courses);
 
@@ -81,14 +81,14 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void testGetCoursesForTeacherEmpty() throws GlobalException {
+    public void testGetCoursesForTeacherEmpty() throws CustomizableException {
         when(courseRepository.findByTeacherTeacherId("1")).thenReturn(new ArrayList<>());
-        Assertions.assertThrows(GlobalException.class, () -> {
+        Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.getCoursesForTeacher(teacher.getTeacherId());
         });
     }
     @Test
-    public void testAddCourseForTeacher() throws GlobalException {
+    public void testAddCourseForTeacher() throws CustomizableException {
         CourseRequest courseRequest = new CourseRequest();
         courseRequest.setCourseId("2");
         courseRequest.setCourseName("Data Management");
@@ -103,19 +103,19 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void testAddCourseForTeacherInvalidTeacher() throws GlobalException {
+    public void testAddCourseForTeacherInvalidTeacher() throws CustomizableException {
         CourseRequest courseRequest = new CourseRequest();
         courseRequest.setCourseId("3");
         courseRequest.setCourseName("Communicating Computer Science Ideas");
         courseRequest.setCourseDescription("A course on technical communication");
 
         when(teacherRepository.findByTeacherId("1")).thenReturn(null);
-        Assertions.assertThrows(GlobalException.class, () -> {
+        Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.addCourseForTeacher("1", courseRequest);});
     }
 
     @Test
-    public void testAddCoursesForTeacher() throws GlobalException {
+    public void testAddCoursesForTeacher() throws CustomizableException {
 
         when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
         when(courseRepository.saveAll(any(List.class))).thenReturn(courses);
@@ -141,7 +141,7 @@ public class CourseServiceTest {
 
     //check this test
     @Test
-    public void testRemoveCourseForTeacher() throws GlobalException {
+    public void testRemoveCourseForTeacher() throws CustomizableException {
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "1")).thenReturn(course);
 
         courseService.removeCourseForTeacher("1", "1");
@@ -153,12 +153,12 @@ public class CourseServiceTest {
     @Test
     public void testRemoveCourseForTeacherInvalidCourse() {
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "3")).thenReturn(null);
-        Assertions.assertThrows(GlobalException.class, () -> {
+        Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.removeCourseForTeacher("1", "3");});
 
     }
     @Test
-    public void testRemoveCoursesForTeacher() throws GlobalException {
+    public void testRemoveCoursesForTeacher() throws CustomizableException {
         // Mocking the course repository to return a list of courses
         when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1", "2"))).thenReturn(Arrays.asList(course, course1));
 
@@ -172,7 +172,7 @@ public class CourseServiceTest {
     public void testRemoveCoursesForTeacherInvalidCourse(){
         when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1", "3"))).thenReturn(Collections.emptyList());
 
-        Assertions.assertThrows(GlobalException.class, () -> {
+        Assertions.assertThrows(CustomizableException.class, () -> {
         courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));});
 
     }

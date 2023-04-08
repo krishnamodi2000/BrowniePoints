@@ -1,8 +1,8 @@
 package com.GRP3.BPA.service;
 
+import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.Course;
 import com.GRP3.BPA.model.CourseStudent;
-import com.GRP3.BPA.exceptions.GlobalException;
 import com.GRP3.BPA.model.Student;
 import com.GRP3.BPA.repository.CourseRepository;
 import com.GRP3.BPA.repository.CourseStudentRepository;
@@ -38,7 +38,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      * @return
      */
     @Override
-    public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
+    public CourseStudent addStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws CustomizableException {
         CourseStudent courseStudent = new CourseStudent(); //push this in if after creating response
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
@@ -54,7 +54,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             String bannerID=courseStudentRequest.getBannerId();
             String courseID=courseStudentRequest.getCourseId();
             String message="Student with ID "+bannerID+" taking course with with courseID "+courseID+" already enrolled in it.";
-            throw new GlobalException(false,message);
+            throw new CustomizableException(false,message);
         }
         return courseStudent;
     }
@@ -63,7 +63,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      * @param courseStudentRequest
      */
     @Override
-    public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
+    public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws CustomizableException {
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
@@ -72,7 +72,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
     }
 
-    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
+    public List<CourseStudent> addStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws CustomizableException {
 
         // Create a list of courses to save to the database
         List<CourseStudent> studentList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         return studentList;
     }
 
-    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws GlobalException {
+    public void removeStudents(String teacherId, CourseStudentRequests courseStudentRequests) throws CustomizableException {
         List<String> bannerIds = courseStudentRequests.getBannerIds();
         String courseId = courseStudentRequests.getCourseId();
         for (String bannerId : bannerIds) {
@@ -95,17 +95,17 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         }
     }
 
-    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) throws GlobalException {
+    public boolean checkCourseStatus(String teacherId, String courseId, String bannerId) throws CustomizableException {
         Course course = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
         if (course == null) {
             String message="Teacher with ID " + teacherId + " taking course with courseID " + courseId + " not found.";
-            throw new GlobalException(false,message);
+            throw new CustomizableException(false,message);
         }
 
         CourseStudent ds = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
         if (ds != null) {
             String message="Student with ID " + bannerId + " taking course with courseID " + courseId + " already exists.";
-            throw new GlobalException(false,message);
+            throw new CustomizableException(false,message);
         }
         return false;
     }
