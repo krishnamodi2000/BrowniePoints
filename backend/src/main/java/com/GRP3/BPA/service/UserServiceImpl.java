@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
 
 //    @Autowired
 //    private PasswordResetTokenService passwordResetTokenService;
@@ -80,15 +82,37 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User updateOTP(User user) {
-
         String otp = generateOtp();
         user.setOtp(otp);
         userRepository.save(user);
         return user;
     }
 
+    @Override
+    public boolean matchOtp(String email, String otp) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        if (user.getOtp().equals(otp)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public User changePassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            user.setPassword(bcryptEncoder.encode(newPassword));
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
     private static String generateOtp() {
-        // Generate a random 6-digit OTP
         return String.format("%06d", new Random().nextInt(999999));
     }
 
