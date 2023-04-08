@@ -1,4 +1,4 @@
-package com.GRP3.BPA.repository.courseStudent;
+package com.GRP3.BPA.repository;
 
 import com.GRP3.BPA.model.CourseStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
