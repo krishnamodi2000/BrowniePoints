@@ -35,6 +35,18 @@ smells-job:
       - smells/
       - backend
 
+issue-job:
+  stage: issue
+  dependencies:
+    - smells-job
+  image: "python:3.10"
+  script:
+    - ls smells/ -a
+    - python --version
+    - pip install -r backend/.gitlab/requirements.txt
+    - python backend/.gitlab/issue.py
+
+
 
 # build:
 #   stage: build
