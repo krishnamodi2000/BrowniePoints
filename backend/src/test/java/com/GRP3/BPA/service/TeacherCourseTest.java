@@ -1,7 +1,7 @@
 //package com.GRP3.BPA.service;
 //
-//import com.GRP3.BPA.model.course.Course;
-//import com.GRP3.BPA.model.teacher.Teacher;
+//import com.GRP3.BPA.model.Course;
+//import com.GRP3.BPA.model.Teacher;
 //import com.GRP3.BPA.model.TeacherCourse;
 //import com.GRP3.BPA.repository.course.CourseRepository;
 //import com.GRP3.BPA.repository.teacherCourse.TeacherCourseRepository;

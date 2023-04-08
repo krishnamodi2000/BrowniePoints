@@ -1,6 +1,6 @@
 //package com.GRP3.BPA.repository.course;
 //
-//import com.GRP3.BPA.model.course.Course;
+//import com.GRP3.BPA.model.Course;
 //import jakarta.persistence.EntityManager;
 //import jakarta.persistence.PersistenceContext;
 //

@@ -2,7 +2,7 @@ package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.service.EmailValidator;
 import com.GRP3.BPA.model.User;
-import com.GRP3.BPA.model.UserException;
+import com.GRP3.BPA.exceptions.UserException;
 import com.GRP3.BPA.service.UserService;
 import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;

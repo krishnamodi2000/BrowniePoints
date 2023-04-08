@@ -1,6 +1,6 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.PasswordResetToken.PasswordResetToken;
+import com.GRP3.BPA.model.PasswordResetToken;
 import com.GRP3.BPA.model.User;
 
 public interface PasswordResetTokenService {

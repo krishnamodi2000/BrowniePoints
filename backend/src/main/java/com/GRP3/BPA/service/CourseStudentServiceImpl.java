@@ -1,15 +1,16 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.StudentPointsAllSubject;
-import com.GRP3.BPA.model.course.Course;
-import com.GRP3.BPA.model.GlobalException;
-import com.GRP3.BPA.model.courseStudent.*;
-import com.GRP3.BPA.model.student.Student;
-import com.GRP3.BPA.model.courseStudent.StudentInfoWithName;
+import com.GRP3.BPA.model.Course;
+import com.GRP3.BPA.model.CourseStudent;
+import com.GRP3.BPA.exceptions.GlobalException;
+import com.GRP3.BPA.model.Student;
 import com.GRP3.BPA.repository.course.CourseRepository;
 import com.GRP3.BPA.repository.courseStudent.CourseStudentRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;
+import com.GRP3.BPA.request.courseStudent.CourseStudentRequest;
+import com.GRP3.BPA.request.courseStudent.CourseStudentRequests;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class CourseStudentServiceImpl implements CourseStudentService {
     @Autowired
     private final TeacherRepository teacherRepository;
@@ -30,15 +32,6 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
     @Autowired
     private CourseStudentRepository courseStudentRepository;
-
-
-
-    public CourseStudentServiceImpl(TeacherRepository teacherRepository,CourseRepository courseRepository,CourseStudentRepository courseStudentRepository, StudentRepository studentRepository) {
-        this.teacherRepository = teacherRepository;
-        this.studentRepository = studentRepository;
-        this.courseRepository = courseRepository;
-        this.courseStudentRepository = courseStudentRepository;
-    }
 
     /**
      * @param courseStudentRequest
@@ -73,10 +66,9 @@ public class CourseStudentServiceImpl implements CourseStudentService {
     public void removeStudent(String teacherId, CourseStudentRequest courseStudentRequest) throws GlobalException {
         String courseId = courseStudentRequest.getCourseId();
         String bannerId = courseStudentRequest.getBannerId();
-        if (!checkCourseStatus(teacherId, courseId, bannerId)) {
-            CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
-            courseStudentRepository.delete(courseStudent);
-        }
+        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
+        courseStudentRepository.delete(courseStudent);
+
 
     }
 
@@ -118,61 +110,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         return false;
     }
 
-    public PointsCreateResponse incrementPoints(String studentId, String courseId)
-    {
-        CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(studentId, courseId);
 
-        if(courseStudent != null){
-            int currentPoints = courseStudent.getPoints() +1;
-            courseStudent.setPoints(currentPoints);
-            courseStudentRepository.save(courseStudent);
-        }
 
-        PointsCreateResponse pointsCreateResponse = new PointsCreateResponse();
-        pointsCreateResponse.setSuccess(true);
-
-        pointsCreateResponse.setStudent(studentRepository.findByBannerId(studentId));
-
-        return pointsCreateResponse;
-    }
-
-    public CourseStudentsResponse dataOfStudent(String courseId){
-        List<CourseStudent> courseStudents = courseStudentRepository.findByCourseCourseId(courseId);
-        CourseStudentsResponse courseStudentsResponse = new CourseStudentsResponse();
-        ArrayList<StudentInfoWithName> data = new ArrayList<>();
-
-        if(courseStudents != null){
-            for(int i=0; i<courseStudents.size(); i++){
-                CourseStudent courseStudent = courseStudents.get(i);
-                Student student = courseStudent.getStudent();
-                StudentInfoWithName studentInfoWithName = new StudentInfoWithName();
-                studentInfoWithName.setStudentName(student.getUser().getFirstName() + " " +student.getUser().getLastName());
-                studentInfoWithName.setBannerId(student.getBannerId());
-                studentInfoWithName.setPoints(courseStudent.getPoints());
-                data.add(studentInfoWithName);
-            }
-            courseStudentsResponse.setStatus(true);
-            courseStudentsResponse.setData(data);
-        }
-        return courseStudentsResponse;
-    }
-
-    public List<StudentPointsAllSubject> pointsAllSubject(String bannerId){
-        List<CourseStudent> allCoursesEnrolled = courseStudentRepository.findByStudentBannerId(bannerId);
-        List<StudentPointsAllSubject> response = new ArrayList<>();
-
-        if(allCoursesEnrolled != null){
-            for(int i=0; i<allCoursesEnrolled.size(); i++){
-                CourseStudent courseStudent = allCoursesEnrolled.get(i);
-                Course course = courseStudent.getCourse();
-                StudentPointsAllSubject studentPointsAllSubject = new StudentPointsAllSubject();
-                studentPointsAllSubject.setCourseId(course.getCourseId());
-                studentPointsAllSubject.setCourseName(course.getCourseName());
-                studentPointsAllSubject.setPoints(courseStudent.getPoints());
-                response.add(studentPointsAllSubject);
-            }
-        }
-        return response;
-    }
 }
 

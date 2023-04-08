@@ -1,10 +1,10 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.DTO.UserDTO;
-import com.GRP3.BPA.model.PasswordResetToken.PasswordResetToken;
+import com.GRP3.BPA.model.PasswordResetToken;
 import com.GRP3.BPA.model.User;
-import com.GRP3.BPA.model.student.Student;
-import com.GRP3.BPA.model.teacher.Teacher;
+import com.GRP3.BPA.model.Student;
+import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.student.StudentRepository;
 import com.GRP3.BPA.repository.teacher.TeacherRepository;

@@ -1,8 +1,8 @@
 package com.GRP3.BPA.controller;
 
-import com.GRP3.BPA.model.AuthenticationRequest;
-import com.GRP3.BPA.model.AuthenticationResponse;
-import com.GRP3.BPA.model.UserException;
+import com.GRP3.BPA.request.authentication.AuthenticationRequest;
+import com.GRP3.BPA.response.authentication.AuthenticationResponse;
+import com.GRP3.BPA.exceptions.UserException;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.service.AuthenticationService;
 import com.GRP3.BPA.service.UserService;

@@ -1,7 +1,6 @@
 package com.GRP3.BPA.repository.student;
 
-import com.GRP3.BPA.model.student.Student;
-import com.GRP3.BPA.model.teacher.Teacher;
+import com.GRP3.BPA.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 @Repository
