@@ -44,7 +44,8 @@ issue-job:
     - ls smells/ -a
     - python --version
     - pip install -r backend/.gitlab/requirements.txt
-    - python backend/.gitlab/issue.py
+    - echo "CI_COMMIT_SHA:" $CI_COMMIT_SHA
+    - python backend/.gitlab/issue.py $CI_COMMIT_SHA
 
 
 
