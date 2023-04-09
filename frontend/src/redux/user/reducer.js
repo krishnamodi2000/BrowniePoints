@@ -9,6 +9,7 @@ const initialState = {
   otpGenerated: false,
   passwordReseted: false,
   errorMessage: '',
+  updateProfileLoading: false,
 };
 
 const user = (state = initialState, action) => {
@@ -82,6 +83,27 @@ const user = (state = initialState, action) => {
         ...state,
         resetPasswordLoading: false,
         passwordReseted: false,
+        errorMessage: action.error,
+        error: true,
+      };
+
+    case actionTypes.UPDATE_PROFILE_LOADING:
+      return {
+        ...state,
+        updateProfileLoading: true,
+      };
+
+    case actionTypes.UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        updateProfileLoading: false,
+        user: {...state.user, ...action.payload},
+      };
+
+    case actionTypes.UPDATE_PROFILE_FAIL:
+      return {
+        ...state,
+        updateProfileLoading: false,
         errorMessage: action.error,
         error: true,
       };

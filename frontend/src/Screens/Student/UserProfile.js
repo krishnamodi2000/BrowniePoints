@@ -1,21 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {Box, Center, Text, Button, Avatar, FormControl} from 'native-base';
-import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {Box, Center, Button, Avatar, FormControl, Spinner} from 'native-base';
 import Wrapper from '../../wrapper/Wrapper';
 import Header from '../../components/Header/Header';
 import {InputType1} from '../../components/Commons/Input';
+import {updateProfile} from '../../redux/user/actions';
+import CustomModal from '../../components/Commons/CustomModal';
 
 const UserProfile = () => {
-  const {user} = useSelector(state => state.user);
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const {user, updateProfileLoading} = useSelector(state => state.user);
   const [profile, setProfile] = useState({firstName: '', lastName: ''});
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const generateInitials = () =>
     user.firstName[0].toUpperCase() + user.lastName[0];
 
   const handleUpdateProfile = () => {
-    navigation.navigate('UpdateProfile', {user});
+    dispatch(
+      updateProfile(user.email, profile.firstName, profile.lastName, () => {
+        setShowSuccessModal(true);
+      }),
+    );
   };
 
   const inputFields = [
@@ -34,6 +41,22 @@ const UserProfile = () => {
   return (
     <Wrapper>
       <Header title="User Profile" />
+      <CustomModal
+        showModal={showSuccessModal}
+        setShowModal={setShowSuccessModal}
+        heading="Profile Updated"
+        body={
+          <Center>
+            Successfully updated the profile
+            <Button
+              mt="2"
+              minWidth="100"
+              onPress={() => setShowSuccessModal(false)}>
+              Back
+            </Button>
+          </Center>
+        }
+      />
       <Box>
         <Center>
           <Avatar bg="secondary.300" mr={1} size="xl" mt={10}>
@@ -67,11 +90,15 @@ const UserProfile = () => {
             ))}
           </Box>
           <Box mt={5}>
-            <Button
-              onPress={handleUpdateProfile}
-              _pressed={{backgroundColor: 'secondary.400'}}>
-              Update Profile
-            </Button>
+            {updateProfileLoading ? (
+              <Spinner color="secondary.500" size="lg" />
+            ) : (
+              <Button
+                onPress={handleUpdateProfile}
+                _pressed={{backgroundColor: 'secondary.400'}}>
+                Update Profile
+              </Button>
+            )}
           </Box>
         </Center>
       </Box>
