@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from '../config/Axios';
 import {useDispatch} from 'react-redux';
 import {getUserInfoAction} from '../redux/user/actions';
+import {CustomAlert} from '../components/Commons/CustomAlert';
 
 const inputFields = [
   {placeholder: 'Email ID', type: 'text', name: 'emailId'},
@@ -68,12 +69,16 @@ const Login = ({navigation}) => {
   const handleSubmit = () => {
     if (isValidated()) {
       setLoader(true);
+      setAlert('');
       Axios.post('/auth/login', {
         email: formData.emailId,
         password: formData.password,
       })
         .then(async res => {
-          if (res.data) {
+          if (res?.data?.message) {
+            setAlert(res.data.message);
+          }
+          if (res?.data?.token) {
             await AsyncStorage.setItem('token', res.data.token);
             dispatch(getUserInfoAction());
           }
@@ -86,7 +91,6 @@ const Login = ({navigation}) => {
         });
     }
   };
-
   const handleResetPassword = () => {
     navigation.navigate('Reset Password');
   };
@@ -103,7 +107,12 @@ const Login = ({navigation}) => {
           mb="5">
           Login
         </Heading>
-
+        <CustomAlert
+          message={alert}
+          open={Boolean(alert)}
+          status="error"
+          noClose={true}
+        />
         <Stack p="4" space={3} width="100%">
           {inputFields.map((inputField, key) => (
             <Stack space={2} key={key}>
