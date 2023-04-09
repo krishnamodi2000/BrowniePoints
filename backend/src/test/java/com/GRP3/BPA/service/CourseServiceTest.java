@@ -75,9 +75,9 @@ public class CourseServiceTest {
         List<Course> result = courseService.getCoursesForTeacher("1");
 
         Assertions.assertEquals(courses,result);
-//        for (int i = 0; i < courses.size(); i++) {
-//            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
-//        }
+        for (int i = 0; i < courses.size(); i++) {
+            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
+        }
         verify(courseRepository, times(1)).findByTeacherTeacherId(teacher.getTeacherId());
 
     }

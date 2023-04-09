@@ -109,14 +109,15 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
         //delete the student from the course in the CourseStudent from the database
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
-        if (courseStudent != null) {
-            courseStudentRepository.delete(courseStudent);
-        }
+        if (courseStudent == null) {
+            //throw exception if there is no such student enrolled  in the course
+            boolean status = false;
+            String message = "No student with bannerId: " + bannerId + " is enrolled in course: " + courseId;
+            throw new CustomizableException(status, message);
 
-        //throw exception if there is no such student enrolled  in the course
-        boolean status = false;
-        String message = "No student with bannerId: " + bannerId + " is enrolled in course: " + courseId;
-        throw new CustomizableException(status, message);
+        }
+        courseStudentRepository.delete(courseStudent);
+
     }
 
     /**
@@ -148,7 +149,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             //create a new Course Student object
             CourseStudent courseStudent = new CourseStudent();
 
-            //Get the student by bannerId
+            //Get the student by bannerId...//add exception here
             Student student = studentRepository.findByBannerId(bannerId);
             courseStudent.setStudent(student);
 
@@ -191,14 +192,16 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             //add to the list to delete the student from the course in the
             // CourseStudent from the database
             CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
-            if (courseStudent != null) {
-                studentList.add(courseStudent);
+            if (courseStudent == null) {
+                boolean status = false;
+                String message = "No student with bannerId: " + bannerId + " is enrolled in course: " + courseId;
+                throw new CustomizableException(status, message);
+
             }
 
+            studentList.add(courseStudent);
             //throw an exception if the student doesn't take the course
-            boolean status = false;
-            String message = "No student with bannerId: " + bannerId + " is enrolled in course: " + courseId;
-            throw new CustomizableException(status, message);
+
         }
 
         courseStudentRepository.deleteAll(studentList);
