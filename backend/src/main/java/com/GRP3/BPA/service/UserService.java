@@ -19,6 +19,8 @@ public interface UserService {
 
     User findByEmail(String email) throws UsernameNotFoundException;
 
+
+    User updateUser(User user, String email);
     User updateOTP(User user);
 
     Utils changePassword(User user, String newPassword);
