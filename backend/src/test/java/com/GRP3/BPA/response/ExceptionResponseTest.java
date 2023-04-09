@@ -5,6 +5,34 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExceptionResponseTest {
+
+    @Test
+    public void testAllArgsConstructor() {
+        ExceptionResponse response = new ExceptionResponse(true, "Test message");
+        assertTrue(response.isStatus());
+        assertEquals("Test message", response.getMessage());
+    }
+
+
+
+    @Test
+    public void testGetterAndSetter() {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setStatus(true);
+        response.setMessage("Test message");
+        assertTrue(response.isStatus());
+        assertEquals("Test message", response.getMessage());
+    }
+
+    @Test
+    public void testBuilder() {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .status(true)
+                .message("Test message")
+                .build();
+        assertTrue(response.isStatus());
+        assertEquals("Test message", response.getMessage());
+    }
     @Test
     public void testGetSetStatus() {
         ExceptionResponse response = new ExceptionResponse();
