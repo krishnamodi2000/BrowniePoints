@@ -24,3 +24,11 @@ export const changePassword = (email, newPassword, otp, success) => ({
 export const resetPasswordChangeFlow = () => ({
   type: actionTypes.RESET_PASSWORD_CHANGE_FLOW,
 });
+
+export const updateProfile = (email, firstName, lastName, successCallBack) => ({
+  type: actionTypes.UPDATE_PROFILE,
+  firstName,
+  lastName,
+  email,
+  successCallBack,
+});

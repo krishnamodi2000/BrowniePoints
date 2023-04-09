@@ -25,17 +25,18 @@ import {
   deleteCourse,
   getStudentsByCourseId,
   removeStudentFromCourse,
+  updateCourse,
 } from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
 import {CustomAlert} from '../../components/Commons/CustomAlert';
 
 const inputFields = [
-  {
-    placeholder: 'Course Code',
-    type: 'text',
-    name: 'courseId',
-  },
   {placeholder: 'Course Name', type: 'text', name: 'courseName'},
+  {
+    placeholder: 'Course Description',
+    type: 'text',
+    name: 'courseDescription',
+  },
 ];
 
 const bannerIdField = {
@@ -59,6 +60,8 @@ export default function EditCourse({route}) {
   const [showRemoveStudent, setShowRemoveStudent] = useState(false);
   const [showDeleteCourseSuccessModal, setShowDeleteCourseSuccessModal] =
     useState(false);
+  const [showUpdateCourseSuccessModal, setShowUpdateCourseModal] =
+    useState(false);
   const [removedStudentBannerId, setRemovedStudentBannerId] = useState('');
   const [alert, setAlert] = useState('');
 
@@ -71,7 +74,12 @@ export default function EditCourse({route}) {
   };
 
   const handleSave = () => {
-    setDisabled(true);
+    dispatch(
+      updateCourse({...courseInformation}, () => {
+        setDisabled(true);
+        setShowUpdateCourseModal(true);
+      }),
+    );
   };
 
   const addBannerIdField = () => {
@@ -162,6 +170,10 @@ export default function EditCourse({route}) {
     navigation.goBack();
   };
 
+  const handleUpdateCouseModalClose = () => {
+    setShowUpdateCourseModal(false);
+  };
+
   useEffect(() => {
     dispatch(getStudentsByCourseId(route.params.courseDetails.courseId));
   }, [dispatch]);
@@ -176,6 +188,9 @@ export default function EditCourse({route}) {
         onClose={() => setAlert('')}
       />
       <Stack p="4" space={3} width="100%">
+        <Text fontSize="20" color="white">
+          Course Id :{courseInformation?.courseId}
+        </Text>
         {inputFields.map((inputField, key) => (
           <Stack space={2} key={key}>
             {disabled ? (
@@ -185,9 +200,9 @@ export default function EditCourse({route}) {
             ) : (
               <FormControl>
                 <InputType1
+                  disabled={disabled}
                   {...inputField}
                   value={courseInformation[inputField.name]}
-                  disabled={disabled}
                   onChangeText={value =>
                     handleTextChange(inputField.name, value)
                   }
@@ -210,13 +225,17 @@ export default function EditCourse({route}) {
               Edit course
             </Button>
           ) : (
-            <Button
-              size="lg"
-              backgroundColor="secondary.400"
-              _pressed={{backgroundColor: 'secondary.500'}}
-              onPress={() => handleSave()}>
-              Save Changes
-            </Button>
+            <>
+              {!loading && (
+                <Button
+                  size="lg"
+                  backgroundColor="secondary.400"
+                  _pressed={{backgroundColor: 'secondary.500'}}
+                  onPress={() => handleSave()}>
+                  Save Changes
+                </Button>
+              )}
+            </>
           )}
         </Stack>
         <Divider />
@@ -358,6 +377,11 @@ export default function EditCourse({route}) {
         setShowModal={setShowDeleteCourseSuccessModal}
         handleCloseModal={handleDeleteCourseClose}
       />
+      <UpdateCourseSuccessModal
+        showModal={showUpdateCourseSuccessModal}
+        setShowModal={setShowUpdateCourseModal}
+        handleCloseModal={handleUpdateCouseModalClose}
+      />
     </Wrapper>
   );
 }
@@ -416,6 +440,26 @@ const DeleteCourseSuccessModal = ({
     body={
       <Center>
         Successfully removed the course.
+        <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+          Back
+        </Button>
+      </Center>
+    }
+  />
+);
+
+const UpdateCourseSuccessModal = ({
+  showModal,
+  setShowModal,
+  handleCloseModal,
+}) => (
+  <CustomModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    heading="Updated Course"
+    body={
+      <Center>
+        Successfully updated the course.
         <Button mt="2" minWidth="100" onPress={handleCloseModal}>
           Back
         </Button>
