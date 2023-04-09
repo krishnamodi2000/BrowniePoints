@@ -10,9 +10,10 @@ export const addCourse = (courseDetails, onSuccess) => ({
   onSuccess,
 });
 
-export const updateCourse = courseDetails => ({
+export const updateCourse = (courseDetails, successCallBack) => ({
   type: actionTypes.UPDATE_COURSE,
   courseDetails,
+  successCallBack,
 });
 
 export const deleteCourse = (courseId, bannerIds, success) => ({

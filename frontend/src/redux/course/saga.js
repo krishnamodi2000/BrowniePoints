@@ -180,6 +180,34 @@ function* deleteCourseSaga({courseId, success, bannerIds}) {
   }
 }
 
+function* updateCourseSaga({courseDetails, successCallBack}) {
+  try {
+    yield put({type: actionTypes.SET_COURSE_LOADING});
+
+    const {data} = yield AxiosInstance.put('/teachers/courses/updateCourse', {
+      ...courseDetails,
+    });
+
+    if (data.status) {
+      yield put({
+        type: actionTypes.UPDATE_COURSE_SUCCESS,
+      });
+      successCallBack();
+    } else {
+      yield put({
+        type: actionTypes.UPDATE_COURSE_FAIL,
+        error: 'Unable to update course',
+      });
+    }
+  } catch (error) {
+    console.log(error, JSON.stringify(error));
+    yield put({
+      type: actionTypes.UPDATE_COURSE_FAIL,
+      error: 'Something went wrong',
+    });
+  }
+}
+
 function* courseSaga() {
   yield all([
     yield takeLatest(actionTypes.GET_COURSES, getCoursesSaga),
@@ -197,6 +225,7 @@ function* courseSaga() {
       addStudentsToCourseSaga,
     ),
     yield takeLatest(actionTypes.DELETE_COURSE, deleteCourseSaga),
+    yield takeLatest(actionTypes.UPDATE_COURSE, updateCourseSaga),
   ]);
 }
 

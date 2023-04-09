@@ -69,9 +69,11 @@ const courses = (state = initialState, action) => {
       return {...state, loading: false, error: true};
 
     case actionTypes.DELETE_COURSE_SUCCESS:
+    case actionTypes.UPDATE_COURSE_SUCCESS:
       return {...state, loading: false};
 
     case actionTypes.DELETE_COURSE_FAIL:
+    case actionTypes.UPDATE_COURSE_FAIL:
       return {
         ...state,
         loading: false,
