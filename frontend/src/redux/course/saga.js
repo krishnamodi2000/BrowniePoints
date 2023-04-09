@@ -145,15 +145,18 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
 function* deleteCourseSaga({courseId, success, bannerIds}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
-    yield AxiosInstance.delete('/teachers/courses/removeStudents', {
-      data: {courseId, bannerIds},
-    });
+    console.log({courseId, bannerIds});
+    if (bannerIds.length > 0)
+      yield AxiosInstance.delete('/teachers/courses/students/removeStudents', {
+        data: {courseId, bannerIds},
+      });
     const {data} = yield AxiosInstance.delete(
       '/teachers/courses/removeCourse',
       {
         data: {courseId},
       },
     );
+
     if (data.status) {
       yield put({
         type: actionTypes.DELETE_COURSE_SUCCESS,
@@ -167,6 +170,7 @@ function* deleteCourseSaga({courseId, success, bannerIds}) {
       });
     }
   } catch (error) {
+    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.DELETE_COURSE_FAIL,
       error: 'Something went wrong',
