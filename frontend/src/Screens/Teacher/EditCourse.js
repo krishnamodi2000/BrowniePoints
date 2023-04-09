@@ -48,7 +48,6 @@ export default function EditCourse({route}) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {loading, students, studentAdded} = useSelector(state => state.course);
-
   const [courseInformation, setCourseInformation] = useState({
     ...route.params.courseDetails,
   });
@@ -154,9 +153,13 @@ export default function EditCourse({route}) {
 
   const deleteCourseHandler = () => {
     dispatch(
-      deleteCourse(courseInformation.courseId, () => {
-        setShowDeleteCourseSuccessModal(true);
-      }),
+      deleteCourse(
+        courseInformation.courseId,
+        students.map(student => student.bannerId),
+        () => {
+          setShowDeleteCourseSuccessModal(true);
+        },
+      ),
     );
   };
 
