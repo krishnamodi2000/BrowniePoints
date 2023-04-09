@@ -2,21 +2,27 @@ import {
   Box,
   Button,
   Center,
-  Column,
   Divider,
+  FlatList,
   FormControl,
   HStack,
+  Spacer,
   Spinner,
   Stack,
   Text,
   VStack,
 } from 'native-base';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {InputType1} from '../../components/Commons/Input';
 import Header from '../../components/Header/Header';
 import Wrapper from '../../wrapper/Wrapper';
 import {useDispatch, useSelector} from 'react-redux';
-import {addStudentsToCourse} from '../../redux/course/actions';
+import {
+  addStudentsToCourse,
+  deleteCourse,
+  getStudentsByCourseId,
+  removeStudentFromCourse,
+} from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
 import {useNavigation} from '@react-navigation/native';
 import DocumentPicker from 'react-native-document-picker';
@@ -41,7 +47,7 @@ const bannerIdField = {
 export default function EditCourse({route}) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {loading, studentAdded} = useSelector(state => state.course);
+  const {loading, students, studentAdded} = useSelector(state => state.course);
 
   const [courseInformation, setCourseInformation] = useState({
     ...route.params.courseDetails,
@@ -50,6 +56,11 @@ export default function EditCourse({route}) {
   const [showAddStudents, setShowAddStudents] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showRemoveStudentModal, setShowRemoveStudentModal] = useState(false);
+  const [showRemoveStudent, setShowRemoveStudent] = useState(false);
+  const [showDeleteCourseSuccessModal, setShowDeleteCourseSuccessModal] =
+    useState(false);
+  const [removedStudentBannerId, setRemovedStudentBannerId] = useState('');
 
   const handleEdit = () => {
     setDisabled(false);
@@ -89,11 +100,16 @@ export default function EditCourse({route}) {
     setBannerId(null);
   };
 
+  const removeStudent = () => {
+    setShowRemoveStudent(true);
+  };
+
   const selectFile = async () => {
     try {
       const res = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.allFiles],
       });
+
       readFile(res.uri, 'ascii').then(res => {
         const data = res
           .split(',')
@@ -111,12 +127,46 @@ export default function EditCourse({route}) {
     } catch (err) {}
   };
 
+  const handleStudentRemove = studentId => {
+    dispatch(
+      removeStudentFromCourse(
+        courseInformation.courseId,
+        studentId,
+        bannerId => {
+          setRemovedStudentBannerId(bannerId);
+          setShowRemoveStudentModal(true);
+          setShowRemoveStudent(false);
+        },
+      ),
+    );
+  };
+
+  const handleRemoveStudentClose = () => {
+    setShowRemoveStudentModal(false);
+  };
+
   const navigateToScanner = () => {
     navigation.navigate('Scanner', {
       courseCode: courseInformation.courseId,
       addStudent: true,
     });
   };
+
+  const deleteCourseHandler = () => {
+    dispatch(
+      deleteCourse(courseInformation.courseId, () => {
+        setShowDeleteCourseSuccessModal(true);
+      }),
+    );
+  };
+
+  const handleDeleteCourseClose = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    dispatch(getStudentsByCourseId(route.params.courseDetails.courseId));
+  }, [dispatch]);
 
   return (
     <Wrapper>
@@ -209,32 +259,163 @@ export default function EditCourse({route}) {
                     Upload Excel
                   </Button>
                 </VStack>
+              ) : showRemoveStudent ? (
+                <VStack>
+                  <FlatList
+                    data={students}
+                    renderItem={({item, key}) => (
+                      <Box
+                        key={key}
+                        borderBottomWidth="1"
+                        borderColor="secondary.300"
+                        pl={['0', '4']}
+                        pr={['0', '5']}
+                        py="2">
+                        <HStack
+                          space={[2, 3]}
+                          justifyContent="space-between"
+                          key={key}>
+                          <VStack>
+                            <Text color="white" bold>
+                              {item.bannerId}
+                            </Text>
+                            <Text
+                              color="white"
+                              _dark={{
+                                color: 'warmGray.200',
+                              }}>
+                              {item.studentName}
+                            </Text>
+                          </VStack>
+                          <Spacer />
+                          {students.length > 0 && (
+                            <Button
+                              size="sm"
+                              backgroundColor="red.400"
+                              _pressed={{backgroundColor: 'red.500'}}
+                              onPress={() => handleStudentRemove(item.bannerId)}
+                              pr={3}>
+                              Remove
+                            </Button>
+                          )}
+                        </HStack>
+                      </Box>
+                    )}
+                    keyExtractor={item => item.id}
+                  />
+                </VStack>
               ) : (
-                <Button
-                  size="lg"
-                  backgroundColor="secondary.400"
-                  _pressed={{backgroundColor: 'secondary.500'}}
-                  onPress={() => addBannerIdField()}>
-                  Add Students
-                </Button>
+                <>
+                  <Button
+                    size="lg"
+                    backgroundColor="secondary.400"
+                    _pressed={{backgroundColor: 'secondary.500'}}
+                    onPress={() => addBannerIdField()}>
+                    Add Students
+                  </Button>
+                  {students.length > 0 && (
+                    <Button
+                      size="lg"
+                      mt={5}
+                      backgroundColor="red.400"
+                      _pressed={{backgroundColor: 'red.500'}}
+                      onPress={() => removeStudent()}>
+                      Remove Student
+                    </Button>
+                  )}
+                  <Button
+                    size="lg"
+                    mt={5}
+                    backgroundColor="red.400"
+                    _pressed={{backgroundColor: 'red.500'}}
+                    onPress={() => deleteCourseHandler()}>
+                    Delete Course
+                  </Button>
+                </>
               )}
             </>
           )}
         </Stack>
       </Stack>
-      <CustomModal
+      <AddStudentToCourseSuccessModal
         showModal={showSuccessModal}
         setShowModal={setShowSuccessModal}
-        heading="Added Students"
-        body={
-          <Center>
-            Successfully added {studentAdded.length} students.
-            <Button mt="2" minWidth="100" onPress={handleCloseModal}>
-              Back
-            </Button>
-          </Center>
-        }
+        studentAdded={studentAdded}
+        handleCloseModal={handleCloseModal}
+      />
+      <StudentRemovedFromCourseSuccessModal
+        showModal={showRemoveStudentModal}
+        setShowModal={setShowRemoveStudentModal}
+        bannerId={removedStudentBannerId}
+        handleCloseModal={handleRemoveStudentClose}
+      />
+      <DeleteCourseSuccessModal
+        showModal={showDeleteCourseSuccessModal}
+        setShowModal={setShowDeleteCourseSuccessModal}
+        handleCloseModal={handleDeleteCourseClose}
       />
     </Wrapper>
   );
 }
+
+const StudentRemovedFromCourseSuccessModal = ({
+  showModal,
+  setShowModal,
+  bannerId,
+  handleCloseModal,
+}) => (
+  <CustomModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    heading="Removed Student"
+    body={
+      <Center>
+        Successfully removed {bannerId} from course.
+        <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+          Okay
+        </Button>
+      </Center>
+    }
+  />
+);
+
+const AddStudentToCourseSuccessModal = ({
+  showModal,
+  setShowModal,
+  studentAdded,
+  handleCloseModal,
+}) => (
+  <CustomModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    heading="Added Students"
+    body={
+      <Center>
+        Successfully added {studentAdded.length} students.
+        <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+          Back
+        </Button>
+      </Center>
+    }
+  />
+);
+
+const DeleteCourseSuccessModal = ({
+  showModal,
+  setShowModal,
+  handleCloseModal,
+}) => (
+  <CustomModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    heading="Added Students"
+    body={
+      <Center>
+        Successfully removed the course.
+        <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+          Back
+        </Button>
+      </Center>
+    }
+  />
+);

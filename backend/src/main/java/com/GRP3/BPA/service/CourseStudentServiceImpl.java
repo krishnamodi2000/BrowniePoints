@@ -96,7 +96,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         List<String> bannerIds = courseStudentRequests.getBannerIds();
         String courseId = courseStudentRequests.getCourseId();
         for (String bannerId : bannerIds) {
-            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(courseId, bannerId);
+            CourseStudentRequest courseStudentRequest = new CourseStudentRequest(bannerId,courseId);
             removeStudent(teacherId, courseStudentRequest);
         }
     }
