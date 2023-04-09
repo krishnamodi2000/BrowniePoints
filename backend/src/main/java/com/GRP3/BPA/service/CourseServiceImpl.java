@@ -3,9 +3,7 @@ package com.GRP3.BPA.service;
 import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.Course;
 import com.GRP3.BPA.model.CourseStudent;
-import com.GRP3.BPA.model.Student;
 import com.GRP3.BPA.repository.CourseStudentRepository;
-import com.GRP3.BPA.repository.StudentRepository;
 import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.CourseRepository;
@@ -36,8 +34,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     @Autowired
     private final CourseStudentRepository courseStudentRepository;
-    @Autowired
-    private StudentRepository studentRepository;
+
 
     /**
      * Method to get all courses for a given teacher
