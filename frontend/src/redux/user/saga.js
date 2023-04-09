@@ -30,29 +30,27 @@ function* getUserInfoSaga() {
 
 function* generateResetPasswordOTPSaga({email}) {
   try {
-    console.log('HERE');
     yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
     const {data} = yield AxiosInstance.post('/auth/reset-password', {email});
-    if (data) {
+    if (data.status) {
       yield put({
         type: actionTypes.GENERATE_RESET_PASSWORD_OTP_SUCCESS,
       });
     } else {
       yield put({
         type: actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL,
-        error: 'Message from backend',
+        error: data.message,
       });
     }
   } catch (error) {
-    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL,
-      error: 'Something went wrong',
+      error: error?.response?.data?.message || 'Something went wrong',
     });
   }
 }
 
-function* resetPasswordSaga({email, otp, newPassword}) {
+function* resetPasswordSaga({email, otp, newPassword, success}) {
   try {
     yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
     const {data} = yield AxiosInstance.post('/auth/reset-password-matchotp', {
@@ -60,22 +58,21 @@ function* resetPasswordSaga({email, otp, newPassword}) {
       otp,
       newPassword,
     });
-    console.log(data);
-    if (data) {
+    if (data.status) {
       yield put({
         type: actionTypes.RESET_PASSWORD_SUCCESS,
       });
+      success();
     } else {
       yield put({
         type: actionTypes.RESET_PASSWORD_FAIL,
-        error: 'Message from backend',
+        error: data.message,
       });
     }
   } catch (error) {
-    console.log(error);
     yield put({
       type: actionTypes.RESET_PASSWORD_FAIL,
-      error: 'Something went wrong',
+      error: error?.response?.data?.message || 'Something went wrong',
     });
   }
 }
