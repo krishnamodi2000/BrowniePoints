@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service class that implements the CourseService interface
+ * This class provides an implementation for the CourseService interface, which defines the business logic
+ * for managing the relationship between a teacher and its courses. It contains methods for adding/removing
+ * a course, retrieving a list of courses for a teacher, updating the course details and checking if a teacher is authorized
+ * to manage a particular course.
  */
 @Service
 @Transactional
@@ -39,6 +42,7 @@ public class CourseServiceImpl implements CourseService {
      * @return list of courses for the teacher
      * @throws CustomizableException if the teacher does not exist or does not take any courses
      */
+    @Override
     public List<Course> getCoursesForTeacher(String teacherId) throws CustomizableException {
 
         checkIfTeacherExists(teacherId);
@@ -63,6 +67,7 @@ public class CourseServiceImpl implements CourseService {
      * @return the newly added course
      * @throws CustomizableException if the teacher or course already exist in the database
      */
+    @Override
     public Course addCourseForTeacher(String teacherId, CourseRequest courseRequest) throws CustomizableException {
         // extract all fields from the courseRequest
         String courseId= courseRequest.getCourseId();
@@ -98,6 +103,7 @@ public class CourseServiceImpl implements CourseService {
      * @throws CustomizableException if the teacher or course does not exist in the database
      */
 
+    @Override
     public List<Course> addCoursesForTeacher(String teacherId, List<CourseRequest> courseRequests) throws CustomizableException {
         // Get the teacher from the database
         checkIfTeacherExists(teacherId);
@@ -135,6 +141,7 @@ public class CourseServiceImpl implements CourseService {
      * @throws CustomizableException if the course does not exist in the database or the teacher is not associated with the course
      *                          or if the students do not take the course
      */
+    @Override
     public void removeCourseForTeacher(String teacherId, String courseId) throws CustomizableException {
         Course courseDelete = courseRepository.findByTeacherTeacherIdAndCourseId(teacherId, courseId);
 
@@ -154,6 +161,7 @@ public class CourseServiceImpl implements CourseService {
      * @param courseIds the ids of the courses to remove
      * @throws CustomizableException if the teacher does not take a particular course or if the course has enrolled students
      */
+    @Override
     public void removeCoursesForTeacher(String teacherId, List<String> courseIds) throws CustomizableException {
         List<Course> coursesDelete = new ArrayList<>();
         //check if the teacher takes the particular course and if the course has students enrolled

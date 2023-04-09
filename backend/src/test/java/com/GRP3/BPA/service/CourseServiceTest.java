@@ -39,11 +39,11 @@ public class CourseServiceTest {
     private CourseRequest courseRequest;
     private CourseRequest courseRequest1;
 
-    List<Course> courses=new ArrayList<>();
-    @BeforeEach
-    public void setUp()  {
+    List<Course> courses = new ArrayList<>();
 
-        user=new User();
+    @BeforeEach
+    public void setUp() {
+        user = new User();
         teacher = new Teacher();
         teacher.setTeacherId("1");
         teacher.setUser(user);
@@ -74,10 +74,12 @@ public class CourseServiceTest {
 
         List<Course> result = courseService.getCoursesForTeacher("1");
 
-        for (int i = 0; i < courses.size(); i++) {
-            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
-        }
+        Assertions.assertEquals(courses,result);
+//        for (int i = 0; i < courses.size(); i++) {
+//            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
+//        }
         verify(courseRepository, times(1)).findByTeacherTeacherId(teacher.getTeacherId());
+
     }
 
     @Test
@@ -87,6 +89,7 @@ public class CourseServiceTest {
             courseService.getCoursesForTeacher(teacher.getTeacherId());
         });
     }
+
     @Test
     public void testAddCourseForTeacher() throws CustomizableException {
         CourseRequest courseRequest = new CourseRequest();
@@ -111,7 +114,8 @@ public class CourseServiceTest {
 
         when(teacherRepository.findByTeacherId("1")).thenReturn(null);
         Assertions.assertThrows(CustomizableException.class, () -> {
-            courseService.addCourseForTeacher("1", courseRequest);});
+            courseService.addCourseForTeacher("1", courseRequest);
+        });
     }
 
     @Test
@@ -119,7 +123,7 @@ public class CourseServiceTest {
 
         when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
         when(courseRepository.saveAll(any(List.class))).thenReturn(courses);
-        List<CourseRequest> courseRequestList=new ArrayList<>();
+        List<CourseRequest> courseRequestList = new ArrayList<>();
 
         courseRequest = new CourseRequest();
         courseRequest.setCourseId("1");
@@ -146,17 +150,19 @@ public class CourseServiceTest {
 
         courseService.removeCourseForTeacher("1", "1");
 
-        verify(courseRepository,times(1)).delete(course);
+        verify(courseRepository, times(1)).delete(course);
     }
 
-//check test case
+    //check test case
     @Test
     public void testRemoveCourseForTeacherInvalidCourse() {
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "3")).thenReturn(null);
         Assertions.assertThrows(CustomizableException.class, () -> {
-            courseService.removeCourseForTeacher("1", "3");});
+            courseService.removeCourseForTeacher("1", "3");
+        });
 
     }
+
     @Test
     public void testRemoveCoursesForTeacher() throws CustomizableException {
         // Mocking the course repository to return a list of courses
@@ -168,12 +174,14 @@ public class CourseServiceTest {
         // Verifying that the deleteAll method was called on the course repository
         verify(courseRepository, times(1)).deleteAll(Arrays.asList(course, course1));
     }
+
     @Test
-    public void testRemoveCoursesForTeacherInvalidCourse(){
+    public void testRemoveCoursesForTeacherInvalidCourse() {
         when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1", "3"))).thenReturn(Collections.emptyList());
 
         Assertions.assertThrows(CustomizableException.class, () -> {
-        courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));});
+            courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));
+        });
 
     }
 }
