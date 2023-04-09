@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -43,6 +40,11 @@ public class UserController {
     @GetMapping(value = "/api/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication){
        return new ResponseEntity<>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/api/user/{email}")
+    public ResponseEntity<User> updateUser(@PathVariable("email") String email, @RequestBody User user){
+        return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('TEACHER')")

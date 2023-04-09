@@ -181,4 +181,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = userRepository.findByEmail(username);
         return user;
     }
+
+    public User updateUser(User user, String email){
+        User existingUser = userRepository.findByEmail(email);
+        if(existingUser == null){
+            throw new UsernameNotFoundException("User does not exist");
+        }
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+
+        userRepository.save(existingUser);
+        return existingUser;
+    }
 }
