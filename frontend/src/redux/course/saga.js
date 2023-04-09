@@ -1,6 +1,7 @@
-const {takeLatest, all, put} = require('redux-saga/effects');
 import AxiosInstance from '../../config/Axios';
 import * as actionTypes from './actionTypes';
+
+const {takeLatest, all, put} = require('redux-saga/effects');
 
 function* getCoursesSaga() {
   try {
@@ -46,7 +47,6 @@ function* addCouseSaga({courseDetails, onSuccess}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.ADD_COURSE_FAIL,
       error: 'Something went wrong',
@@ -72,7 +72,6 @@ function* getStudentsByCourseSaga({courseId}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.GET_STUDENTS_BY_COURSE_FAIL,
       error: 'Something went wrong',
@@ -103,7 +102,6 @@ function* addStudentsToCourseSaga({courseId, bannerIds, successCallBack}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.ADD_STUDENTS_TO_COURSE_FAIL,
       error: 'Something went wrong',
@@ -137,7 +135,6 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL,
       error: 'Something went wrong',
@@ -145,17 +142,21 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
   }
 }
 
-function* deleteCourseSaga({courseId, success}) {
+function* deleteCourseSaga({courseId, success, bannerIds}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
-
+    console.log({courseId, bannerIds});
+    if (bannerIds.length > 0)
+      yield AxiosInstance.delete('/teachers/courses/students/removeStudents', {
+        data: {courseId, bannerIds},
+      });
     const {data} = yield AxiosInstance.delete(
-      `/teachers/courses/removeCourse`,
+      '/teachers/courses/removeCourse',
       {
         data: {courseId},
       },
     );
-    console.log(data);
+
     if (data.status) {
       yield put({
         type: actionTypes.DELETE_COURSE_SUCCESS,

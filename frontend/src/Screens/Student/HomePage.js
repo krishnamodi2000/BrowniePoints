@@ -23,12 +23,12 @@ export default function HomePage({navigation}) {
   };
 
   const reloadPoints = () => {
-    //Make it dynamic
+    // Make it dynamic
     dispatch(getEnrolledCourseInfo('B00917345'));
   };
 
   useEffect(() => {
-    //Please make it dynamic
+    // Please make it dynamic
     dispatch(getEnrolledCourseInfo('B00917345'));
   }, [dispatch]);
 

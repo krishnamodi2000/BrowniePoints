@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import Wrapper from '../../wrapper/Wrapper';
 import {Text, Box, Center, Button, Spinner} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
+import Wrapper from '../../wrapper/Wrapper';
 import {addPoints} from '../../redux/points/actions';
 import {addStudentsToCourse} from '../../redux/course/actions';
 
@@ -11,6 +11,10 @@ export default function Scanner({navigation, route}) {
   const {addedPointDetails, loading} = useSelector(state => state.points);
 
   const [showScanner, setShowScanner] = useState(true);
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
   const onRead = e => {
     if (route.params.addStudent) {
@@ -23,10 +27,6 @@ export default function Scanner({navigation, route}) {
       dispatch(addPoints('CSCI5100', e.data));
     }
     setShowScanner(false);
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
   };
 
   return (
