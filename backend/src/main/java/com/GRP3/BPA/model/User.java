@@ -37,9 +37,6 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Getter @Setter
-    @Column(name = "contact_number")
-    private Integer contactNumber;
 
     @Getter @Setter
     @Column
@@ -48,6 +45,10 @@ public class User implements UserDetails {
     @Getter @Setter
     @Column
     private String role;
+
+    @Getter @Setter
+    @Column(name = "otp")
+    private String otp;
 
     @Getter @Setter
     @Column(name = "is_authenticated")

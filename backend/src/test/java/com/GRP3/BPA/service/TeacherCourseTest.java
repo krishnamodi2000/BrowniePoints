@@ -1,11 +1,11 @@
 //package com.GRP3.BPA.service;
 //
-//import com.GRP3.BPA.model.course.Course;
-//import com.GRP3.BPA.model.teacher.Teacher;
+//import com.GRP3.BPA.model.Course;
+//import com.GRP3.BPA.model.Teacher;
 //import com.GRP3.BPA.model.TeacherCourse;
-//import com.GRP3.BPA.repository.course.CourseRepository;
+//import com.GRP3.BPA.repository.CourseRepository;
 //import com.GRP3.BPA.repository.teacherCourse.TeacherCourseRepository;
-//import com.GRP3.BPA.repository.teacher.TeacherRepository;
+//import com.GRP3.BPA.repository.TeacherRepository;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.Mock;

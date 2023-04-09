@@ -1,14 +1,13 @@
 package com.GRP3.BPA.service;
 
 import org.springframework.stereotype.Component;
-
 import java.util.regex.Pattern;
 
 @Component
 public class EmailValidator {
 
     private static final String EMAIL_PATTERN =
-            "^[\\w\\.\\d]+@dal\\.ca$"; // this checks if the email ends with dal.ca
+            "^[\\w\\.\\d]+@dal\\.ca$";
 
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 

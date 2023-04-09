@@ -2,8 +2,9 @@ package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.service.EmailValidator;
 import com.GRP3.BPA.model.User;
-import com.GRP3.BPA.model.UserException;
+import com.GRP3.BPA.exceptions.UserException;
 import com.GRP3.BPA.service.UserService;
+import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,20 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
+
+    @Autowired
     private UserService userService;
-
-
 
     @Autowired
     private EmailValidator emailValidator;
-
-
-    public UserController (UserService userService)
-    {
-        super();
-        this.userService = userService;
-    }
-
 
     @PostMapping(value = "/api/auth/register")
     public ResponseEntity<?> saveUser(@RequestBody User user) {
@@ -35,7 +28,8 @@ public class UserController {
                 throw new IllegalArgumentException("Invalid email address.");
             }
             userService.saveUser(user);
-            return new ResponseEntity<>("success", HttpStatus.CREATED);
+            Utils successResponse = new Utils("User successfully registered.", true);
+            return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
         }
         catch (RuntimeException e){
             return new ResponseEntity<>(new UserException(e.getMessage()), HttpStatus.OK);

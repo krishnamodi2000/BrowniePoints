@@ -1,9 +1,9 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.teacher.Teacher;
+import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.repository.UserRepository;
-import com.GRP3.BPA.repository.teacher.TeacherRepository;
+import com.GRP3.BPA.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,6 @@ public class TeacherService {
             Teacher teacher= teacherRepository.findByUserId(id);
             return teacher.getTeacherId();
         }
-        return null; //return exception of sometype
+        return null; //return some type of exception
     }
 }

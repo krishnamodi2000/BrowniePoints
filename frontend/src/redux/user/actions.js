@@ -7,3 +7,20 @@ export const getUserInfoAction = () => ({
 export const logoutAction = () => ({
   type: actionTypes.LOGOUT_USER,
 });
+
+export const generateResetPasswordOTP = email => ({
+  type: actionTypes.GENERATE_RESET_PASSWORD_OTP,
+  email,
+});
+
+export const changePassword = (email, newPassword, otp, success) => ({
+  type: actionTypes.RESET_PASSWORD,
+  email,
+  newPassword,
+  otp,
+  success,
+});
+
+export const resetPasswordChangeFlow = () => ({
+  type: actionTypes.RESET_PASSWORD_CHANGE_FLOW,
+});

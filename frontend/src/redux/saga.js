@@ -5,5 +5,9 @@ import userSaga from './user/saga';
 import studentSaga from './student/saga';
 
 export default function* rootSaga() {
-  yield all([userSaga(), pointsSaga(), courseSaga(), studentSaga()]);
+  try {
+    yield all([userSaga(), pointsSaga(), courseSaga(), studentSaga()]);
+  } catch (error) {
+    console.log(error, JSON.stringify(error));
+  }
 }

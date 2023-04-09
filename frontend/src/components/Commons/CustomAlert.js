@@ -9,7 +9,7 @@ import {
   VStack,
 } from 'native-base';
 
-export const CustomAlert = ({status, message, open, onClose}) => (
+export const CustomAlert = ({status, message, open, onClose, noClose}) => (
   <>
     {open && (
       <Alert maxW="400" status={status} colorScheme={status}>
@@ -24,17 +24,19 @@ export const CustomAlert = ({status, message, open, onClose}) => (
               {message}
             </Text>
           </HStack>
-          <IconButton
-            variant="unstyled"
-            _focus={{
-              borderWidth: 0,
-            }}
-            onPress={onClose}
-            icon={<CloseIcon size="3" />}
-            _icon={{
-              color: 'coolGray.600',
-            }}
-          />
+          {!noClose && (
+            <IconButton
+              variant="unstyled"
+              _focus={{
+                borderWidth: 0,
+              }}
+              onPress={onClose}
+              icon={<CloseIcon size="3" />}
+              _icon={{
+                color: 'coolGray.600',
+              }}
+            />
+          )}
         </HStack>
       </Alert>
     )}

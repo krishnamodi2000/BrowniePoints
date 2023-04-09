@@ -1,9 +1,6 @@
 import {
   Center,
-  Column,
   HStack,
-  Row,
-  ScrollView,
   Spinner,
   VStack,
   Box,
@@ -12,7 +9,6 @@ import {
   FlatList,
   Spacer,
   Stack,
-  Divider,
 } from 'native-base';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -23,7 +19,6 @@ import Wrapper from '../../wrapper/Wrapper';
 export default function CourseInfo({route}) {
   const dispatch = useDispatch();
   const {students, loading} = useSelector(state => state.course);
-  console.log(students);
 
   useEffect(() => {
     dispatch(getStudentsByCourseId(route.params.courseId));
@@ -93,7 +88,10 @@ export default function CourseInfo({route}) {
                   pl={['0', '4']}
                   pr={['0', '5']}
                   py="2">
-                  <HStack space={[2, 3]} justifyContent="space-between">
+                  <HStack
+                    space={[2, 3]}
+                    justifyContent="space-between"
+                    key={key}>
                     <VStack>
                       <Text color="white" bold>
                         {item.bannerId}

@@ -14,16 +14,11 @@ public class UserTest {
         user.setEmail("test@example.com");
         user.setFirstName("John");
         user.setLastName("Doe");
-        user.setContactNumber(1234567890);
         user.setPassword("password");
         user.setRole("ROLE_USER");
         user.setIsAuthenticated(true);
     }
 
-//    @Test
-//    void testGetId() {
-//        Assertions.assertEquals(1, user.getId());
-//    }
 
     @Test
     void testGetEmail() {
@@ -40,10 +35,6 @@ public class UserTest {
         Assertions.assertEquals("Doe", user.getLastName());
     }
 
-    @Test
-    void testGetContactNumber() {
-        Assertions.assertEquals(1234567890, user.getContactNumber());
-    }
 
     @Test
     void testGetPassword() {

@@ -4,19 +4,29 @@ import Wrapper from '../../wrapper/Wrapper';
 import {Text, Box, Center, Button, Spinner} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {addPoints} from '../../redux/points/actions';
+import {addStudentsToCourse} from '../../redux/course/actions';
 
 export default function Scanner({navigation, route}) {
-  const [showScanner, setShowScanner] = useState(true);
   const dispatch = useDispatch();
   const {addedPointDetails, loading} = useSelector(state => state.points);
 
+  const [showScanner, setShowScanner] = useState(true);
+
   const onRead = e => {
-    dispatch(addPoints('CSCI5100', e.data));
+    if (route.params.addStudent) {
+      dispatch(
+        addStudentsToCourse(route.params.courseCode, [e.data], () => {
+          handleBack();
+        }),
+      );
+    } else {
+      dispatch(addPoints('CSCI5100', e.data));
+    }
     setShowScanner(false);
   };
 
   const handleBack = () => {
-    console.log(navigation.goBack());
+    navigation.goBack();
   };
 
   return (
@@ -44,27 +54,31 @@ export default function Scanner({navigation, route}) {
               {loading ? (
                 <Spinner color="secondary.400" size="lg" />
               ) : (
-                <Box>
-                  <Text fontSize={20} fontWeight={500} color="white" mb={5}>
-                    Point added!
-                  </Text>
-                  <Text color="white">
-                    Name: {addedPointDetails?.student.user?.firstName}{' '}
-                    {addedPointDetails?.student?.user?.lastName}
-                  </Text>
-                  <Text color="white">
-                    Banner ID: {addedPointDetails?.student?.bannerId}
-                  </Text>
-                  <Button
-                    size="lg"
-                    marginTop={5}
-                    fontWeight={500}
-                    backgroundColor="secondary.300"
-                    _pressed={{backgroundColor: 'secondary.400'}}
-                    onPress={() => handleBack()}>
-                    Back
-                  </Button>
-                </Box>
+                <>
+                  {!route.params.addStudent && (
+                    <Box>
+                      <Text fontSize={20} fontWeight={500} color="white" mb={5}>
+                        Point added!
+                      </Text>
+                      <Text color="white">
+                        Name: {addedPointDetails?.student.user?.firstName}{' '}
+                        {addedPointDetails?.student?.user?.lastName}
+                      </Text>
+                      <Text color="white">
+                        Banner ID: {addedPointDetails?.student?.bannerId}
+                      </Text>
+                      <Button
+                        size="lg"
+                        marginTop={5}
+                        fontWeight={500}
+                        backgroundColor="secondary.300"
+                        _pressed={{backgroundColor: 'secondary.400'}}
+                        onPress={() => handleBack()}>
+                        Back
+                      </Button>
+                    </Box>
+                  )}
+                </>
               )}
             </>
           )}
