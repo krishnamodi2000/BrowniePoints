@@ -2,17 +2,12 @@ package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.exceptions.CustomizableException;
 import com.GRP3.BPA.model.*;
-import com.GRP3.BPA.repository.CourseRepository;
-import com.GRP3.BPA.repository.CourseStudentRepository;
-import com.GRP3.BPA.repository.TeacherRepository;
 import com.GRP3.BPA.request.course.CourseIdRequest;
-import com.GRP3.BPA.request.course.CourseIdsRequest;
 import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.response.ExceptionResponse;
 import com.GRP3.BPA.response.course.CourseResponse;
 import com.GRP3.BPA.response.course.CoursesResponse;
 import com.GRP3.BPA.service.CourseService;
-import com.GRP3.BPA.service.CourseServiceImpl;
 import com.GRP3.BPA.utils.JWTAuthenticationUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +24,6 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,17 +38,7 @@ public class CourseControllerTest {
     @InjectMocks
     private CourseController courseController;
 
-    @Mock
-    private TeacherRepository teacherRepository;
-
-    @Mock
-    private CourseStudentRepository courseStudentRepository;
-
-    @Mock
-    private CourseRepository courseRepository;
     private String validToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYxODU0MzU4MywiZXhwIjoxNjE4NTQ3MTgzfQ.SB8eqx4z4jiv4pztLJNZAGiwZ18nGKj3g09S8ElmKX9Eifm0qgFq6w4Uf4K0o0GZ6xJUoFMNrd2NpuYIX-1JQ";
-
-    private String teacherId = "teacher1";
 
     private Course course;
 
