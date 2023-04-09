@@ -6,9 +6,8 @@ import * as actionTypes from './actionTypes';
 function* getUserInfoSaga() {
   try {
     yield put({type: actionTypes.SET_USER_INFO_LOADING});
-
     const {data} = yield AxiosInstance.get('/user');
-    if (data.status) {
+    if (data.role) {
       yield put({
         type: actionTypes.GET_USER_INFO_SUCCESS,
         payload: data,
