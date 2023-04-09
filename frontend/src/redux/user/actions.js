@@ -13,8 +13,14 @@ export const generateResetPasswordOTP = email => ({
   email,
 });
 
-export const validateResetPasswordOTP = (email, otp) => ({
-  type: actionTypes.VALIDATE_RESET_PASSWORD_OTP,
+export const changePassword = (email, newPassword, otp, success) => ({
+  type: actionTypes.RESET_PASSWORD,
   email,
+  newPassword,
   otp,
+  success,
+});
+
+export const resetPasswordChangeFlow = () => ({
+  type: actionTypes.RESET_PASSWORD_CHANGE_FLOW,
 });

@@ -1,12 +1,15 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.DTO.UserDTO;
+import com.GRP3.BPA.model.PasswordResetToken.ConfirmOTP;
 import com.GRP3.BPA.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.GRP3.BPA.utils.Utils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface UserService {
     User saveUser(User user) throws RuntimeException;
+
+    Utils matchOtp(ConfirmOTP confirmOTP);
 
     UserDTO getUser(String username) throws UsernameNotFoundException;
 
@@ -16,9 +19,9 @@ public interface UserService {
 
     User findByEmail(String email) throws UsernameNotFoundException;
 
-    void generatePasswordResetToken(User user, String token);
+    User updateOTP(User user);
 
-    void resetPassword(User user, String password);
+    Utils changePassword(User user, String newPassword);
 
-    User updatePasswordResetToken(User user);
+    Utils validateResetPassword(User user);
 }

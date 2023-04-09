@@ -29,6 +29,7 @@ public class LoginController {
     public String getStatus() {
         return "Application is running.";
     }
+
     @PostMapping("/api/auth/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {

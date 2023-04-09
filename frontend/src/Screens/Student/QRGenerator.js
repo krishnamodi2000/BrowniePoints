@@ -7,14 +7,15 @@ import React from 'react';
 import CustomCard from '../../components/Commons/CustomCard';
 
 export default function QRGenerator() {
-  //Get the Banner ID
+  const {user} = useSelector(state => state.user);
+
   return (
     <Wrapper>
       <Header title="QR Code" />
       <CustomCard>
         <Center style={{height: '90%'}}>
-          <Box p={6} background="white" borderRadius={16}>
-            <Qrcode value={'B00917345'} size={320} />
+          <Box p={10} background="white" borderRadius={16}>
+            <Qrcode value={user.userId} size={250} />
           </Box>
         </Center>
       </CustomCard>
