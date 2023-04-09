@@ -45,7 +45,7 @@ function* generateResetPasswordOTPSaga({email}) {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL,
       error: 'Something went wrong',
@@ -53,27 +53,29 @@ function* generateResetPasswordOTPSaga({email}) {
   }
 }
 
-function* validateOTPSaga({email, otp}) {
+function* resetPasswordSaga({email, otp, newPassword}) {
   try {
     yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
     const {data} = yield AxiosInstance.post('/auth/reset-password-matchotp', {
       email,
       otp,
+      newPassword,
     });
+    console.log(data);
     if (data) {
       yield put({
-        type: actionTypes.VALIDATE_RESET_PASSWORD_OTP_SUCCESS,
+        type: actionTypes.RESET_PASSWORD_SUCCESS,
       });
     } else {
       yield put({
-        type: actionTypes.VALIDATE_RESET_PASSWORD_OTP_FAIL,
+        type: actionTypes.RESET_PASSWORD_FAIL,
         error: 'Message from backend',
       });
     }
   } catch (error) {
     console.log(error);
     yield put({
-      type: actionTypes.VALIDATE_RESET_PASSWORD_OTP_FAIL,
+      type: actionTypes.RESET_PASSWORD_FAIL,
       error: 'Something went wrong',
     });
   }
@@ -96,7 +98,7 @@ function* userSaga() {
       actionTypes.GENERATE_RESET_PASSWORD_OTP,
       generateResetPasswordOTPSaga,
     ),
-    yield takeLatest(actionTypes.VALIDATE_RESET_PASSWORD_OTP, validateOTPSaga),
+    yield takeLatest(actionTypes.RESET_PASSWORD, resetPasswordSaga),
   ]);
 }
 

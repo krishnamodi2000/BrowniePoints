@@ -10,27 +10,25 @@ import {
 } from 'native-base';
 import {InputType1} from '../components/Commons/Input';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  generateResetPasswordOTP,
-  validateResetPasswordOTP,
-} from '../redux/user/actions';
+import {generateResetPasswordOTP, changePassword} from '../redux/user/actions';
 
 export default function ResetPassword() {
   const dispatch = useDispatch();
-  const {resetPasswordLoading, otpGenerated, otpValidated} = useSelector(
+  const {resetPasswordLoading, otpGenerated, passwordReseted} = useSelector(
     state => state.user,
   );
-  console.log(otpValidated);
+
+  console.log(passwordReseted);
   const [emailId, setEmailId] = useState('');
   const [OTP, setOTP] = useState('');
-  const [step, setStep] = useState(0);
+  const [newPassword, setNewPassword] = useState('');
 
   const generateOTP = () => {
     dispatch(generateResetPasswordOTP(emailId));
   };
 
-  const matchOTP = () => {
-    dispatch(validateResetPasswordOTP(emailId, OTP));
+  const handleChangePassword = () => {
+    dispatch(changePassword(emailId, newPassword, OTP));
   };
 
   return (
@@ -46,7 +44,7 @@ export default function ResetPassword() {
           Reset Password
         </Heading>
         <Stack p="4" space={3} width="100%">
-          {!otpGenerated && (
+          {!otpGenerated ? (
             <>
               <Stack space={2}>
                 <FormControl>
@@ -72,31 +70,45 @@ export default function ResetPassword() {
                 )}
               </Stack>
             </>
+          ) : (
+            <>
+              <Stack space={2}>
+                <FormControl>
+                  <InputType1
+                    placeholder="OTP"
+                    type="text"
+                    keyboardType="numeric"
+                    name="otp"
+                    onChangeText={value => setOTP(value)}
+                  />
+                </FormControl>
+              </Stack>
+              <Stack space={2}>
+                <FormControl>
+                  <InputType1
+                    placeholder="New Password"
+                    type="password"
+                    secureTextEntry={true}
+                    name="confirmPassword"
+                    onChangeText={value => setNewPassword(value)}
+                  />
+                </FormControl>
+              </Stack>
+              <Stack space={2}>
+                {resetPasswordLoading ? (
+                  <Spinner color="secondary.500" size="lg" />
+                ) : (
+                  <Button
+                    size="lg"
+                    background="secondary.400"
+                    onPress={() => handleChangePassword()}
+                    _pressed={{backgroundColor: 'secondary.500'}}>
+                    Submit
+                  </Button>
+                )}
+              </Stack>
+            </>
           )}
-          <Stack space={2}>
-            <FormControl>
-              <InputType1
-                placeholder="OTP"
-                type="text"
-                keyboardType="numeric"
-                name="otp"
-                onChangeText={value => setOTP(value)}
-              />
-            </FormControl>
-          </Stack>
-          <Stack space={2}>
-            {resetPasswordLoading ? (
-              <Spinner color="secondary.500" size="lg" />
-            ) : (
-              <Button
-                size="lg"
-                background="secondary.400"
-                onPress={() => matchOTP()}
-                _pressed={{backgroundColor: 'secondary.500'}}>
-                Submit
-              </Button>
-            )}
-          </Stack>
         </Stack>
       </Center>
     </Wrapper>
