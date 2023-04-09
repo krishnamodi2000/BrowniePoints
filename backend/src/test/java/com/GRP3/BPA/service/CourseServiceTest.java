@@ -1,10 +1,9 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.exceptions.CustomizableException;
-import com.GRP3.BPA.model.User;
-import com.GRP3.BPA.model.Course;
+import com.GRP3.BPA.model.*;
+import com.GRP3.BPA.repository.CourseStudentRepository;
 import com.GRP3.BPA.request.course.CourseRequest;
-import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.CourseRepository;
 import com.GRP3.BPA.repository.TeacherRepository;
 import org.junit.jupiter.api.Assertions;
@@ -27,27 +26,35 @@ public class CourseServiceTest {
     private TeacherRepository teacherRepository;
 
     @Mock
+    private CourseStudentRepository courseStudentRepository;
+
+    @Mock
     private CourseRepository courseRepository;
 
     @InjectMocks
     private CourseServiceImpl courseService;
     private Teacher teacher;
-
+    private Student student;
     private Course course;
     private Course course1;
-    private User user;
-   // private CourseRequest courseRequest;
-    private CourseRequest courseRequest1;
+    private User userIsTeacher;
 
+    private User userIsStudent;
+
+    private CourseStudent courseStudent;
     List<Course> courses = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
-        user = new User();
+        userIsTeacher = new User();
         teacher = new Teacher();
         teacher.setTeacherId("1");
-        teacher.setUser(user);
+        teacher.setUser(userIsTeacher);
 
+        userIsStudent = new User();
+        student=new Student();
+        student.setBannerId("1");
+        student.setUser(userIsStudent);
 
 
         course = new Course();
@@ -66,6 +73,10 @@ public class CourseServiceTest {
         courses.add(course);
         courses.add(course1);
 
+        courseStudent=new CourseStudent();
+        courseStudent.setCourse(course1);
+        courseStudent.setStudent(student);
+        courseStudent.setPoints(0);
 
 
     }
@@ -170,22 +181,21 @@ public class CourseServiceTest {
         courseRequestList.add(courseRequest);
         courseRequestList.add(courseRequest1);
         List<Course> result = courseService.addCoursesForTeacher("1", courseRequestList);
-
-        for (int i = 0; i < courses.size(); i++) {
-            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
-        }
+        Assertions.assertEquals(courses,result);
     }
 
     //check this test
     @Test
     public void testRemoveCourseForTeacher() throws CustomizableException {
-        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
-        when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "1")).thenReturn(course);
+        when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "2")).thenReturn(course1);
+        when(courseStudentRepository.findByCourseCourseId("2")).thenReturn(Collections.emptyList());
 
-        courseService.removeCourseForTeacher("1", "1");
+        courseService.removeCourseForTeacher("1", "2");
 
-        verify(courseRepository, times(1)).delete(course);
+        Assertions.assertNull(courseRepository.findByCourseId("2"));
+        verify(courseRepository, times(1)).delete(course1);
     }
+
 
     //check test case
     @Test
@@ -199,19 +209,18 @@ public class CourseServiceTest {
 
     @Test
     public void testRemoveCoursesForTeacher() throws CustomizableException {
-        // Mocking the course repository to return a list of courses
-        when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1", "2"))).thenReturn(Arrays.asList(course, course1));
+        when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "1")).thenReturn(course);
+        when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "2")).thenReturn(course1);
 
-        // Calling the method being tested
-        courseService.removeCoursesForTeacher("1", Arrays.asList("1", "2"));
+        // Call method being tested
+        courseService.removeCoursesForTeacher("1", Arrays.asList("1","2"));
 
-        // Verifying that the deleteAll method was called on the course repository
-        verify(courseRepository, times(1)).deleteAll(Arrays.asList(course, course1));
+        // Verify that courses were deleted
+        verify(courseRepository, times(1)).deleteAll(courses);
     }
 
     @Test
     public void testRemoveCoursesForTeacherInvalidCourse() {
-        when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1", "3"))).thenReturn(Collections.emptyList());
 
         Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));
