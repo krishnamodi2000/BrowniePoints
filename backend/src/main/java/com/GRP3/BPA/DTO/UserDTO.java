@@ -20,6 +20,7 @@ public class UserDTO {
     }
 
     @Id
+    @Getter @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
