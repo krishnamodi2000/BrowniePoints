@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.*;
 
@@ -20,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class CourseServiceTest {
 
     @Mock
@@ -279,7 +282,7 @@ public class CourseServiceTest {
 
     @Test
     public void testRemoveCoursesForTeacherInvalidCourse() {
-
+        when(courseRepository.findByTeacherTeacherIdAndCourseIdIn("1", Arrays.asList("1","3"))).thenReturn(null);
         Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));
         });

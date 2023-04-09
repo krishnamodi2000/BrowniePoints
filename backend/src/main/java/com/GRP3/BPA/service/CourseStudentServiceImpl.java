@@ -71,7 +71,8 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         // Check if the teacher takes the course
         checkIfTeacherTakesCourse(teacherId, courseId);
 
-        checkIStudentExists(bannerId);
+        //check if the student exists
+        checkIfStudentExists(bannerId);
 
         // Check if the student is already enrolled in the course
         checkIfStudentIsEnrolledInCourse(bannerId, courseId);
@@ -108,7 +109,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
         // Check if the teacher takes the course
         checkIfTeacherTakesCourse(teacherId, courseId);
-        checkIStudentExists(bannerId);
+        checkIfStudentExists(bannerId);
         //delete the student from the course in the CourseStudent from the database
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
         if (courseStudent == null) {
@@ -148,7 +149,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             //check if student is already enrolled in the course
             checkIfStudentIsEnrolledInCourse(bannerId, courseId);
 
-            checkIStudentExists(bannerId);
+            checkIfStudentExists(bannerId);
 
             //create a new Course Student object
             CourseStudent courseStudent = new CourseStudent();
@@ -195,7 +196,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         for (String bannerId : bannerIds) {
             //add to the list to delete the student from the course in the
             // CourseStudent from the database
-            checkIStudentExists(bannerId);
+            checkIfStudentExists(bannerId);
             CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
             if (courseStudent == null) {
                 boolean status = false;
@@ -244,7 +245,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
             throw new CustomizableException(false, message);
         }
     }
-    private void checkIStudentExists(String bannerId) throws CustomizableException {
+    private void checkIfStudentExists(String bannerId) throws CustomizableException {
         Student student= studentRepository.findByBannerId(bannerId);
         if(student == null){
             boolean status = false;
