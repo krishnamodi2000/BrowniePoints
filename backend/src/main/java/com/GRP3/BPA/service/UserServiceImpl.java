@@ -110,6 +110,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         String email = confirmOTP.getEmail();
         String otp = confirmOTP.getOtp();
+        String newPassword = confirmOTP.getNewPassword();
+
         if (email == null || email.isEmpty()) {
             return new Utils("Email cannot be null or empty.", false);
         }
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             return new Utils("User not found.", false);
         } else {
             if(currentUser.getOtp().equals(otp)) {
-                return new Utils("OTP matched successfully.", true);
+                return changePassword(currentUser, newPassword);
             } else {
                 return new Utils("OTP is invalid.", false);
             }
@@ -132,25 +134,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User changePassword(String email, String newPassword) {
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be null or empty.");
-        }
-        if (!isValid(email)) {
-            throw new IllegalArgumentException("Invalid email format.");
-        }
+    public Utils changePassword(User user, String newPassword) {
         if (newPassword == null || newPassword.isEmpty()) {
-            throw new IllegalArgumentException("New password cannot be null or empty.");
+            return new Utils("New password cannot be null or empty.", false);
         }
         if (!isValidPassword(newPassword)) {
-            throw new IllegalArgumentException("New password does not meet requirements.");
+            return new Utils("New password does not meet requirements.", false);
         }
-        User user = userRepository.findByEmail(email);
-        if (user != null) {
-            user.setPassword(bcryptEncoder.encode(newPassword));
-            return userRepository.save(user);
-        }
-        return null;
+        user.setPassword(bcryptEncoder.encode(newPassword));
+        userRepository.save(user);
+        return new Utils("Password changed successfully.", true);
     }
 
 

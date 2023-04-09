@@ -10,4 +10,7 @@ public class ConfirmOTP {
 
     @Getter @Setter
     private String otp;
+
+    @Getter @Setter
+    private String newPassword;
 }
