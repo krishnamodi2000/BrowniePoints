@@ -8,7 +8,7 @@ function* getUserInfoSaga() {
     yield put({type: actionTypes.SET_USER_INFO_LOADING});
 
     const {data} = yield AxiosInstance.get('/user');
-    if (data) {
+    if (data.status) {
       yield put({
         type: actionTypes.GET_USER_INFO_SUCCESS,
         payload: data,
@@ -17,11 +17,10 @@ function* getUserInfoSaga() {
     } else {
       yield put({
         type: actionTypes.GET_USER_INFO_FAIL,
-        error: 'Message from backend',
+        error: data.message,
       });
     }
   } catch (error) {
-    console.log(error);
     yield put({
       type: actionTypes.GET_USER_INFO_FAIL,
       error: 'Something went wrong',

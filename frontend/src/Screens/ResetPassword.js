@@ -11,14 +11,15 @@ import {
 import {InputType1} from '../components/Commons/Input';
 import {useDispatch, useSelector} from 'react-redux';
 import {generateResetPasswordOTP, changePassword} from '../redux/user/actions';
+import { CustomAlert } from '../components/Commons/CustomAlert';
 
 export default function ResetPassword() {
   const dispatch = useDispatch();
-  const {resetPasswordLoading, otpGenerated, passwordReseted} = useSelector(
+  const {resetPasswordLoading, otpGenerated, passwordReseted,error,errorMessage} = useSelector(
     state => state.user,
   );
 
-  console.log(passwordReseted);
+
   const [emailId, setEmailId] = useState('');
   const [OTP, setOTP] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -43,6 +44,11 @@ export default function ResetPassword() {
           mb="5">
           Reset Password
         </Heading>
+        <CustomAlert
+            message={errorMessage}
+            open={error}
+            status="error"
+          />
         <Stack p="4" space={3} width="100%">
           {!otpGenerated ? (
             <>

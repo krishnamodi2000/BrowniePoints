@@ -8,6 +8,7 @@ const initialState = {
   role: null,
   otpGenerated: false,
   passwordReseted: false,
+  errorMessage:""
 };
 
 const user = (state = initialState, action) => {
@@ -21,6 +22,8 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         resetPasswordLoading: true,
+        error:false,
+        errorMessage:""
       };
     case actionTypes.GET_USER_INFO_SUCCESS:
       return {
@@ -58,6 +61,8 @@ const user = (state = initialState, action) => {
         ...state,
         resetPasswordLoading: false,
         otpGenerated: false,
+        error:true,
+        errorMessage:action.message
       };
     case actionTypes.RESET_PASSWORD_SUCCESS:
       return {
@@ -70,6 +75,8 @@ const user = (state = initialState, action) => {
         ...state,
         resetPasswordLoading: false,
         passwordReseted: false,
+        errorMessage:action.error,
+        error:true
       };
 
     default:
