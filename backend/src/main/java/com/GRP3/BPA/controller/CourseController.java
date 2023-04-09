@@ -64,26 +64,26 @@ public class CourseController {
             return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PostMapping("/addCourses")
-    public ResponseEntity<Object> addCourses(@RequestBody List<CourseRequest> courseRequests, @RequestHeader("Authorization") String authorizationHeader) {
-        ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
-        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
-        }
-        String teacherId = teacherIdResponse.getBody();
-        try {
-            List<Course> courses = courseService.addCoursesForTeacher(teacherId, courseRequests);
-            CoursesResponse response = new CoursesResponse();
-            response.setStatus(true);
-            List<CourseRequest> courseRequestList = addCourseRequests(courses);
-            response.setCourseRequestList(courseRequestList);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (CustomizableException e) {
-            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
-            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-        }
-    }
+//
+//    @PostMapping("/addCourses")
+//    public ResponseEntity<Object> addCourses(@RequestBody List<CourseRequest> courseRequests, @RequestHeader("Authorization") String authorizationHeader) {
+//        ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
+//        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
+//            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
+//        }
+//        String teacherId = teacherIdResponse.getBody();
+//        try {
+//            List<Course> courses = courseService.addCoursesForTeacher(teacherId, courseRequests);
+//            CoursesResponse response = new CoursesResponse();
+//            response.setStatus(true);
+//            List<CourseRequest> courseRequestList = addCourseRequests(courses);
+//            response.setCourseRequestList(courseRequestList);
+//            return new ResponseEntity<>(response, HttpStatus.CREATED);
+//        } catch (CustomizableException e) {
+//            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+//            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @DeleteMapping("/removeCourse")
     public ResponseEntity<Object> removeCourse(@RequestBody CourseIdRequest courseId, @RequestHeader("Authorization") String authorizationHeader) {
@@ -106,23 +106,24 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping("/removeCourses")
-    public ResponseEntity<Object> removeCourses(@RequestBody CourseIdsRequest courseIdsList, @RequestHeader("Authorization") String authorizationHeader) {
-        ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
-        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
-        }
-        String teacherId = teacherIdResponse.getBody();
-        try {
-            courseService.removeCoursesForTeacher(teacherId, courseIdsList.getCourseIds());
-            CourseResponse response = new CourseResponse();
-            response.setStatus(true);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (CustomizableException e) {
-            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
-            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-        }
-    }
+//
+//    @DeleteMapping("/removeCourses")
+//    public ResponseEntity<Object> removeCourses(@RequestBody CourseIdsRequest courseIdsList, @RequestHeader("Authorization") String authorizationHeader) {
+//        ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
+//        if (teacherIdResponse.getStatusCode() != HttpStatus.OK) {
+//            return new ResponseEntity<>(teacherIdResponse.getBody(), teacherIdResponse.getStatusCode());
+//        }
+//        String teacherId = teacherIdResponse.getBody();
+//        try {
+//            courseService.removeCoursesForTeacher(teacherId, courseIdsList.getCourseIds());
+//            CourseResponse response = new CourseResponse();
+//            response.setStatus(true);
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } catch (CustomizableException e) {
+//            ExceptionResponse exceptionResponse=new ExceptionResponse(e.isStatus(),e.getMessage());
+//            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+//        }
+//    }
     @PutMapping("/updateCourse")
     public ResponseEntity<Object> updateCourse(@RequestBody CourseRequest courseRequest, @RequestHeader("Authorization") String authorizationHeader){
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
