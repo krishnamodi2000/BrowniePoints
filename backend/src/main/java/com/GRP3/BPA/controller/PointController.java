@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/teachers/points/")
+@RequestMapping("/api/teachers/points")
 public class PointController {
     @Autowired
     private PointServiceImpl pointService;
 
-    @PutMapping("{courseId}/{studentId}")
+    @PutMapping("/{courseId}/{studentId}")
     public ResponseEntity<Object> incrementPoints(@PathVariable("studentId") String studentId, @PathVariable("courseId") String courseId) {
         try {
 
@@ -29,7 +29,7 @@ public class PointController {
         }
     }
 
-    @GetMapping("{courseId}")
+    @GetMapping("/{courseId}")
     public ResponseEntity<Object> getPointsByCourse(@PathVariable("courseId") String courseId) {
         try {
             CourseStudentsResponse courseStudentsResponse = pointService.dataOfStudent(courseId);
@@ -39,7 +39,7 @@ public class PointController {
         }
     }
 
-    @GetMapping("{bannerId}")
+    @GetMapping("/student/{bannerId}")
     public ResponseEntity<Object> getPointsByBannerId(@PathVariable("bannerId") String bannerId) {
         try {
             List<StudentPointsAllSubject> studentPointsByBannerId = pointService.pointsAllSubject(bannerId);
