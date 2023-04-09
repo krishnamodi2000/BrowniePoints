@@ -130,19 +130,13 @@ const Signup = ({navigation}) => {
             setShowSuccessModal(true);
           }
         })
-        .catch(e => {
-          console.log(e, 'A');
+        .catch(() => {
           setAlert('Unable to register the user.');
         })
         .finally(() => {
           setLoader(false);
         });
     }
-  };
-
-  const handleLoginPress = () => {
-    navigateToLogin();
-    resetState();
   };
 
   const navigateToLogin = () => {
@@ -152,6 +146,11 @@ const Signup = ({navigation}) => {
   const resetState = () => {
     setErrors({...dataObj});
     setFormData({...dataObj});
+  };
+
+  const handleLoginPress = () => {
+    navigateToLogin();
+    resetState();
   };
 
   return (

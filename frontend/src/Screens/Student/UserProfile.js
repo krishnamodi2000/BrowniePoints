@@ -1,21 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Box, Center, Text, Button, Avatar, FormControl} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
 import Header from '../../components/Header/Header';
+import {InputType1} from '../../components/Commons/Input';
 
 const UserProfile = () => {
   const {user} = useSelector(state => state.user);
   const navigation = useNavigation();
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
+  const [profile, setProfile] = useState({firstName: '', lastName: ''});
 
   const generateInitials = () =>
     user.firstName[0].toUpperCase() + user.lastName[0];
 
   const handleUpdateProfile = () => {
-    // Alert.alert('Are you sure you want to change your information');
     navigation.navigate('UpdateProfile', {user});
   };
 
@@ -23,6 +22,14 @@ const UserProfile = () => {
     {placeholder: 'First Name', type: 'text', name: 'firstName'},
     {placeholder: 'Last Name', type: 'text', name: 'lastName'},
   ];
+
+  const handleTextChange = (name, value) => {
+    setProfile(current => ({...current, [name]: value}));
+  };
+
+  useEffect(() => {
+    setProfile({firstName: user.firstName, lastName: user.lastName});
+  }, [user]);
 
   return (
     <Wrapper>
@@ -34,25 +41,27 @@ const UserProfile = () => {
           </Avatar>
           <Box
             bg="#373737"
-            p={10}
+            p={6}
+            width="80%"
             borderRadius={8}
             borderWidth={1}
             borderColor="white"
             mt={10}>
-            {inputFields.map(({placeholder, type, name}) => (
-              <FormControl key={name} isDisabled>
+            {inputFields.map((input, key) => (
+              <FormControl key={key} isDisabled>
                 <FormControl.Label
                   _text={{
                     color: 'secondary.100',
                     fontSize: 18,
                     fontWeight: 'bold',
                   }}>
-                  {placeholder}:
+                  {input.placeholder}
                 </FormControl.Label>
-                <FormControl.Input
-                  value={user[name]}
-                  borderColor="white"
-                  _focus={{borderColor: 'secondary.200'}}
+                <InputType1
+                  {...input}
+                  value={profile[input.name] || ''}
+                  onChangeText={value => handleTextChange(input.name, value)}
+                  style={{color: 'white'}}
                 />
               </FormControl>
             ))}
@@ -61,9 +70,7 @@ const UserProfile = () => {
             <Button
               onPress={handleUpdateProfile}
               _pressed={{backgroundColor: 'secondary.400'}}>
-              <Text color="white" fontWeight="bold">
-                Update Profile
-              </Text>
+              Update Profile
             </Button>
           </Box>
         </Center>

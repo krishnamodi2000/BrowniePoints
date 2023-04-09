@@ -27,6 +27,7 @@ import {
   removeStudentFromCourse,
 } from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
+import {CustomAlert} from '../../components/Commons/CustomAlert';
 
 const inputFields = [
   {
@@ -60,6 +61,7 @@ export default function EditCourse({route}) {
   const [showDeleteCourseSuccessModal, setShowDeleteCourseSuccessModal] =
     useState(false);
   const [removedStudentBannerId, setRemovedStudentBannerId] = useState('');
+  const [alert, setAlert] = useState('');
 
   const handleEdit = () => {
     setDisabled(false);
@@ -115,7 +117,9 @@ export default function EditCourse({route}) {
           }),
         );
       });
-    } catch (err) {}
+    } catch (err) {
+      setAlert('Unable to read the ');
+    }
   };
 
   const handleStudentRemove = studentId => {
@@ -162,6 +166,12 @@ export default function EditCourse({route}) {
   return (
     <Wrapper>
       <Header title="Edit Course" />
+      <CustomAlert
+        message={alert}
+        open={Boolean(alert)}
+        status="error"
+        onClose={() => setAlert('')}
+      />
       <Stack p="4" space={3} width="100%">
         {inputFields.map((inputField, key) => (
           <Stack space={2} key={key}>

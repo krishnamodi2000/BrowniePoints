@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Provider, useDispatch, useSelector} from 'react-redux';
-import {useEffect} from 'react';
 import theme from './theme';
 import Signup from './Screens/Signup';
 import Home from './Screens/Home';

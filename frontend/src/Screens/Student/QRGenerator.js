@@ -1,5 +1,5 @@
-import {Button, Box, Text, VStack, Fab, Icon, View, Center} from 'native-base';
-import {useDispatch, useSelector} from 'react-redux';
+import {Box, Center} from 'native-base';
+import {useSelector} from 'react-redux';
 import Qrcode from 'react-native-qrcode-svg';
 import React from 'react';
 import Header from '../../components/Header/Header';

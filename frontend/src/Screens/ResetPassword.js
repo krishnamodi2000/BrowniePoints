@@ -39,10 +39,6 @@ export default function ResetPassword() {
     newPassword: '',
   });
 
-  const generateOTP = () => {
-    if (isEmailValid()) dispatch(generateResetPasswordOTP(emailId));
-  };
-
   const isEmailValid = () => {
     const errorObj = {
       email: '',
@@ -58,6 +54,10 @@ export default function ResetPassword() {
 
     setErrors(errorObj);
     return isValid;
+  };
+
+  const generateOTP = () => {
+    if (isEmailValid()) dispatch(generateResetPasswordOTP(emailId));
   };
 
   const isOTPandPasswordValid = () => {

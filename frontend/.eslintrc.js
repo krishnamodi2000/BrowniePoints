@@ -11,7 +11,6 @@ module.exports = {
   },
   plugins: ['react', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
     'react/prop-types': ['off'],
     'no-param-reassign': ['off'],
     'no-plusplus': ['off'],
@@ -24,7 +23,6 @@ module.exports = {
     'arrow-body-style': 'warn',
     'no-nested-ternary': 0,
     'no-unused-vars': 'warn',
-    'import/prefer-default-export': 'warn',
     'import/prefer-default-export': 0,
   },
 };
