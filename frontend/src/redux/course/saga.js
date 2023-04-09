@@ -114,10 +114,48 @@ function* addStudentsToCourseSaga({courseId, bannerIds, successCallBack}) {
   }
 }
 
+function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
+  try {
+    yield put({type: actionTypes.SET_COURSE_LOADING});
+
+    const {data} = yield AxiosInstance.delete(
+      `/teachers/courses/removeStudent`,
+      {
+        data: {courseId, bannerId},
+      },
+    );
+
+    if (data.status) {
+      yield put({
+        type: actionTypes.REMOVE_STUDENT_FROM_COURSE_SUCCESS,
+        payload: data.data,
+      });
+
+      yield put({type: actionTypes.GET_STUDENTS_BY_COURSE, courseId});
+      successCallback(bannerId);
+    } else {
+      yield put({
+        type: actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL,
+        error: 'Message from backend',
+      });
+    }
+  } catch (error) {
+    console.log(error.message, JSON.stringify(error));
+    yield put({
+      type: actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL,
+      error: 'Something went wrong',
+    });
+  }
+}
+
 function* courseSaga() {
   yield all([
     yield takeLatest(actionTypes.GET_COURSES, getCoursesSaga),
     yield takeLatest(actionTypes.ADD_COURSE, addCouseSaga),
+    yield takeLatest(
+      actionTypes.REMOVE_STUDENT_FROM_COURSE,
+      removeStudentFromCourseSaga,
+    ),
     yield takeLatest(
       actionTypes.GET_STUDENTS_BY_COURSE,
       getStudentsByCourseSaga,

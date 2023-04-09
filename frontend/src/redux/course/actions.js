@@ -31,3 +31,14 @@ export const addStudentsToCourse = (courseId, bannerIds, successCallBack) => ({
   bannerIds,
   successCallBack,
 });
+
+export const removeStudentFromCourse = (
+  courseId,
+  bannerId,
+  successCallback,
+) => ({
+  type: actionTypes.REMOVE_STUDENT_FROM_COURSE,
+  courseId,
+  successCallback,
+  bannerId,
+});

@@ -60,6 +60,12 @@ const courses = (state = initialState, action) => {
     case actionTypes.ADD_STUDENTS_TO_COURSE_FAIL:
       return {...state, studentAdded: [], loading: false, error: true};
 
+    case actionTypes.REMOVE_STUDENT_FROM_COURSE_SUCCESS:
+      return {...state, loading: false};
+
+    case actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL:
+      return {...state, loading: false, error: true};
+
     default:
       return state;
   }

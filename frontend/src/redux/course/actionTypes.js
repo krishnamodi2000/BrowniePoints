@@ -1,25 +1,74 @@
-export const SET_COURSE_LOADING = 'SET_COURSE_LOADING';
+import * as actionTypes from './actionTypes';
 
-export const GET_COURSES = 'GET_COURSES';
-export const GET_COURSES_SUCCESS = 'GET_COURSES_SUCCESS';
-export const GET_COURSES_FAIL = 'GET_COURSES_FAIL';
+const initialState = {
+  courses: [],
+  courseDetails: null,
+  error: null,
+  loading: false,
+  students: [],
+  studentsAdded: [],
+};
 
-export const ADD_COURSE = 'ADD_COURSE';
-export const ADD_COURSE_SUCCESS = 'ADD_COURSE_SUCCESS';
-export const ADD_COURSE_FAIL = 'ADD_COURSE_FAIL';
+const courses = (state = initialState, action) => {
+  switch (action.type) {
+    case actionTypes.SET_COURSE_LOADING:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+        studentAdded: [],
+        students: [],
+      };
+    case actionTypes.GET_COURSES_SUCCESS:
+      return {
+        ...state,
+        courses: action.payload,
+        loading: false,
+      };
+    case actionTypes.GET_COURSES_FAIL:
+      return {
+        ...state,
+        courses: [],
+        loading: false,
+        error: true,
+      };
 
-export const UPDATE_COURSE = 'GUPDATE_COURSE';
-export const UPDATE_COURSE_SUCCESS = 'UPDATE_COURSE_SUCCESS';
-export const UPDATE_COURSE_FAIL = 'UPDATE_COURSE_FAIL';
+    case actionTypes.ADD_COURSE_SUCCESS:
+      return {
+        ...state,
+        courseDetails: action.payload,
+        loading: false,
+      };
 
-export const DELETE_COURSE = 'DELETE_COURSE';
-export const DELETE_COURSE_SUCCESS = 'DELETE_COURSE_SUCCESS';
-export const DELETE_COURSE_FAIL = 'DELETE_COURSE_FAIL';
+    case actionTypes.ADD_COURSE_FAIL:
+      return {
+        ...state,
+        courseDetails: null,
+        loading: false,
+        error: false,
+      };
 
-export const GET_STUDENTS_BY_COURSE = 'GET_STUDENTS_BY_COURSE';
-export const GET_STUDENTS_BY_COURSE_SUCCESS = 'GET_STUDENTS_BY_COURSE_SUCCESS';
-export const GET_STUDENTS_BY_COURSE_FAIL = 'GET_STUDENTS_BY_COURSE_FAIL';
+    case actionTypes.GET_STUDENTS_BY_COURSE_SUCCESS:
+      return {...state, students: action.payload, loading: false};
 
-export const ADD_STUDENTS_TO_COURSE = 'ADD_STUDENTS_TO_COURSE';
-export const ADD_STUDENTS_TO_COURSE_SUCCESS = 'ADD_STUDENTS_TO_COURSE_SUCCESS';
-export const ADD_STUDENTS_TO_COURSE_FAIL = 'ADD_STUDENTS_TO_COURSE_FAIL';
+    case actionTypes.GET_STUDENTS_BY_COURSE_FAIL:
+      return {...state, students: [], loading: false, error: true};
+
+    case actionTypes.ADD_STUDENTS_TO_COURSE_SUCCESS:
+      return {...state, loading: false, studentAdded: action.payload};
+
+    case actionTypes.ADD_STUDENTS_TO_COURSE_FAIL:
+      return {...state, studentAdded: [], loading: false, error: true};
+
+    case actionTypes.REMOVE_STUDENT_FROM_COURSE_SUCCESS:
+      return {...state, loading: false};
+
+    case actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL:
+      return {...state, loading: false, error: true};
+
+    default:
+      return state;
+  }
+};
+
+export default courses;
