@@ -19,6 +19,7 @@ import UpdateProfile from './Screens/Student/UpdateProfile';
 import QRgenerator from './Screens/Student/QRGenerator';
 import Scanner from './Screens/Teacher/Scanner';
 import CourseInfo from './Screens/Teacher/CourseInfo';
+import ResetPassword from './Screens/ResetPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ const noAuthComponents = [
   {name: 'Home', component: Home},
   {name: 'Signup', component: Signup},
   {name: 'Login', component: Login},
+  {name: 'Reset Password', component: ResetPassword},
 ];
 
 const teacherComponents = [

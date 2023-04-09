@@ -8,7 +8,7 @@ function* getUserInfoSaga() {
     yield put({type: actionTypes.SET_USER_INFO_LOADING});
 
     const {data} = yield AxiosInstance.get('/user');
-    if (data) {
+    if (data.status) {
       yield put({
         type: actionTypes.GET_USER_INFO_SUCCESS,
         payload: data,
@@ -17,14 +17,62 @@ function* getUserInfoSaga() {
     } else {
       yield put({
         type: actionTypes.GET_USER_INFO_FAIL,
-        error: 'Message from backend',
+        error: data.message,
       });
     }
   } catch (error) {
-    console.log(error);
     yield put({
       type: actionTypes.GET_USER_INFO_FAIL,
       error: 'Something went wrong',
+    });
+  }
+}
+
+function* generateResetPasswordOTPSaga({email}) {
+  try {
+    yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
+    const {data} = yield AxiosInstance.post('/auth/reset-password', {email});
+    if (data.status) {
+      yield put({
+        type: actionTypes.GENERATE_RESET_PASSWORD_OTP_SUCCESS,
+      });
+    } else {
+      yield put({
+        type: actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL,
+        error: data.message,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: actionTypes.GENERATE_RESET_PASSWORD_OTP_FAIL,
+      error: error?.response?.data?.message || 'Something went wrong',
+    });
+  }
+}
+
+function* resetPasswordSaga({email, otp, newPassword, success}) {
+  try {
+    yield put({type: actionTypes.SET_RESET_PASSWORD_LOADING});
+    const {data} = yield AxiosInstance.post('/auth/reset-password-matchotp', {
+      email,
+      otp,
+      newPassword,
+    });
+    if (data.status) {
+      yield put({
+        type: actionTypes.RESET_PASSWORD_SUCCESS,
+      });
+      success();
+    } else {
+      yield put({
+        type: actionTypes.RESET_PASSWORD_FAIL,
+        error: data.message,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: actionTypes.RESET_PASSWORD_FAIL,
+      error: error?.response?.data?.message || 'Something went wrong',
     });
   }
 }
@@ -42,6 +90,11 @@ function* userSaga() {
   yield all([
     yield takeLatest(actionTypes.GET_USER_INFO, getUserInfoSaga),
     yield takeLatest(actionTypes.LOGOUT_USER, logoutUserSaga),
+    yield takeLatest(
+      actionTypes.GENERATE_RESET_PASSWORD_OTP,
+      generateResetPasswordOTPSaga,
+    ),
+    yield takeLatest(actionTypes.RESET_PASSWORD, resetPasswordSaga),
   ]);
 }
 

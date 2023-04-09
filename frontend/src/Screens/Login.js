@@ -9,6 +9,7 @@ import {
   Spinner,
   FormControl,
   WarningOutlineIcon,
+  Text,
 } from 'native-base';
 import {validateEmail} from '../helpers/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,6 +39,7 @@ const Login = ({navigation}) => {
     emailId: '',
     password: '',
   });
+
   const [alert, setAlert] = useState('');
 
   const isValidated = () => {
@@ -84,6 +86,11 @@ const Login = ({navigation}) => {
         });
     }
   };
+
+  const handleResetPassword = () => {
+    navigation.navigate('Reset Password');
+  };
+
   return (
     <Wrapper>
       <Center height="100%">
@@ -124,10 +131,17 @@ const Login = ({navigation}) => {
                 background="secondary.400"
                 onPress={() => handleSubmit()}
                 _pressed={{backgroundColor: 'secondary.500'}}>
-                login
+                Login
               </Button>
             )}
           </Stack>
+          <Button
+            size="sm"
+            // background=""
+            onPress={() => handleResetPassword()}
+            _pressed={{backgroundColor: 'secondary.500'}}>
+            Reset Password
+          </Button>
         </Stack>
       </Center>
     </Wrapper>
