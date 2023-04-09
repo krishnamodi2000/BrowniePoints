@@ -36,7 +36,7 @@ public class CourseServiceTest {
     private Course course;
     private Course course1;
     private User user;
-    private CourseRequest courseRequest;
+   // private CourseRequest courseRequest;
     private CourseRequest courseRequest1;
 
     List<Course> courses = new ArrayList<>();
@@ -47,6 +47,8 @@ public class CourseServiceTest {
         teacher = new Teacher();
         teacher.setTeacherId("1");
         teacher.setUser(user);
+
+
 
         course = new Course();
         course.setCourseId("1");
@@ -65,31 +67,45 @@ public class CourseServiceTest {
         courses.add(course1);
 
 
+
     }
 
     @Test
     public void getCoursesForTeacher() throws CustomizableException {
-
+        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
         when(courseRepository.findByTeacherTeacherId("1")).thenReturn(courses);
-
+        // Call the service method
         List<Course> result = courseService.getCoursesForTeacher("1");
 
-        Assertions.assertEquals(courses,result);
-        for (int i = 0; i < courses.size(); i++) {
-            Assertions.assertEquals(courses.get(i).getCourseId(), result.get(i).getCourseId());
-        }
-        verify(courseRepository, times(1)).findByTeacherTeacherId(teacher.getTeacherId());
+        // Verify the result
+        Assertions.assertEquals(courses, result, "The returned courses should match the expected courses.");
 
+        // Verify that the repository method was called once with the correct argument
+        verify(courseRepository, times(1)).findByTeacherTeacherId(teacher.getTeacherId());
     }
 
     @Test
-    public void testGetCoursesForTeacherEmpty() throws CustomizableException {
-        when(courseRepository.findByTeacherTeacherId("1")).thenReturn(new ArrayList<>());
-        Assertions.assertThrows(CustomizableException.class, () -> {
-            courseService.getCoursesForTeacher(teacher.getTeacherId());
-        });
+    public void testGetCoursesIfTeacherDoesNotExists(){
+        when(teacherRepository.findByTeacherId("1")).thenReturn(null);
+
+        // Call the service method and expect an exception to be thrown
+        Assertions.assertThrows(CustomizableException.class, () -> courseService.getCoursesForTeacher("1"),
+                "The method should throw a CustomizableException when the teacher doesn't take any courses.");
+
+        // Verify that the repository method was called once with the correct argument
+        verify(courseRepository,never()).findByTeacherTeacherId("1");
     }
 
+    @Test
+    void getCoursesForTeacherWhenTeacherHasNoCourses() {
+        // Arrange
+        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
+        when(courseRepository.findByTeacherTeacherId(teacher.getTeacherId())).thenReturn(new ArrayList<>());
+
+        // Act & Assert
+        Assertions.assertThrows(CustomizableException.class, () -> courseService.getCoursesForTeacher(teacher.getTeacherId()));
+        verify(courseRepository, times(1)).findByTeacherTeacherId(teacher.getTeacherId());
+    }
     @Test
     public void testAddCourseForTeacher() throws CustomizableException {
         CourseRequest courseRequest = new CourseRequest();
@@ -106,7 +122,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    public void testAddCourseForTeacherInvalidTeacher() throws CustomizableException {
+    public void testAddCourseForTeacherIfTeacherDoesNotExists() throws CustomizableException {
         CourseRequest courseRequest = new CourseRequest();
         courseRequest.setCourseId("3");
         courseRequest.setCourseName("Communicating Computer Science Ideas");
@@ -119,18 +135,35 @@ public class CourseServiceTest {
     }
 
     @Test
+    public void testAddCourseForTeacherIfCourseExists() throws CustomizableException {
+        CourseRequest courseRequest = new CourseRequest();
+        courseRequest.setCourseId("2");
+        courseRequest.setCourseName("Data Management");
+        courseRequest.setCourseDescription("A course on Data Management");
+
+        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
+        when(courseRepository.findByCourseId(courseRequest.getCourseId())).thenReturn(course1);
+
+        // Call the service method and expect an exception to be thrown
+        Assertions.assertThrows(CustomizableException.class, () -> courseService.addCourseForTeacher("1", courseRequest),
+                "The method should throw a CustomizableException when trying to add a course that already exists.");
+
+        // Verify that the repository method was called once with the correct argument
+        verify(courseRepository, times(1)).findByCourseId(courseRequest.getCourseId());
+    }
+    @Test
     public void testAddCoursesForTeacher() throws CustomizableException {
 
         when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
         when(courseRepository.saveAll(any(List.class))).thenReturn(courses);
         List<CourseRequest> courseRequestList = new ArrayList<>();
 
-        courseRequest = new CourseRequest();
+        CourseRequest courseRequest = new CourseRequest();
         courseRequest.setCourseId("1");
         courseRequest.setCourseName("ASDC");
         courseRequest.setCourseDescription("A course on ASDC");
 
-        courseRequest1 = new CourseRequest();
+        CourseRequest courseRequest1 = new CourseRequest();
         courseRequest1.setCourseId("2");
         courseRequest1.setCourseName("Data Management");
         courseRequest1.setCourseDescription("A course on Data Management");
@@ -146,6 +179,7 @@ public class CourseServiceTest {
     //check this test
     @Test
     public void testRemoveCourseForTeacher() throws CustomizableException {
+        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "1")).thenReturn(course);
 
         courseService.removeCourseForTeacher("1", "1");
