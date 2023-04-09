@@ -17,18 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
+
+    @Autowired
     private UserService userService;
 
     @Autowired
     private EmailValidator emailValidator;
-
-
-    public UserController (UserService userService)
-    {
-        super();
-        this.userService = userService;
-    }
-
 
     @PostMapping(value = "/api/auth/register")
     public ResponseEntity<?> saveUser(@RequestBody User user) {
@@ -37,7 +31,7 @@ public class UserController {
                 throw new IllegalArgumentException("Invalid email address.");
             }
             userService.saveUser(user);
-            Utils successResponse = new Utils("User successfully registered.");
+            Utils successResponse = new Utils("User successfully registered.", true);
             return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
         }
         catch (RuntimeException e){

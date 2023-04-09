@@ -22,33 +22,21 @@ public class ResetPasswordController {
 
     @PostMapping("/api/auth/reset-password")
     public ResponseEntity<?> sendOtp(@RequestBody User user) {
-        System.out.println(user.getEmail());
-        user = userService.findByEmail(user.getEmail());
-        if (user == null) {
-            return ResponseEntity.badRequest().body("User not found.");
+        Utils resetPasswordResponse = userService.validateResetPassword(user);
+        if(resetPasswordResponse.isStatus()) {
+            return new ResponseEntity<>(resetPasswordResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(resetPasswordResponse, HttpStatus.BAD_REQUEST);
         }
-        user = userService.updateOTP(user);
-        emailService.sendOtp(user.getEmail(), user.getOtp());
-        Utils successResponse = new Utils("OTP sent to " + user.getEmail());
-        return new ResponseEntity<>(successResponse, HttpStatus.OK);
-//        return ResponseEntity.ok("OTP sent to " + user.getEmail());
-//        return "OTP sent to " + email;
     }
 
     @PostMapping("/api/auth/reset-password-matchotp")
     public ResponseEntity<?> matchOtp(@RequestBody ConfirmOTP confirmOTP) {
-        boolean isOtpMatched = false;
-        User user = userService.findByEmail(confirmOTP.getEmail());
-        if (user != null) {
-            isOtpMatched = user.getOtp().equals(confirmOTP.getOtp());
-        }
-        if (isOtpMatched) {
-            Utils successResponse = new Utils("OTP matched successfully.");
-            return new ResponseEntity<>(successResponse, HttpStatus.OK);
-        }
-        else {
-            Utils errorResponse =new Utils("Invalid OTP.");
-            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        Utils response = userService.matchOtp(confirmOTP);
+        if(response.isStatus()) {
+            return new ResponseEntity<>(userService.matchOtp(confirmOTP), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(userService.matchOtp(confirmOTP), HttpStatus.BAD_REQUEST);
         }
     }
 }
