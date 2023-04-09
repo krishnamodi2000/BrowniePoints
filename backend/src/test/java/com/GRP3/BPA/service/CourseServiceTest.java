@@ -184,6 +184,56 @@ public class CourseServiceTest {
         Assertions.assertEquals(courses,result);
     }
 
+    @Test
+    public void testAddCoursesForTeacherIfTeacherDoesNotExists() throws CustomizableException {
+        List<CourseRequest> courseRequestList = new ArrayList<>();
+
+        CourseRequest courseRequest = new CourseRequest();
+        courseRequest.setCourseId("1");
+        courseRequest.setCourseName("ASDC");
+        courseRequest.setCourseDescription("A course on ASDC");
+
+        CourseRequest courseRequest1 = new CourseRequest();
+        courseRequest1.setCourseId("2");
+        courseRequest1.setCourseName("Data Management");
+        courseRequest1.setCourseDescription("A course on Data Management");
+        courseRequestList.add(courseRequest);
+        courseRequestList.add(courseRequest1);
+
+        when(teacherRepository.findByTeacherId("1")).thenReturn(null);
+        Assertions.assertThrows(CustomizableException.class, () -> {
+            courseService.addCoursesForTeacher("1", courseRequestList);
+        });
+    }
+
+    @Test
+    public void testAddCoursesForTeacherIfCourseExists() throws CustomizableException {
+        List<CourseRequest> courseRequestList = new ArrayList<>();
+
+        CourseRequest courseRequest = new CourseRequest();
+        courseRequest.setCourseId("1");
+        courseRequest.setCourseName("ASDC");
+        courseRequest.setCourseDescription("A course on ASDC");
+
+        CourseRequest courseRequest1 = new CourseRequest();
+        courseRequest1.setCourseId("2");
+        courseRequest1.setCourseName("Data Management");
+        courseRequest1.setCourseDescription("A course on Data Management");
+        courseRequestList.add(courseRequest);
+        courseRequestList.add(courseRequest1);
+
+        when(teacherRepository.findByTeacherId("1")).thenReturn(teacher);
+        when(courseRepository.findByCourseId(courseRequest.getCourseId())).thenReturn(course);
+        when(courseRepository.findByCourseId(courseRequest.getCourseId())).thenReturn(course1);
+
+        // Call the service method and expect an exception to be thrown
+        Assertions.assertThrows(CustomizableException.class, () -> courseService.addCoursesForTeacher("1", courseRequestList),
+                "The method should throw a CustomizableException when trying to add a course that already exists.");
+
+        // Verify that the repository method was called once with the correct argument
+        verify(courseRepository, times(1)).findByCourseId(courseRequest.getCourseId());
+    }
+
     //check this test
     @Test
     public void testRemoveCourseForTeacher() throws CustomizableException {
@@ -208,6 +258,14 @@ public class CourseServiceTest {
     }
 
     @Test
+    public void testRemoveCourseForTeacherInvalidTeacher() {
+        Assertions.assertThrows(CustomizableException.class, () -> {
+            courseService.removeCourseForTeacher("1", "2");
+        });
+
+    }
+
+    @Test
     public void testRemoveCoursesForTeacher() throws CustomizableException {
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "1")).thenReturn(course);
         when(courseRepository.findByTeacherTeacherIdAndCourseId("1", "2")).thenReturn(course1);
@@ -224,6 +282,15 @@ public class CourseServiceTest {
 
         Assertions.assertThrows(CustomizableException.class, () -> {
             courseService.removeCoursesForTeacher("1", Arrays.asList("1", "3"));
+        });
+
+    }
+
+    @Test
+    public void testRemoveCoursesForTeacherInvalidTeacher() {
+
+        Assertions.assertThrows(CustomizableException.class, () -> {
+            courseService.removeCoursesForTeacher("1", Arrays.asList("1", "2"));
         });
 
     }

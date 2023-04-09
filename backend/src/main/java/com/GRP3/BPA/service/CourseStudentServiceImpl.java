@@ -71,6 +71,8 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         // Check if the teacher takes the course
         checkIfTeacherTakesCourse(teacherId, courseId);
 
+        checkIStudentExists(bannerId);
+
         // Check if the student is already enrolled in the course
         checkIfStudentIsEnrolledInCourse(bannerId, courseId);
 
@@ -106,7 +108,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
         // Check if the teacher takes the course
         checkIfTeacherTakesCourse(teacherId, courseId);
-
+        checkIStudentExists(bannerId);
         //delete the student from the course in the CourseStudent from the database
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
         if (courseStudent == null) {
@@ -145,6 +147,8 @@ public class CourseStudentServiceImpl implements CourseStudentService {
 
             //check if student is already enrolled in the course
             checkIfStudentIsEnrolledInCourse(bannerId, courseId);
+
+            checkIStudentExists(bannerId);
 
             //create a new Course Student object
             CourseStudent courseStudent = new CourseStudent();
@@ -191,6 +195,7 @@ public class CourseStudentServiceImpl implements CourseStudentService {
         for (String bannerId : bannerIds) {
             //add to the list to delete the student from the course in the
             // CourseStudent from the database
+            checkIStudentExists(bannerId);
             CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
             if (courseStudent == null) {
                 boolean status = false;
@@ -232,10 +237,19 @@ public class CourseStudentServiceImpl implements CourseStudentService {
      */
 
     private void checkIfStudentIsEnrolledInCourse(String bannerId, String courseId) throws CustomizableException {
+
         CourseStudent courseStudent = courseStudentRepository.findByStudentBannerIdAndCourseCourseId(bannerId, courseId);
         if (courseStudent != null) {
             String message = "Student with ID " + bannerId + " taking course with courseID " + courseId + " already exists.";
             throw new CustomizableException(false, message);
+        }
+    }
+    private void checkIStudentExists(String bannerId) throws CustomizableException {
+        Student student= studentRepository.findByBannerId(bannerId);
+        if(student == null){
+            boolean status = false;
+            String message = "The student " + bannerId + " does not exists and ";
+            throw  new CustomizableException(status,message);
         }
     }
 
