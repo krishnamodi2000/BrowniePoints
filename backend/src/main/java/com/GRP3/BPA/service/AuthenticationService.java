@@ -1,7 +1,7 @@
 package com.GRP3.BPA.service;
 
-import com.GRP3.BPA.model.AuthenticationRequest;
-import com.GRP3.BPA.model.AuthenticationResponse;
+import com.GRP3.BPA.request.authentication.AuthenticationRequest;
+import com.GRP3.BPA.response.authentication.AuthenticationResponse;
 import com.GRP3.BPA.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

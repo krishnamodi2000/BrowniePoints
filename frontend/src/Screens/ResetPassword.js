@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Wrapper from '../wrapper/Wrapper';
 import {
   Button,
   Center,
@@ -9,15 +8,16 @@ import {
   Stack,
   WarningOutlineIcon,
 } from 'native-base';
-import {InputType1} from '../components/Commons/Input';
 import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import Wrapper from '../wrapper/Wrapper';
+import {InputType1} from '../components/Commons/Input';
 import {
   generateResetPasswordOTP,
   changePassword,
   resetPasswordChangeFlow,
 } from '../redux/user/actions';
 import {CustomAlert} from '../components/Commons/CustomAlert';
-import {useNavigation} from '@react-navigation/native';
 import CustomModal from '../components/Commons/CustomModal';
 import {validateEmail} from '../helpers/functions';
 
@@ -39,10 +39,6 @@ export default function ResetPassword() {
     newPassword: '',
   });
 
-  const generateOTP = () => {
-    if (isEmailValid()) dispatch(generateResetPasswordOTP(emailId));
-  };
-
   const isEmailValid = () => {
     const errorObj = {
       email: '',
@@ -58,6 +54,10 @@ export default function ResetPassword() {
 
     setErrors(errorObj);
     return isValid;
+  };
+
+  const generateOTP = () => {
+    if (isEmailValid()) dispatch(generateResetPasswordOTP(emailId));
   };
 
   const isOTPandPasswordValid = () => {

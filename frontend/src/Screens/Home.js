@@ -1,10 +1,9 @@
 import React from 'react';
+import {Center, Image, VStack, Text, Button} from 'native-base';
 import Wrapper from '../wrapper/Wrapper';
 import Logo from '../assets/Logo.png';
-import {Center, Image, VStack, Text, Button} from 'native-base';
 
-const Home = ({navigation}) => {
-  return (
+const Home = ({navigation}) => (
     <Wrapper>
       <Center style={{height: '100%'}}>
         <Image
@@ -44,6 +43,5 @@ const Home = ({navigation}) => {
       </VStack>
     </Wrapper>
   );
-};
 
 export default Home;

@@ -53,7 +53,7 @@ export default function HomeScreen({navigation}) {
       <Header
         title={user.firstName}
         menuItemsList={[
-          {name: 'Profile', onPress: () => console.log('Profile Clicked')},
+          // {name: 'Profile', onPress: () => console.log('Profile Clicked')},
           {name: 'Add Course', onPress: () => navigateToCourse()},
           {name: 'Logout', onPress: () => logout()},
         ]}
@@ -87,39 +87,37 @@ const CardContent = ({
   naviagteToEditCourse,
   navigateToScanner,
   navigateCourseInfo,
-}) => {
-  return (
-    <Box p={4} borderColor="white" borderWidth={2} borderRadius={5}>
-      <VStack>
-        <Text fontSize={20} fontWeight="bold" color="white">
-          {courseCode} - {courseName}
-        </Text>
+}) => (
+  <Box p={4} borderColor="white" borderWidth={2} borderRadius={5}>
+    <VStack>
+      <Text fontSize={20} fontWeight="bold" color="white">
+        {courseCode} - {courseName}
+      </Text>
+      <Button
+        mt={3}
+        background="secondary.400"
+        _pressed={{backgroundColor: 'secondary.600'}}
+        onPress={() => navigateToScanner(courseCode)}>
+        Scan QR
+      </Button>
+      <HStack justifyContent="space-between">
         <Button
           mt={3}
-          background="secondary.400"
-          _pressed={{backgroundColor: 'secondary.600'}}
-          onPress={() => navigateToScanner(courseCode)}>
-          Scan QR
+          width="45%"
+          background="primary.200"
+          _pressed={{backgroundColor: 'primary.600'}}
+          onPress={() => navigateCourseInfo()}>
+          Info
         </Button>
-        <HStack justifyContent="space-between">
-          <Button
-            mt={3}
-            width="45%"
-            background="primary.200"
-            _pressed={{backgroundColor: 'primary.600'}}
-            onPress={() => navigateCourseInfo()}>
-            Info
-          </Button>
-          <Button
-            width="45%"
-            mt={3}
-            background="primary.200"
-            _pressed={{backgroundColor: 'primary.600'}}
-            onPress={() => naviagteToEditCourse()}>
-            Edit Information
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
-  );
-};
+        <Button
+          width="45%"
+          mt={3}
+          background="primary.200"
+          _pressed={{backgroundColor: 'primary.600'}}
+          onPress={() => naviagteToEditCourse()}>
+          Edit Information
+        </Button>
+      </HStack>
+    </VStack>
+  </Box>
+);
