@@ -1,9 +1,9 @@
 import {Button, Box, Text, VStack, Fab, Icon, View, Center} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
-import Header from '../../components/Header/Header';
-import Wrapper from '../../wrapper/Wrapper';
 import Qrcode from 'react-native-qrcode-svg';
 import React from 'react';
+import Header from '../../components/Header/Header';
+import Wrapper from '../../wrapper/Wrapper';
 import CustomCard from '../../components/Commons/CustomCard';
 
 export default function QRGenerator() {

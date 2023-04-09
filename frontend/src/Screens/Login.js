@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import Wrapper from '../wrapper/Wrapper';
-import {InputType1} from '../components/Commons/Input';
 import {
   Stack,
   Heading,
@@ -11,10 +9,12 @@ import {
   WarningOutlineIcon,
   Text,
 } from 'native-base';
-import {validateEmail} from '../helpers/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Axios from '../config/Axios';
 import {useDispatch} from 'react-redux';
+import Wrapper from '../wrapper/Wrapper';
+import {InputType1} from '../components/Commons/Input';
+import {validateEmail} from '../helpers/functions';
+import Axios from '../config/Axios';
 import {getUserInfoAction} from '../redux/user/actions';
 import {CustomAlert} from '../components/Commons/CustomAlert';
 

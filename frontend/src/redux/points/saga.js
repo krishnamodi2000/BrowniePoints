@@ -1,6 +1,7 @@
-const {takeLatest, all, put} = require('redux-saga/effects');
 import AxiosInstance from '../../config/Axios';
 import * as actionTypes from './actionTypes';
+
+const {takeLatest, all, put} = require('redux-saga/effects');
 
 function* addPointsSaga({courseId, bannerId}) {
   try {
@@ -21,7 +22,6 @@ function* addPointsSaga({courseId, bannerId}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.ADD_POINTS_FAIL,
       error: 'Something went wrong',

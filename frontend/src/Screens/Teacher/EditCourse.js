@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Button,
@@ -12,11 +13,13 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
+import {readFile} from 'react-native-fs';
 import {InputType1} from '../../components/Commons/Input';
 import Header from '../../components/Header/Header';
 import Wrapper from '../../wrapper/Wrapper';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   addStudentsToCourse,
   deleteCourse,
@@ -24,10 +27,6 @@ import {
   removeStudentFromCourse,
 } from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
-import {useNavigation} from '@react-navigation/native';
-import DocumentPicker from 'react-native-document-picker';
-import Papa from 'papaparse';
-import {readFile} from 'react-native-fs';
 
 const inputFields = [
   {
@@ -84,13 +83,9 @@ export default function EditCourse({route}) {
 
   const handleAddBannerId = () => {
     dispatch(
-      addStudentsToCourse(
-        (courseCode = courseInformation.courseId),
-        [bannerId],
-        () => {
-          setShowSuccessModal(true);
-        },
-      ),
+      addStudentsToCourse(courseInformation.courseId, [bannerId], () => {
+        setShowSuccessModal(true);
+      }),
     );
   };
 
@@ -110,18 +105,14 @@ export default function EditCourse({route}) {
         type: [DocumentPicker.types.allFiles],
       });
 
-      readFile(res.uri, 'ascii').then(res => {
-        const data = res
+      readFile(res.uri, 'ascii').then(response => {
+        const data = response
           .split(',')
           .map(item => item.replace(/(\r\n|\n|\r)/gm, ''));
         dispatch(
-          addStudentsToCourse(
-            (courseCode = courseInformation.courseId),
-            data,
-            () => {
-              setShowSuccessModal(true);
-            },
-          ),
+          addStudentsToCourse(courseInformation.courseId, data, () => {
+            setShowSuccessModal(true);
+          }),
         );
       });
     } catch (err) {}
@@ -132,8 +123,8 @@ export default function EditCourse({route}) {
       removeStudentFromCourse(
         courseInformation.courseId,
         studentId,
-        bannerId => {
-          setRemovedStudentBannerId(bannerId);
+        bannerIdFromSaga => {
+          setRemovedStudentBannerId(bannerIdFromSaga);
           setShowRemoveStudentModal(true);
           setShowRemoveStudent(false);
         },

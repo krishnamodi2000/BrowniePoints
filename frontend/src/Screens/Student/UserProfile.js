@@ -1,20 +1,9 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Button,
-  Avatar,
-  FormControl,
-} from 'native-base';
+import {Box, Center, Text, Button, Avatar, FormControl} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
-import UpdateProfile from './UpdateProfile';
 import Header from '../../components/Header/Header';
-import {InputType1} from '../../components/Commons/Input';
-import axios from 'axios';
 
 const UserProfile = () => {
   const {user} = useSelector(state => state.user);
@@ -26,7 +15,7 @@ const UserProfile = () => {
     user.firstName[0].toUpperCase() + user.lastName[0];
 
   const handleUpdateProfile = () => {
-    Alert.alert('Are you sure you want to change your information');
+    // Alert.alert('Are you sure you want to change your information');
     navigation.navigate('UpdateProfile', {user});
   };
 

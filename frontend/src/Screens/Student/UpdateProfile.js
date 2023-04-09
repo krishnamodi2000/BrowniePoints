@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Box, Center, Heading, Text, Button, FormControl} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 import Wrapper from '../../wrapper/Wrapper';
 import Header from '../../components/Header/Header';
 import {InputType1} from '../../components/Commons/Input';
-import axios from 'axios';
 
 export default function UpdateProfile() {
   const dispatch = useDispatch();
