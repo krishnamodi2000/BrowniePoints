@@ -26,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -138,27 +140,6 @@ public class CourseControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-//    @Test
-//    public void getCoursesValidTokenAndInvalidTeacherId() throws CustomizableException {
-//
-//        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("999", HttpStatus.OK));
-//
-//       // when(courseService.getCoursesForTeacher("999")).thenThrow(new CustomizableException(false,""));
-//
-//        // Call the API endpoint
-//        ResponseEntity<Object> response = courseController.getCourses(validToken);
-//
-//        // Verify the response
-//        ExceptionResponse exceptionResponse = new ExceptionResponse();
-//        response.getBody();
-//        verify(jwtAuthenticationUtil, times(1)).validateAuthorizationHeader(validToken);
-//        verifyNoMoreInteractions(jwtAuthenticationUtil);
-//        verify(courseService, times(1)).getCoursesForTeacher("999");
-//        verifyNoMoreInteractions(courseService);
-//      //  assert exceptionResponse.isStatus();
-//        assert exceptionResponse.getMessage().equals("");
-//        assert response.getStatusCode().equals(HttpStatus.BAD_REQUEST);
-//        }
 
     @Test
     public void getCoursesValidTokenAndInvalidTeacherId() throws CustomizableException {
@@ -179,6 +160,80 @@ public class CourseControllerTest {
         assert exceptionResponse.getMessage().equals("Invalid teacher ID");
         assert response.getStatusCode().equals(HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    public void addCourseValidInput() throws CustomizableException {
+        // Mock authorization header
+        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
+
+        // Mock courseService.addCourseForTeacher() method
+        CourseRequest courseRequest = new CourseRequest("Test Course", "Course Description","Course Description");
+
+        when(courseService.addCourseForTeacher("1", courseRequest)).thenReturn(course);
+
+        // Call the API endpoint
+        CourseRequest courseRequestToAdd = courseController.addCourseRequest(course);
+        ResponseEntity<Object> response = courseController.addCourse(courseRequest, validToken);
+
+        // Verify the response
+        CourseResponse courseResponse = (CourseResponse) response.getBody();
+        verify(jwtAuthenticationUtil, times(1)).validateAuthorizationHeader(validToken);
+        verify(courseService, times(1)).addCourseForTeacher("1", courseRequest);
+        verifyNoMoreInteractions(jwtAuthenticationUtil, courseService);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertTrue(courseResponse.getStatus());
+        assertEquals(courseRequestToAdd, courseResponse.getCourseRequest());
+    }
+    @Test
+    public void removeCourseValidInput() throws CustomizableException {
+        CourseIdRequest courseIdRequest = new CourseIdRequest();
+        courseIdRequest.setCourseId("1");
+
+        // Mock authorization header
+        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
+
+        // Call the API endpoint
+        ResponseEntity<Object> response = courseController.removeCourse(courseIdRequest, validToken);
+
+        // Verify the response
+        verify(jwtAuthenticationUtil, times(1)).validateAuthorizationHeader(validToken);
+        verify(courseService, times(1)).removeCourseForTeacher("1", "1");
+        verifyNoMoreInteractions(jwtAuthenticationUtil, courseService);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(((CourseResponse) response.getBody()).getStatus());
+    }
+
+    @Test
+    public void updateCourseValidInput() throws CustomizableException {
+        // Mock authorization header
+        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
+
+        // Mock courseService.updateCourseForTeacher() method
+        CourseRequest courseRequest = new CourseRequest();
+        courseRequest.setCourseId("1");
+        courseRequest.setCourseName("ASDC");
+        courseRequest.setCourseDescription("An updated course on ASDC");
+        Course updatedCourse = new Course("1", "ASDC", "An updated course on ASDC",teacher);
+        when(courseService.updateCourseForTeacher("1", courseRequest)).thenReturn(updatedCourse);
+
+        // Call the API endpoint
+        ResponseEntity<Object> response = courseController.updateCourse(courseRequest, validToken);
+
+        // Verify the response
+        verify(jwtAuthenticationUtil, times(1)).validateAuthorizationHeader(validToken);
+        verify(courseService, times(1)).updateCourseForTeacher("1", courseRequest);
+        verifyNoMoreInteractions(jwtAuthenticationUtil, courseService);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        CourseResponse courseResponse = (CourseResponse) response.getBody();
+        assertNotNull(courseResponse);
+        assertTrue(courseResponse.getStatus());
+        assertNotNull(courseResponse.getCourseRequest());
+        assertEquals(updatedCourse.getCourseId(), courseResponse.getCourseRequest().getCourseId());
+        assertEquals(updatedCourse.getCourseName(), courseResponse.getCourseRequest().getCourseName());
+        assertEquals(updatedCourse.getCourseDescription(), courseResponse.getCourseRequest().getCourseDescription());
+    }
+
 
 
 }
