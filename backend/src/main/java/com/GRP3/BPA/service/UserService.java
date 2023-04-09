@@ -21,7 +21,7 @@ public interface UserService {
 
     User updateOTP(User user);
 
-    User changePassword(String email, String newPassword);
+    Utils changePassword(User user, String newPassword);
 
     Utils validateResetPassword(User user);
 }
