@@ -17,17 +17,7 @@ export default function UpdateProfile() {
   const [emailId, setEmailId] = useState(user.emailId);
 
   const handleSaveChanges = () => {
-    dispatch({
-      type: 'UPDATE_USER_INFO',
-      payload: {
-        firstName,
-        lastName,
-        bannerId,
-        emailId,
-      },
-    });
-    alert('Profile updated successfully!');
-    navigation.goBack();
+    dispatch();
   };
 
   const inputFields = [

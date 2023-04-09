@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
-import {Box, Center, Text, Button, Avatar, FormControl} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {Box, Center, Button, Avatar, FormControl} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import Wrapper from '../../wrapper/Wrapper';
 import Header from '../../components/Header/Header';
 import {InputType1} from '../../components/Commons/Input';
+import {updateProfile} from '../../redux/user/actions';
 
 const UserProfile = () => {
-  const {user} = useSelector(state => state.user);
   const navigation = useNavigation();
-  const [profile, setProfile] = useState({firstName: '', lastName: ''});
+  const dispatch = useDispatch();
 
+  const {user} = useSelector(state => state.user);
+  const [profile, setProfile] = useState({firstName: '', lastName: ''});
+  console.log(user);
   const generateInitials = () =>
     user.firstName[0].toUpperCase() + user.lastName[0];
 
   const handleUpdateProfile = () => {
-    navigation.navigate('UpdateProfile', {user});
+    dispatch(updateProfile(user.email, profile.firstName, profile.lastName));
   };
 
   const inputFields = [

@@ -57,9 +57,7 @@ function* getStudentsByCourseSaga({courseId}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
 
-    const {data} = yield AxiosInstance.get(
-      `/teachers/courses/points/${courseId}`,
-    );
+    const {data} = yield AxiosInstance.get(`/teachers/points/${courseId}`);
     if (data.status) {
       yield put({
         type: actionTypes.GET_STUDENTS_BY_COURSE_SUCCESS,
@@ -83,17 +81,23 @@ function* addStudentsToCourseSaga({courseId, bannerIds, successCallBack}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
 
-    const {data} = yield AxiosInstance.post(`/teachers/courses/addStudents`, {
-      courseId,
-      bannerIds,
-    });
+    const {data} = yield AxiosInstance.post(
+      `/teachers/courses/students/addStudents`,
+      {
+        courseId,
+        bannerIds,
+      },
+    );
 
     if (data.status) {
       yield put({
         type: actionTypes.ADD_STUDENTS_TO_COURSE_SUCCESS,
         payload: data.data,
       });
-
+      yield put({
+        type: actionTypes.GET_STUDENTS_BY_COURSE,
+        courseId,
+      });
       successCallBack();
     } else {
       yield put({
@@ -114,7 +118,7 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
     yield put({type: actionTypes.SET_COURSE_LOADING});
 
     const {data} = yield AxiosInstance.delete(
-      `/teachers/courses/removeStudent`,
+      `/teachers/courses/students/removeStudent`,
       {
         data: {courseId, bannerId},
       },
@@ -145,7 +149,6 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
 function* deleteCourseSaga({courseId, success, bannerIds}) {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
-    console.log({courseId, bannerIds});
     if (bannerIds.length > 0)
       yield AxiosInstance.delete('/teachers/courses/students/removeStudents', {
         data: {courseId, bannerIds},
@@ -170,7 +173,6 @@ function* deleteCourseSaga({courseId, success, bannerIds}) {
       });
     }
   } catch (error) {
-    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.DELETE_COURSE_FAIL,
       error: 'Something went wrong',
