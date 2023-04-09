@@ -97,6 +97,7 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         updateProfileLoading: false,
+        user: {...state.user, ...action.payload},
       };
 
     case actionTypes.UPDATE_PROFILE_FAIL:

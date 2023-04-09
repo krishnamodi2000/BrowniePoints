@@ -86,19 +86,19 @@ function* logoutUserSaga() {
   }
 }
 
-function* updateProfileSaga({email, firstName, lastName, success}) {
+function* updateProfileSaga({email, firstName, lastName, successCallBack}) {
   try {
     yield put({type: actionTypes.UPDATE_PROFILE_LOADING});
     const {data} = yield AxiosInstance.put(`/user/${email}`, {
       firstName,
       lastName,
     });
-    console.log(data, 'D');
-    if (data.status) {
+    if (data) {
       yield put({
         type: actionTypes.UPDATE_PROFILE_SUCCESS,
+        payload: {firstName, lastName},
       });
-      success();
+      successCallBack();
     } else {
       yield put({
         type: actionTypes.UPDATE_PROFILE_FAIL,
@@ -106,7 +106,6 @@ function* updateProfileSaga({email, firstName, lastName, success}) {
       });
     }
   } catch (error) {
-    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.UPDATE_PROFILE_FAIL,
       error: error?.response?.data?.message || 'Something went wrong',
