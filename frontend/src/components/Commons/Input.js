@@ -1,3 +1,5 @@
+import {React} from 'react';
+
 const {Input} = require('native-base');
 
 export const InputType1 = ({...rest}) => (

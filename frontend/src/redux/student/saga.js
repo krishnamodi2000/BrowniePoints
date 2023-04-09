@@ -1,6 +1,7 @@
-const {takeLatest, all, put} = require('redux-saga/effects');
 import AxiosInstance from '../../config/Axios';
 import * as actionTypes from './actionTypes';
+
+const {takeLatest, all, put} = require('redux-saga/effects');
 
 function* getEnrolledCoursesInfoSaga({bannerId}) {
   try {
@@ -21,7 +22,6 @@ function* getEnrolledCoursesInfoSaga({bannerId}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.GET_ENROLLED_COURSES_INFO_FAIL,
       error: 'Something went wrong',

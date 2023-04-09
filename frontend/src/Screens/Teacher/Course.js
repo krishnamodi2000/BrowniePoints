@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import Wrapper from '../../wrapper/Wrapper';
-import Header from '../../components/Header/Header';
 import {
   Button,
   Center,
@@ -9,8 +7,10 @@ import {
   Stack,
   WarningOutlineIcon,
 } from 'native-base';
-import {InputType1} from '../../components/Commons/Input';
 import {useDispatch, useSelector} from 'react-redux';
+import Wrapper from '../../wrapper/Wrapper';
+import Header from '../../components/Header/Header';
+import {InputType1} from '../../components/Commons/Input';
 import {addCourse, getCourses} from '../../redux/course/actions';
 import CustomModal from '../../components/Commons/CustomModal';
 
@@ -70,6 +70,11 @@ export default function Course({navigation}) {
     return isValid;
   };
 
+  const onSuccess = () => {
+    setCourseDetails({...initialState});
+    setShowSuccessModal(true);
+  };
+
   const handleSubmit = () => {
     if (isFieldsValid()) {
       dispatch(addCourse(courseDetails, onSuccess));
@@ -79,11 +84,6 @@ export default function Course({navigation}) {
   const handleBack = () => {
     navigation.goBack();
     dispatch(getCourses());
-  };
-
-  const onSuccess = () => {
-    setCourseDetails({...initialState});
-    setShowSuccessModal(true);
   };
 
   return (

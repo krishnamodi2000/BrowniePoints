@@ -1,6 +1,6 @@
 import React from 'react';
-import Wrapper from '../wrapper/Wrapper';
 import {Center, Image, Spinner, Stack, Text} from 'native-base';
+import Wrapper from '../wrapper/Wrapper';
 import Logo from '../assets/Logo.png';
 
 export default function Loading() {

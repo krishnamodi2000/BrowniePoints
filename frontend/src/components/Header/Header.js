@@ -14,8 +14,7 @@ export default function Header({title, menuItemsList}) {
           {menuItemsList && (
             <Menu
               w="190"
-              trigger={triggerProps => {
-                return (
+              trigger={triggerProps => (
                   <Pressable
                     accessibilityLabel="More options menu"
                     {...triggerProps}>
@@ -25,8 +24,7 @@ export default function Header({title, menuItemsList}) {
                       size={28}
                     />
                   </Pressable>
-                );
-              }}>
+                )}>
               {menuItemsList.map((item, key) => (
                 <Menu.Item key={key} onPress={() => item.onPress()}>
                   {item.name}

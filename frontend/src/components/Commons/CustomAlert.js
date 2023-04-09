@@ -1,13 +1,5 @@
-import {
-  Alert,
-  Box,
-  CloseIcon,
-  Collapse,
-  HStack,
-  IconButton,
-  Text,
-  VStack,
-} from 'native-base';
+import React from 'react';
+import {Alert, CloseIcon, HStack, IconButton, Text} from 'native-base';
 
 export const CustomAlert = ({status, message, open, onClose, noClose}) => (
   <>
