@@ -47,9 +47,9 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
-    @PostMapping(value = "/test")
-    public String test(){
-        return "pass";
-    }
+//    @PreAuthorize("hasRole('TEACHER')")
+//    @PostMapping(value = "/test")
+//    public String test(){
+//        return "pass";
+//    }
 }

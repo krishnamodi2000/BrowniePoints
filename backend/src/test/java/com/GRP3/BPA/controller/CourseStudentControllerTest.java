@@ -166,70 +166,56 @@ public class CourseStudentControllerTest {
         assertTrue(response.isStatus());
     }
 
-//    @Test
-//    public void testAddStudents() throws CustomizableException {
-//        // Arrange
-//        CourseStudentRequests courseStudentRequests = new CourseStudentRequests("1", Arrays.asList("1","2"));
-//
-//        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
-//
-//        List<CourseStudent> courseStudents = new ArrayList<>();
-//        CourseStudent courseStudent = new CourseStudent();
-//        courseStudent.setCourse(course1);
-//        courseStudent.setStudent(student);
-//        CourseStudent courseStudent1 = new CourseStudent();
-//        courseStudent.setCourse(course2);
-//        courseStudent.setStudent(student1);
-//        courseStudents.add(courseStudent);
-//        courseStudents.add(courseStudent1);
-//
-//        when(courseStudentService.addStudents("1", courseStudentRequests)).thenReturn(courseStudents);
-//
-//        // Act
-//        ResponseEntity<Object> responseEntity = courseStudentController.addStudents(courseStudentRequests, validToken);
-//
-//        // Assert
-//        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-//        assertTrue(responseEntity.getBody() instanceof CourseStudentsResponse);
-//        CourseStudentsResponse response = (CourseStudentsResponse) responseEntity.getBody();
-//        assertTrue(response.isStatus());
-//        List<StudentInfoWithName> data = response.getData();
-//        assertNotNull(data);
-//        assertEquals(2, data.size());
-//
-//    }
-//@Test
-//public void testAddStudents() throws CustomizableException {
-//    // Arrange
-//    CourseStudentRequests courseStudentRequests = new CourseStudentRequests("1", Arrays.asList("1","2"));
-//
-//    when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
-//
-//    List<CourseStudent> courseStudents = new ArrayList<>();
-//    CourseStudent courseStudent1 = new CourseStudent();
-//    courseStudent1.setCourse(course1);
-//    courseStudent1.setStudent(student);
-//    CourseStudent courseStudent2 = new CourseStudent();
-//    courseStudent2.setCourse(course2);
-//    courseStudent2.setStudent(student1);
-//    courseStudents.add(courseStudent1);
-//    courseStudents.add(courseStudent2);
-//
-//    when(courseStudentService.addStudents("1", courseStudentRequests)).thenReturn(courseStudents);
-//
-//    // Act
-//    ResponseEntity<Object> responseEntity = courseStudentController.addStudents(courseStudentRequests, validToken);
-//
-//    // Assert
-//    assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-//    CourseStudentsResponse response = (CourseStudentsResponse) responseEntity.getBody();
-//    assertNotNull(response);
-//    assertTrue(response.isStatus());
-//    List<StudentInfoWithName> data = response.getData();
-//    assertNotNull(data);
-//    assertEquals(2, data.size());
-//}
+    @Test
+    public void testAddStudents() throws CustomizableException {
+        // Arrange
+        CourseStudentRequests courseStudentRequests = new CourseStudentRequests("1", Arrays.asList("1","2"));
 
+        when(jwtAuthenticationUtil.validateAuthorizationHeader(validToken)).thenReturn(new ResponseEntity<>("1", HttpStatus.OK));
+
+        Student student = new Student();
+        student.setBannerId("1");
+        User user1 = new User();
+        student.setUser(user1);
+
+        Student student1 = new Student();
+        student1.setBannerId("2");
+        User user2 = new User();
+        student1.setUser(user2);
+
+        Course course1 = new Course();
+        course1.setCourseId("1");
+
+        Course course2 = new Course();
+        course2.setCourseId("2");
+
+        List<CourseStudent> courseStudents = new ArrayList<>();
+        CourseStudent courseStudent = new CourseStudent();
+        courseStudent.setCourse(course1);
+        courseStudent.setStudent(student);
+        courseStudent.setPoints(0);
+        courseStudents.add(courseStudent);
+
+        CourseStudent courseStudent1 = new CourseStudent();
+        courseStudent1.setCourse(course2);
+        courseStudent1.setStudent(student1);
+        courseStudent1.setPoints(0);
+        courseStudents.add(courseStudent1);
+
+        when(courseStudentService.addStudents("1", courseStudentRequests)).thenReturn(courseStudents);
+
+        // Act
+        ResponseEntity<Object> responseEntity = courseStudentController.addStudents(courseStudentRequests, validToken);
+
+        // Assert
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody() instanceof CourseStudentsResponse);
+        CourseStudentsResponse response = (CourseStudentsResponse) responseEntity.getBody();
+        assertTrue(response.isStatus());
+        List<StudentInfoWithName> data = response.getData();
+        assertNotNull(data);
+        assertEquals(2, data.size());
+    }
 
 
 }
