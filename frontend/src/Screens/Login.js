@@ -80,7 +80,9 @@ const Login = ({navigation}) => {
           }
           if (res?.data?.token) {
             await AsyncStorage.setItem('token', res.data.token);
+            console.log('DD');
             dispatch(getUserInfoAction());
+            console.log('DD');
           }
         })
         .catch(e => {

@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   students: [],
   studentsAdded: [],
+  errorMessage: '',
 };
 
 const courses = (state = initialState, action) => {
@@ -16,6 +17,7 @@ const courses = (state = initialState, action) => {
         ...state,
         loading: true,
         error: false,
+        errorMessage: '',
         studentAdded: [],
         students: [],
       };
@@ -65,6 +67,17 @@ const courses = (state = initialState, action) => {
 
     case actionTypes.REMOVE_STUDENT_FROM_COURSE_FAIL:
       return {...state, loading: false, error: true};
+
+    case actionTypes.DELETE_COURSE_SUCCESS:
+      return {...state, loading: false};
+
+    case actionTypes.DELETE_COURSE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+      };
 
     default:
       return state;

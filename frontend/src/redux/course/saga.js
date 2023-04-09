@@ -2,11 +2,9 @@ const {takeLatest, all, put} = require('redux-saga/effects');
 import AxiosInstance from '../../config/Axios';
 import * as actionTypes from './actionTypes';
 
-function* getCoursesSaga({}) {
+function* getCoursesSaga() {
   try {
     yield put({type: actionTypes.SET_COURSE_LOADING});
-
-    //Make sure to remove hardcoded teacher ID ie 12345
     const {data} = yield AxiosInstance.get(`teachers/courses`);
     if (data) {
       yield put({
@@ -20,7 +18,6 @@ function* getCoursesSaga({}) {
       });
     }
   } catch (error) {
-    console.log(error.message, JSON.stringify(error));
     yield put({
       type: actionTypes.GET_COURSES_FAIL,
       error: 'Something went wrong',
@@ -148,6 +145,38 @@ function* removeStudentFromCourseSaga({courseId, bannerId, successCallback}) {
   }
 }
 
+function* deleteCourseSaga({courseId, success}) {
+  try {
+    yield put({type: actionTypes.SET_COURSE_LOADING});
+
+    const {data} = yield AxiosInstance.delete(
+      `/teachers/courses/removeCourse`,
+      {
+        data: {courseId},
+      },
+    );
+    console.log(data);
+    if (data.status) {
+      yield put({
+        type: actionTypes.DELETE_COURSE_SUCCESS,
+      });
+      yield put({type: actionTypes.GET_COURSES});
+      success();
+    } else {
+      yield put({
+        type: actionTypes.DELETE_COURSE_FAIL,
+        error: 'Unable to delete course',
+      });
+    }
+  } catch (error) {
+    console.log(error, JSON.stringify(error));
+    yield put({
+      type: actionTypes.DELETE_COURSE_FAIL,
+      error: 'Something went wrong',
+    });
+  }
+}
+
 function* courseSaga() {
   yield all([
     yield takeLatest(actionTypes.GET_COURSES, getCoursesSaga),
@@ -164,6 +193,7 @@ function* courseSaga() {
       actionTypes.ADD_STUDENTS_TO_COURSE,
       addStudentsToCourseSaga,
     ),
+    yield takeLatest(actionTypes.DELETE_COURSE, deleteCourseSaga),
   ]);
 }
 

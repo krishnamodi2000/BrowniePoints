@@ -15,9 +15,10 @@ export const updateCourse = courseDetails => ({
   courseDetails,
 });
 
-export const deleteCourse = courseId => ({
+export const deleteCourse = (courseId, success) => ({
   type: actionTypes.DELETE_COURSE,
   courseId,
+  success,
 });
 
 export const getStudentsByCourseId = courseId => ({

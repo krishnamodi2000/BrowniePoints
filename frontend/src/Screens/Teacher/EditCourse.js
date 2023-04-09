@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Center,
-  Column,
   Divider,
   FlatList,
   FormControl,
@@ -20,6 +19,7 @@ import Wrapper from '../../wrapper/Wrapper';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addStudentsToCourse,
+  deleteCourse,
   getStudentsByCourseId,
   removeStudentFromCourse,
 } from '../../redux/course/actions';
@@ -58,6 +58,8 @@ export default function EditCourse({route}) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showRemoveStudentModal, setShowRemoveStudentModal] = useState(false);
   const [showRemoveStudent, setShowRemoveStudent] = useState(false);
+  const [showDeleteCourseSuccessModal, setShowDeleteCourseSuccessModal] =
+    useState(false);
   const [removedStudentBannerId, setRemovedStudentBannerId] = useState('');
 
   const handleEdit = () => {
@@ -148,6 +150,18 @@ export default function EditCourse({route}) {
       courseCode: courseInformation.courseId,
       addStudent: true,
     });
+  };
+
+  const deleteCourseHandler = () => {
+    dispatch(
+      deleteCourse(courseInformation.courseId, () => {
+        setShowDeleteCourseSuccessModal(true);
+      }),
+    );
+  };
+
+  const handleDeleteCourseClose = () => {
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -309,6 +323,14 @@ export default function EditCourse({route}) {
                       Remove Student
                     </Button>
                   )}
+                  <Button
+                    size="lg"
+                    mt={5}
+                    backgroundColor="red.400"
+                    _pressed={{backgroundColor: 'red.500'}}
+                    onPress={() => deleteCourseHandler()}>
+                    Delete Course
+                  </Button>
                 </>
               )}
             </>
@@ -326,6 +348,11 @@ export default function EditCourse({route}) {
         setShowModal={setShowRemoveStudentModal}
         bannerId={removedStudentBannerId}
         handleCloseModal={handleRemoveStudentClose}
+      />
+      <DeleteCourseSuccessModal
+        showModal={showDeleteCourseSuccessModal}
+        setShowModal={setShowDeleteCourseSuccessModal}
+        handleCloseModal={handleDeleteCourseClose}
       />
     </Wrapper>
   );
@@ -365,6 +392,26 @@ const AddStudentToCourseSuccessModal = ({
     body={
       <Center>
         Successfully added {studentAdded.length} students.
+        <Button mt="2" minWidth="100" onPress={handleCloseModal}>
+          Back
+        </Button>
+      </Center>
+    }
+  />
+);
+
+const DeleteCourseSuccessModal = ({
+  showModal,
+  setShowModal,
+  handleCloseModal,
+}) => (
+  <CustomModal
+    showModal={showModal}
+    setShowModal={setShowModal}
+    heading="Added Students"
+    body={
+      <Center>
+        Successfully removed the course.
         <Button mt="2" minWidth="100" onPress={handleCloseModal}>
           Back
         </Button>
