@@ -1,7 +1,8 @@
-const {takeLatest, all, put} = require('redux-saga/effects');
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AxiosInstance from '../../config/Axios';
 import * as actionTypes from './actionTypes';
+
+const {takeLatest, all, put} = require('redux-saga/effects');
 
 function* getUserInfoSaga() {
   try {

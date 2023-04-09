@@ -43,7 +43,6 @@ class LoginControllerTest {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(
                 createUriWithPort("/status"), HttpMethod.GET, entity, String.class);
-
         String data = "Application is running.";
         assertEquals(data, response.getBody());
     }

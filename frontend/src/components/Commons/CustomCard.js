@@ -1,6 +1,5 @@
 import React from 'react';
-import {Box, Divider, VStack} from 'native-base';
-import {Text} from 'native-base';
+import {Box} from 'native-base';
 
 export default function CustomCard({children}) {
   return (
