@@ -15,6 +15,13 @@ public class TeacherService {
     @Autowired
     private UserRepository userRepository;
 
+
+    /**
+     * Finds the teacher associated with the given user email.
+     *
+     * @param email the email of the user
+     * @return the teacher ID associated with the user, or null if no teacher is associated with the user
+     */
     public String findTeacherAssociatedWithUser(String email) {
         User user = userRepository.findByEmail(email);
         String role= user.getRole();

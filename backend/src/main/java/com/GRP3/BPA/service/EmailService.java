@@ -10,6 +10,13 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+
+    /**
+     * This method is used to send an OTP to the provided email address.
+     *
+     * @param email the email address to which the OTP will be sent
+     * @param otp the one-time password to be sent in the email
+     */
     public void sendOtp(String email, String otp) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);

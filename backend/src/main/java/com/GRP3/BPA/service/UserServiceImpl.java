@@ -43,14 +43,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private EmailService emailService;
 
 
+    /**
+
+     Saves a new user to the database.
+     @param user the user to save
+     @return the saved user
+     @throws RuntimeException if the password is not valid or the email address is already in use
+     */
     public User saveUser(User user) throws RuntimeException {
         String password = user.getPassword();
         if(!isValidPassword(password)) throw new RuntimeException("Password should be greater or equal to 8");
         user.setPassword(passwordEncoder.encode(password));
         emailIsAlreadyExist(user);
         User savedUser = userRepository.save(user);
-
-        //Check if SRP is followed or not in the following code
         Student student = new Student();
         student.setBannerId(user.getUserId());
         student.setUser(user);
@@ -58,7 +63,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return savedUser;
     }
 
+    /**
 
+     Checks if an email address is already in use.
+     @param user the user to check
+     @return the user if the email address is not in use
+     @throws RuntimeException if the email address is already in use
+     */
     public User emailIsAlreadyExist(User user) throws RuntimeException{
         User tempsUser = userRepository.findByEmail(user.getEmail());
         if (tempsUser != null && tempsUser.isPresent()) {
@@ -78,6 +89,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
        return user;
     }
 
+    /**
+
+     Generates an OTP for a user and updates the user's OTP in the database.
+     @param user the user to generate an OTP for
+     @return the updated user
+     @throws IllegalArgumentException if the user is null or the email address is invalid
+     */
     @Override
     public User updateOTP(User user) {
         if (user == null || !isValid(user.getEmail())) {
@@ -89,6 +107,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
+    /**
+
+     Validates a user's email address and sends them an OTP to reset their password.
+     @param user the user to reset the password for
+     @return a Utils object containing a success message and a flag indicating success or failure
+     */
     @Override
     public Utils validateResetPassword(User user) {
         if(user.getEmail() == null) {
@@ -103,6 +127,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new Utils("OTP sent to " + user.getEmail(), true);
     }
 
+    /**
+     Validates an OTP and updates a user's password.
+     @param confirmOTP the confirmation object containing the email address, OTP, and new password
+     @return a Utils object containing a success message and a flag indicating success or failure
+     */
     @Override
     public Utils matchOtp(ConfirmOTP confirmOTP) {
         if (confirmOTP == null) {
@@ -133,6 +162,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
+
+    /**
+     Changes a user's password.
+     @param user the user to change the password for
+     @param newPassword
+ */
     @Override
     public Utils changePassword(User user, String newPassword) {
         if (newPassword == null || newPassword.isEmpty()) {
@@ -146,11 +181,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return new Utils("Password changed successfully.", true);
     }
 
-
+    /**
+     Generates a random six-digit OTP code
+     @return a string representing the six-digit OTP code
+     */
     private static String generateOtp() {
         return String.format("%06d", new Random().nextInt(999999));
     }
 
+    /**
+     Gets a user by token and returns a UserDTO object
+     @param token the token to retrieve the user
+     @return a UserDTO object representing the user retrieved
+     @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public UserDTO getUser(String token) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(token);
@@ -168,6 +212,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return null;
     }
 
+
+    /**
+     Authenticates a user by email and password
+     @param email the email of the user to authenticate
+     @param password the password of the user to authenticate
+     @return a User object representing the authenticated user
+     @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public User login(String email, String password) throws UsernameNotFoundException{
         User user = this.loadUserByUsername(email);
@@ -176,12 +228,25 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return null;
     }
 
+    /**
+     Loads a user by email
+     @param username the email of the user to load
+     @return a User object representing the user loaded
+     @throws UsernameNotFoundException if the user is not found
+     */
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
         return user;
     }
 
+    /**
+     Updates the user's first name and last name
+     @param user the user object containing the new first name and last name
+     @param email the email of the user to update
+     @return a User object representing the updated user
+     @throws UsernameNotFoundException if the user is not found
+     */
     public User updateUser(User user, String email){
         User existingUser = userRepository.findByEmail(email);
         if(existingUser == null){

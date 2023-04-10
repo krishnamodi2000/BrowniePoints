@@ -12,19 +12,34 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course {
+
+
+    /**
+     * The ID of the course.
+     */
     @Getter @Setter
     @Id
     @Column(name="course_id")
     private String courseId;
 
+
+    /**
+     * The name of the course.
+     */
     @Getter @Setter
     @Column(name="course_name")
     private String courseName;
 
+    /**
+     * The description of the course.
+     */
     @Getter @Setter
     @Column(name="course_description")
     private String courseDescription;
 
+    /**
+     * The teacher of the course.
+     */
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name="teacher_id")

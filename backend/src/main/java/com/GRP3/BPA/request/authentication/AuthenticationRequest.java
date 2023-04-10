@@ -11,6 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequest {
 
+    /**
+     * The email of the user trying to authenticate.
+     */
     private String email;
+
+
+    /**
+     * The password of the user trying to authenticate.
+     */
     String password;
 }

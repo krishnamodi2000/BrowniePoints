@@ -19,6 +19,11 @@ public class ApplicationConfig {
     @Autowired
     UserDetailsService userDetailsService;
 
+    /**
+     * Provides an authentication provider for the application.
+     *
+     * @return a DaoAuthenticationProvider object with the user details service and password encoder set.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -27,11 +32,23 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    /**
+     * Provides an authentication manager for the application.
+     *
+     * @param config the authentication configuration for the application.
+     * @return an AuthenticationManager object.
+     * @throws Exception if there is an error getting the authentication manager from the configuration.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Provides a password encoder for the application.
+     *
+     * @return a BCryptPasswordEncoder object.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

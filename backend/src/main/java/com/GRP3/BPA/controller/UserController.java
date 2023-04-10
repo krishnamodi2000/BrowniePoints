@@ -21,6 +21,11 @@ public class UserController {
     @Autowired
     private EmailValidator emailValidator;
 
+    /**
+     * Endpoint for registering a new user.
+     * @param user the user object to be registered
+     * @return a ResponseEntity with a success message or an error message if the registration failed
+     */
     @PostMapping(value = "/api/auth/register")
     public ResponseEntity<?> saveUser(@RequestBody User user) {
         try {
@@ -37,19 +42,25 @@ public class UserController {
     }
 
 
+    /**
+     * Endpoint for getting user details.
+     * @param authentication the authentication object of the logged-in user
+     * @return a ResponseEntity with the user details
+     */
     @GetMapping(value = "/api/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication){
        return new ResponseEntity<>(userService.getUser(authentication.getName()), HttpStatus.CREATED);
     }
 
+
+    /**
+     * Endpoint for updating user details.
+     * @param email the email of the user to be updated
+     * @param user the updated user object
+     * @return a ResponseEntity with the updated user object
+     */
     @PutMapping(value = "/api/user/{email}")
     public ResponseEntity<User> updateUser(@PathVariable("email") String email, @RequestBody User user){
         return new ResponseEntity<>(userService.updateUser(user, email), HttpStatus.CREATED);
-    }
-
-    @PreAuthorize("hasRole('TEACHER')")
-    @PostMapping(value = "/test")
-    public String test(){
-        return "pass";
     }
 }
