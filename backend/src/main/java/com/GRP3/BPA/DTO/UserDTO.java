@@ -6,8 +6,22 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+
+/**
+ * Data Transfer Object for User information
+ */
 public class UserDTO {
 
+    /**
+     * Constructor for UserDTO
+     * @param id ID of the user
+     * @param userId User ID of the user
+     * @param email Email address of the user
+     * @param firstName First name of the user
+     * @param lastName Last name of the user
+     * @param role Role of the user
+     * @param token Authentication token of the user
+     */
     public UserDTO(int id, String userId, String email, String firstName, String lastName,
                     String role, String token) {
         this.id = id;

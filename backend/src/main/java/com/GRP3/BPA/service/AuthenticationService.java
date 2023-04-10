@@ -11,12 +11,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+/**
+ * This class provides authentication service to users.
+ */
 public class AuthenticationService {
     private final UserRepository repository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
 
+    /**
+     * This method authenticates the user using the provided authentication request.
+     * @param request the authentication request object containing the user's email and password.
+     * @return an authentication response object containing the generated JWT token.
+     * @throws RuntimeException if the provided credentials are invalid.
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws RuntimeException {
 
         try {

@@ -52,6 +52,13 @@ public class CourseStudentController {
 //        }
 //    }
 
+    /**
+     * Removes a student from a course.
+     *
+     * @param courseStudentRequest The request object containing the student and course IDs.
+     * @param authorizationHeader  The authorization header containing the JWT token for the teacher.
+     * @return A ResponseEntity with the status of the operation.
+     */
     @DeleteMapping("/removeStudent")
     public ResponseEntity<Object> removeStudent(@RequestBody CourseStudentRequest courseStudentRequest, @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
@@ -91,6 +98,14 @@ public class CourseStudentController {
 //        }
 //    }
 
+
+    /**
+     * Removes multiple students from a course.
+     *
+     * @param courseStudentRequests The request object containing the student and course IDs.
+     * @param authorizationHeader   The authorization header containing the JWT token for the teacher.
+     * @return A ResponseEntity with the status of the operation.
+     */
     @DeleteMapping("/removeStudents")
     public ResponseEntity<Object> removeStudents(@RequestBody CourseStudentRequests courseStudentRequests, @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);

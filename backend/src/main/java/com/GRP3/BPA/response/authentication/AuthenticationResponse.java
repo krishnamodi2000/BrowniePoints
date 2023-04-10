@@ -12,5 +12,8 @@ import lombok.Builder;
 @NoArgsConstructor
 public class AuthenticationResponse {
 
+    /**
+     * The authentication token.
+     */
     private String token;
 }
