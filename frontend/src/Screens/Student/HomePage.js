@@ -11,8 +11,6 @@ export default function HomePage({navigation}) {
   const {user} = useSelector(state => state.user);
   const {subjectInfo, loading} = useSelector(state => state.student);
 
-  console.log(user);
-
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutAction());
