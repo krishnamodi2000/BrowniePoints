@@ -10,7 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseStudentRequest {
+
+    /**
+     * The banner ID of the student.
+     */
     private String bannerId;
+
+    /**
+     * The ID of the course.
+     */
     private String courseId;
 
 }

@@ -25,11 +25,21 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    /**
+     This method returns the status of the application.
+     @return a string indicating that the application is running
+     */
     @GetMapping("/status")
     public String getStatus() {
         return "Application is running.";
     }
 
+    /**
+     This method authenticates the user based on the provided AuthenticationRequest.
+     @param request an AuthenticationRequest object containing the user's login credentials
+     @return a ResponseEntity containing the AuthenticationResponse object if authentication is successful
+     @throws UserException if authentication fails
+     */
     @PostMapping("/api/auth/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {

@@ -13,18 +13,34 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseStudent {
+
+    /**
+     * The ID of the course-student relationship.
+     */
     @Getter @Setter
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * The student enrolled in the course.
+     */
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name="banner_id")
     private Student student;
+
+    /**
+     * The course the student is enrolled in.
+     */
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name="course_id")
     private Course course;
+
+    /**
+     * The number of points the student has earned in the course.
+     */
     @Getter @Setter
     @Column(name = "points")
     private Integer points;

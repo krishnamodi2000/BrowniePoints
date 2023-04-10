@@ -13,12 +13,18 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Teacher {
+
+    /**
+     * The ID of the teacher.
+     */
     @Id
     @Getter @Setter
     @Column(name="teacher_id")
-    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     private String teacherId;
 
+    /**
+     * The user account associated with the teacher.
+     */
     @Getter@Setter
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")

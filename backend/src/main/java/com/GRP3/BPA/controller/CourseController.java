@@ -27,6 +27,12 @@ public class CourseController {
     @Autowired
     private JWTAuthenticationUtil jwtAuthenticationUtil;
 
+    /**
+     * Gets the list of courses for the teacher identified by the Authorization header.
+     *
+     * @param authorizationHeader the Authorization header value containing the JWT token
+     * @return ResponseEntity containing the CoursesResponse object with the list of courses and the status
+     */
     @GetMapping
     public ResponseEntity<Object> getCourses(@RequestHeader("Authorization") String authorizationHeader){
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
@@ -47,6 +53,13 @@ public class CourseController {
         }
     }
 
+    /**
+     * Adds a course for the teacher identified by the Authorization header.
+     *
+     * @param courseRequest the CourseRequest object containing the course information
+     * @param authorizationHeader the Authorization header value containing the JWT token
+     * @return ResponseEntity containing the CourseResponse object with the added course information and the status
+     */
     @PostMapping("/addCourse")
     public ResponseEntity<Object> addCourse(@RequestBody CourseRequest courseRequest, @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
@@ -85,6 +98,13 @@ public class CourseController {
 //        }
 //    }
 
+    /**
+     * Removes a course for the teacher identified by the Authorization header.
+     *
+     * @param courseId the CourseIdRequest object containing the course ID to remove
+     * @param authorizationHeader the Authorization header value containing the JWT token
+     * @return ResponseEntity containing the CourseResponse object with the status
+     */
     @DeleteMapping("/removeCourse")
     public ResponseEntity<Object> removeCourse(@RequestBody CourseIdRequest courseId, @RequestHeader("Authorization") String authorizationHeader) {
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
@@ -124,6 +144,14 @@ public class CourseController {
 //            return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 //        }
 //    }
+
+    /**
+     * Endpoint for updating a course for a teacher.
+     *
+     * @param courseRequest The request body containing information about the course to update.
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @return A ResponseEntity containing either a CourseResponse or an ExceptionResponse.
+     */
     @PutMapping("/updateCourse")
     public ResponseEntity<Object> updateCourse(@RequestBody CourseRequest courseRequest, @RequestHeader("Authorization") String authorizationHeader){
         ResponseEntity<String> teacherIdResponse = jwtAuthenticationUtil.validateAuthorizationHeader(authorizationHeader);
@@ -142,6 +170,12 @@ public class CourseController {
         }
     }
 
+    /**
+     * Helper method for converting a Course object to a CourseRequest object.
+     *
+     * @param course The Course object to convert.
+     * @return A CourseRequest object.
+     */
     public CourseRequest addCourseRequest(Course course) {
 
         CourseRequest courseRequest = new CourseRequest();
@@ -152,6 +186,12 @@ public class CourseController {
         return courseRequest;
     }
 
+    /**
+     * Helper method for converting a List of Course objects to a List of CourseRequest objects.
+     *
+     * @param courses The List of Course objects to convert.
+     * @return A List of CourseRequest objects.
+     */
     public List<CourseRequest> addCourseRequests(List<Course> courses) {
         List<CourseRequest> courseRequestList = new ArrayList<>();
         for (Course course : courses) {
