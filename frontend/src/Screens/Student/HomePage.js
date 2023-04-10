@@ -8,16 +8,19 @@ import Wrapper from '../../wrapper/Wrapper';
 import {getEnrolledCourseInfo} from '../../redux/student/actions';
 
 export default function HomePage({navigation}) {
+  const dispatch = useDispatch();
+
   const {user} = useSelector(state => state.user);
   const {subjectInfo, loading} = useSelector(state => state.student);
 
-  const dispatch = useDispatch();
   const logout = () => {
     dispatch(logoutAction());
   };
+
   const handleProfilePress = () => {
     navigation.navigate('UserProfile');
   };
+
   const handleQRGenerator = () => {
     navigation.navigate('QRgenerator');
   };
@@ -44,6 +47,16 @@ export default function HomePage({navigation}) {
         <Spinner color="secondary.500" size="lg" mt={4} />
       ) : (
         <VStack space="2">
+          {subjectInfo.length === 0 && (
+            <Text
+              color="white"
+              fontWeight={600}
+              mt={5}
+              textAlign="center"
+              fontSize={18}>
+              Not enrolled to any course
+            </Text>
+          )}
           {subjectInfo.map((subject, key) => (
             <CourseDetailCard {...subject} key={key} />
           ))}
@@ -73,7 +86,9 @@ export default function HomePage({navigation}) {
         }}
         onPress={() => handleQRGenerator()}
         _pressed={{backgroundColor: 'secondary.400'}}>
-        QR
+        <Text color="black" fontWeight={600}>
+          QR
+        </Text>
       </Button>
     </Wrapper>
   );
