@@ -8,6 +8,7 @@ import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.repository.StudentRepository;
 import com.GRP3.BPA.repository.TeacherRepository;
+import com.GRP3.BPA.service.ServiceInterface.UserService;
 import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

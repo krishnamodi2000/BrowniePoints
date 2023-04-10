@@ -1,19 +1,15 @@
 package com.GRP3.BPA.controller;
 
 import com.GRP3.BPA.exceptions.CustomizableException;
-import com.GRP3.BPA.model.Course;
 import com.GRP3.BPA.model.CourseStudent;
 import com.GRP3.BPA.model.Student;
-import com.GRP3.BPA.request.course.CourseIdRequest;
-import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.request.courseStudent.CourseStudentRequest;
 import com.GRP3.BPA.request.courseStudent.CourseStudentRequests;
 import com.GRP3.BPA.response.ExceptionResponse;
-import com.GRP3.BPA.response.course.CoursesResponse;
 import com.GRP3.BPA.response.courseStudent.CourseStudentResponse;
 import com.GRP3.BPA.response.courseStudent.CourseStudentsResponse;
 import com.GRP3.BPA.response.courseStudent.StudentInfoWithName;
-import com.GRP3.BPA.service.CourseStudentService;
+import com.GRP3.BPA.service.ServiceInterface.CourseStudentService;
 import com.GRP3.BPA.utils.JWTAuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
