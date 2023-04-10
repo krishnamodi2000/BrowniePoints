@@ -64,6 +64,18 @@ export default function HomeScreen({navigation}) {
         </Center>
       ) : (
         <ScrollView>
+          {courses.length === 0 && (
+            <>
+              <Text
+                color="white"
+                fontWeight={600}
+                mt={5}
+                textAlign="center"
+                fontSize={18}>
+                Please add the course to continue.
+              </Text>
+            </>
+          )}
           {courses.map((course, key) => (
             <CustomCard key={key}>
               <CardContent
