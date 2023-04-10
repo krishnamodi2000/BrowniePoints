@@ -200,7 +200,6 @@ function* updateCourseSaga({courseDetails, successCallBack}) {
       });
     }
   } catch (error) {
-    console.log(error, JSON.stringify(error));
     yield put({
       type: actionTypes.UPDATE_COURSE_FAIL,
       error: 'Something went wrong',

@@ -8,8 +8,9 @@ function* addPointsSaga({courseId, bannerId}) {
     yield put({type: actionTypes.SET_POINTS_LOADING});
 
     const {data} = yield AxiosInstance.put(
-      `teachers/courses/${courseId}/${bannerId}`,
+      `/teachers/points/${courseId}/${bannerId}`,
     );
+
     if (data) {
       yield put({
         type: actionTypes.ADD_POINTS_SUCCESS,

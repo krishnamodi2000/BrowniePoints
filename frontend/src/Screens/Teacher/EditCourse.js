@@ -207,10 +207,6 @@ export default function EditCourse({route}) {
                     handleTextChange(inputField.name, value)
                   }
                 />
-                {/* <FormControl.ErrorMessage
-                leftIcon={<WarningOutlineIcon size="xs" />}>
-                {errors[inputField.name]}
-              </FormControl.ErrorMessage> */}
               </FormControl>
             )}
           </Stack>
@@ -410,7 +406,6 @@ const StudentRemovedFromCourseSuccessModal = ({
 const AddStudentToCourseSuccessModal = ({
   showModal,
   setShowModal,
-  studentAdded,
   handleCloseModal,
 }) => (
   <CustomModal
@@ -419,7 +414,7 @@ const AddStudentToCourseSuccessModal = ({
     heading="Added Students"
     body={
       <Center>
-        Successfully added {studentAdded.length} students.
+        Successfully added students.
         <Button mt="2" minWidth="100" onPress={handleCloseModal}>
           Back
         </Button>

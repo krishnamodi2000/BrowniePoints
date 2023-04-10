@@ -24,7 +24,7 @@ export default function Scanner({navigation, route}) {
         }),
       );
     } else {
-      dispatch(addPoints('CSCI5100', e.data));
+      dispatch(addPoints(route.params.courseCode, e.data));
     }
     setShowScanner(false);
   };
