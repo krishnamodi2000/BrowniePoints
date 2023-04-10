@@ -16,7 +16,6 @@ public class Utils {
     }
 
 
-
     public Utils(String message, boolean status) {
         this.message = message;
         this.status =status;
