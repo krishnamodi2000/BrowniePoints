@@ -48,7 +48,12 @@ export default function HomePage({navigation}) {
       ) : (
         <VStack space="2">
           {subjectInfo.length === 0 && (
-            <Text color="white" fontWeight={600} mt={5} textAlign="center" fontSize={18}>
+            <Text
+              color="white"
+              fontWeight={600}
+              mt={5}
+              textAlign="center"
+              fontSize={18}>
               Not enrolled to any course
             </Text>
           )}

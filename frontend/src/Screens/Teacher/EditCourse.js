@@ -275,7 +275,7 @@ export default function EditCourse({route}) {
                     backgroundColor="green.500"
                     _pressed={{backgroundColor: 'green.600'}}
                     onPress={selectFile}>
-                    Upload Excel
+                    Upload CSV
                   </Button>
                 </VStack>
               ) : showRemoveStudent ? (
