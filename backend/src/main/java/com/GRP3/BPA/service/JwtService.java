@@ -1,6 +1,7 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.model.User;
+import com.GRP3.BPA.service.ServiceInterface.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

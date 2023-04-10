@@ -5,7 +5,7 @@ import com.GRP3.BPA.response.authentication.AuthenticationResponse;
 import com.GRP3.BPA.exceptions.UserException;
 import com.GRP3.BPA.repository.UserRepository;
 import com.GRP3.BPA.service.AuthenticationService;
-import com.GRP3.BPA.service.UserService;
+import com.GRP3.BPA.service.ServiceInterface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

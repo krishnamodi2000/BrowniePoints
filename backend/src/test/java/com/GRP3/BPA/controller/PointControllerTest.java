@@ -8,10 +8,8 @@ import com.GRP3.BPA.repository.CourseRepository;
 import com.GRP3.BPA.repository.CourseStudentRepository;
 import com.GRP3.BPA.repository.StudentRepository;
 import com.GRP3.BPA.repository.UserRepository;
-import com.GRP3.BPA.response.courseStudent.CourseStudentsResponse;
 import com.GRP3.BPA.response.points.PointsCreateResponse;
 import com.GRP3.BPA.service.PointServiceImpl;
-import com.GRP3.BPA.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -22,7 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class PointControllerTest {

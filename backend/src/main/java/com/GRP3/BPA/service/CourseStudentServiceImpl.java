@@ -9,6 +9,7 @@ import com.GRP3.BPA.repository.CourseStudentRepository;
 import com.GRP3.BPA.repository.StudentRepository;
 import com.GRP3.BPA.request.courseStudent.CourseStudentRequest;
 import com.GRP3.BPA.request.courseStudent.CourseStudentRequests;
+import com.GRP3.BPA.service.ServiceInterface.CourseStudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -8,6 +8,7 @@ import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.model.Teacher;
 import com.GRP3.BPA.repository.CourseRepository;
 import com.GRP3.BPA.repository.TeacherRepository;
+import com.GRP3.BPA.service.ServiceInterface.CourseService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

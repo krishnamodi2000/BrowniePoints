@@ -7,7 +7,7 @@ import com.GRP3.BPA.request.course.CourseRequest;
 import com.GRP3.BPA.response.ExceptionResponse;
 import com.GRP3.BPA.response.course.CourseResponse;
 import com.GRP3.BPA.response.course.CoursesResponse;
-import com.GRP3.BPA.service.CourseService;
+import com.GRP3.BPA.service.ServiceInterface.CourseService;
 import com.GRP3.BPA.utils.JWTAuthenticationUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
