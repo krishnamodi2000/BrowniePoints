@@ -6,10 +6,11 @@ const {takeLatest, all, put} = require('redux-saga/effects');
 function* addPointsSaga({courseId, bannerId}) {
   try {
     yield put({type: actionTypes.SET_POINTS_LOADING});
-
+    console.log(courseId, bannerId);
     const {data} = yield AxiosInstance.put(
-      `teachers/courses/${courseId}/${bannerId}`,
+      `/teachers/points/${courseId}/${bannerId}`,
     );
+    console.log(data);
     if (data) {
       yield put({
         type: actionTypes.ADD_POINTS_SUCCESS,
