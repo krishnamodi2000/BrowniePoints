@@ -1,8 +1,7 @@
 package com.GRP3.BPA.service;
 
 import com.GRP3.BPA.model.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.GRP3.BPA.service.ServiceInterface.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

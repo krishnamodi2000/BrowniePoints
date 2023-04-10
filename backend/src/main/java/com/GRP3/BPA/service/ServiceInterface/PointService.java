@@ -1,4 +1,4 @@
-package com.GRP3.BPA.service;
+package com.GRP3.BPA.service.ServiceInterface;
 
 import com.GRP3.BPA.response.points.StudentPointsAllSubject;
 import com.GRP3.BPA.response.points.PointsCreateResponse;

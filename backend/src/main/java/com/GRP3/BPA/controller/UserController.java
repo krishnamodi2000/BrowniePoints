@@ -3,12 +3,11 @@ package com.GRP3.BPA.controller;
 import com.GRP3.BPA.service.EmailValidator;
 import com.GRP3.BPA.model.User;
 import com.GRP3.BPA.exceptions.UserException;
-import com.GRP3.BPA.service.UserService;
+import com.GRP3.BPA.service.ServiceInterface.UserService;
 import com.GRP3.BPA.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
