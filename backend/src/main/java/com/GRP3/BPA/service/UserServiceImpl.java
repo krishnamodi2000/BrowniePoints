@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private EmailService emailService;
 
 
+    private static final int MAX_BOUND=999999;
     /**
 
      Saves a new user to the database.
@@ -187,7 +188,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
      @return a string representing the six-digit OTP code
      */
     private static String generateOtp() {
-        return String.format("%06d", new Random().nextInt(999999));
+        return String.format("%06d", new Random().nextInt(MAX_BOUND));
     }
 
     /**

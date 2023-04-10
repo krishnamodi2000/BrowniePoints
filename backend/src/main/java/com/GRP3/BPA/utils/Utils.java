@@ -5,6 +5,7 @@ import lombok.Setter;
 
 public class Utils {
 
+    private static final int MAX_LENGTH=8;
     @Getter @Setter
     private boolean status;
 
@@ -22,7 +23,7 @@ public class Utils {
     }
 
     public static boolean isValidPassword(String password) {
-        if(password.length() >= 8) return true;
+        if(password.length() >= MAX_LENGTH) return true;
         return false;
     }
 }
